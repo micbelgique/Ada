@@ -1,0 +1,49 @@
+﻿@model AdaWebApp.Models.Entities.StaffMember
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+
+<div>
+    <h4>StaffMember</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+    
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+    
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+    
+    </dl>
+    
+    @using (Html.BeginForm()) {
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+

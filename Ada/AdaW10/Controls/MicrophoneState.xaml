@@ -1,0 +1,21 @@
+﻿<UserControl
+    x:Class="AdaW10.Controls.MicrophoneState"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AdaW10.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:AdaW10.Converters"
+    mc:Ignorable="d"
+    MaxHeight="100"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <converters:SpeechStateToVisibilityConverter x:Key="SpeechStateToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Image Source="ms-appx:///Images/music.png" Visibility="{Binding State, Converter={StaticResource SpeechStateToVisibilityConverter}}" Stretch="Uniform"/>
+    </Grid>
+</UserControl>

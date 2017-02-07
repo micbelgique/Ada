@@ -1,0 +1,76 @@
+﻿@model AdaWebApp.Models.Entities.StaffMember
+@{
+    ViewBag.Title = "Detail";
+}
+
+<div>
+    <h4>StaffMember</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<p>
+    @Html.ActionLink("Add an unavailibility", "Create", "Unavailability", new {id = Model.Id}, null)
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Start Time", "Detail", new { id = Model.Id, sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Unavailabilities.First().EndTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Unavailabilities.OrderByDescending(d => d.StarTime))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StarTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @using (Html.BeginForm("Delete", "Unavailability", 
+                    new { id = item.Id, memberId = Model.Id}, FormMethod.Post, null))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-default" />
+                }
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,82 @@
+﻿@model AdaWebApp.Models.Entities.Visit
+
+@{
+    ViewBag.Title = "VisitDetails";
+}
+
+<h2>Visit Details</h2>
+
+<div class="col-md-6">
+    <h4>Person's visit</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.LastName)
+        </dt>
+
+        <dd>
+            @(string.IsNullOrEmpty(Model.Person.LastName) ? "Unknown" : Model.Person.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.FirstName)
+        </dt>
+
+        <dd>
+            @(string.IsNullOrEmpty(Model.Person.FirstName) ? "Unknown" : Model.Person.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Model.Date.ToString("dd/MM/yyyy")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+
+    </dl>
+</div>
+<div class="col-md-6">
+    <h4>Pictures List</h4>
+    <table class="table table-striped">
+        <tr>
+            <th>
+                FaceId
+            </th>
+            <th>
+                Uri
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        @{
+            foreach (var picture in Model.ProfilePictures.OrderByDescending(p => p.Id))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => picture.FaceApiId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => picture.Uri)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Detail", "ProfilePicture", new {id = picture.Id}, null)
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div class="col-md-12">
+    <p>
+        @Html.ActionLink("Back", "Detail", "Person", new { id = Model.Person.Id }, null)
+    </p>   
+</div>
+

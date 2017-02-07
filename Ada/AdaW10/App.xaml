@@ -1,0 +1,13 @@
+﻿<Application
+    x:Class="AdaW10.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AdaW10"
+    xmlns:locator="using:AdaW10.ViewModels"
+    RequestedTheme="Light">
+
+    <Application.Resources>
+        <locator:ViewModelLocator x:Key="ViewModelLocator" />
+    </Application.Resources>
+    
+</Application>

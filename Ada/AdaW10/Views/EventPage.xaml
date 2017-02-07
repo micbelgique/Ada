@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="AdaW10.Views.EventPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AdaW10.Views"
+    xmlns:converters="using:AdaW10.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:AdaW10.ViewModels"
+    xmlns:controls="using:AdaW10.Controls"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <vm:EventViewModel x:Key="ViewModel"/>
+        <converters:LongToDateStringConverter x:Key="LongToDateStringConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid DataContext="{StaticResource ViewModel}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Text="Liste des événements" FontSize="25" Height="28" VerticalAlignment="Top" HorizontalAlignment="Center" />
+
+        <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <ListView Grid.Column="1"  Margin="10,33,10,47"  ItemsSource="{Binding EventList}"  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <StackPanel Margin="20, 10">
+                            <TextBlock Text="{Binding Time, Converter={StaticResource LongToDateStringConverter}}" />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Button Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkOrchid" Foreground="White" FontSize="20">Retour</Button>
+        </Grid>
+        
+    </Grid>
+</Page>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>17948462-dfaf-4732-974f-52ce1c95b1cf</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>AdaBridge</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GenderValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PersonDto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PersonsFormat.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PersonUpdateDto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebServiceError.cs" />
+  </ItemGroup>
+</Project>
