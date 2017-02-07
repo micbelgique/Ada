@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundle/css")
+</head>
+<body>
+
+    @Html.Partial("_MainMenu")
+
+    @* TODO Put Boostrap Wrapper *@
+    <div>
+        @RenderBody()
+    </div>
+
+
+    @Scripts.Render("~/bundle/script")
+</body>
+</html>

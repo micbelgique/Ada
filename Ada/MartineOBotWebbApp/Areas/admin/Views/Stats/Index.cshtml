@@ -1,0 +1,47 @@
+﻿@model MartineOBotWebApp.Areas.Admin.ViewModels.StatsViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>DashBoard</h2>
+
+<div>
+    <h3>Statistiques</h3>
+    <p>
+        @Html.DisplayNameFor(m => m.TotalVisitors) : @Html.DisplayFor(m => m.TotalVisitors)
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.AverageAge) : @Html.DisplayFor(m => m.AverageAge) year
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.Male) : @Html.DisplayFor(m => m.Male) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.Female) : @Html.DisplayFor(m => m.Female) %
+    </p>
+    <h4>Emotions Score</h4>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Happiness) : @Html.DisplayFor(m => m.EmotionScores.Happiness) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Neutral) : @Html.DisplayFor(m => m.EmotionScores.Neutral) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Sadness) : @Html.DisplayFor(m => m.EmotionScores.Sadness) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Surprise) : @Html.DisplayFor(m => m.EmotionScores.Surprise) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Fear) : @Html.DisplayFor(m => m.EmotionScores.Fear) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Anger) : @Html.DisplayFor(m => m.EmotionScores.Anger) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Contempt) : @Html.DisplayFor(m => m.EmotionScores.Contempt) %
+    </p>
+    <p>
+        @Html.DisplayNameFor(m => m.EmotionScores.Disgust) : @Html.DisplayFor(m => m.EmotionScores.Disgust) %
+    </p>
+</div>
