@@ -1,5 +1,6 @@
 ﻿using AdaWebApp.Models.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -17,6 +18,14 @@ namespace AdaWebApp.Models.DAL.Repositories
                 person.Visits.Add(new Visit { Date = dateOfVisit, NbPasses = 1 });
             else
                 person.Visits.Last().NbPasses++;
+        }
+
+        public List<Visit> getVisitsByDate()
+        {
+            DateTime day = DateTime.Today;
+            List<Visit> visits = new List<Visit>();
+            visits.Any(v => v.Date == day);
+            return visits;
         }
     }
 }
