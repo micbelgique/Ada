@@ -304,6 +304,10 @@
     <Compile Include="Helpers\FaceHelper.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Helpers\UrlHelpers.cs" />
+    <Compile Include="Migrations\201702131101164_InitialCreate.cs" />
+    <Compile Include="Migrations\201702131101164_InitialCreate.Designer.cs">
+      <DependentUpon>201702131101164_InitialCreate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
@@ -373,8 +377,12 @@
     <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Edit.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="ConnectionString.config" />
+    <Content Include="ConnectionString.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\AdaProd - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\AdaWebApp - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\martine-o-bot-dev - Web Deploy %282%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
@@ -428,6 +436,11 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201702131101164_InitialCreate.resx">
+      <DependentUpon>201702131101164_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
