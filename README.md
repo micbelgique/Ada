@@ -7,21 +7,21 @@ The first step to deploy the web application is to subscribe to Microsoft Cognit
 
 On Microsoft Cognitive Face web console (https://goo.gl/afkZ6R), create a new persons group with a generated guid as group id.
 
-### Web application + SQL Database
+### Web Application + SQL Database
 
-The next step is to deploy webapp+sql services and make this configuration :
+The next step is to deploy WebApp + SQL services and make this configuration :
 
 In web application → Application Settings → App settings, the value of this keys must be set :
+* **OxfordFaceApiKey** : The key of the Microsoft Cognitive Face api
+* **OxfordEmotionApiKey** : The key of the Microsoft Cognitive Emotion api
+* **OxfordPersonGroupId** : The id of person group created on Microsoft Cognitive Face api
+* **Host** : the full address of the website (ex : http://mywebsite.azurewebsites.net)
 
-OxfordFaceApiKey : The key of the Microsoft Cognitive Face api
-OxfordEmotionApiKey : The key of the Microsoft Cognitive Emotion api
-OxfordPersonGroupId : The id of person group created on Microsoft Cognitive Face api
-Host : the full address of website (ex : http://martine-o-bot.azurewebsites.net)
-Warning : The keys are case sensitive !
+**Warning : The keys are case sensitive !**
 
 In the Connection strings section, set the connection string to sql database with DefaultConnection as key.
 
-A little more configuration
+### A little more configuration
 
 The default roles and users are created while the first migration of database. To edit them before publish the first time, go to Migrations → Configuration.cs → Seed method.
 
@@ -33,7 +33,7 @@ It's possible to personalize the destination of temporary uploaded files and per
 
 To use ApplicationInsight, right clic on project → ApplicationInsight → configure → follow the wizard.
 
-Publication on azure
+### Publication on azure
 
 To deploy the application on azure :
 
