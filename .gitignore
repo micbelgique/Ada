@@ -251,4 +251,5 @@ paket-files/
 .idea/
 *.sln.iml
 
-Ada/AdaWebApp/ConnectionString.configAda/AdaW10/AppConfig.cs
+Ada/AdaWebApp/ConnectionString.config
+Ada/AdaW10/AppConfig.cs
