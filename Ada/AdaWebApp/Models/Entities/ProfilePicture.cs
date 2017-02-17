@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using AdaBridge;
+using AdaSDK;
 using Microsoft.ProjectOxford.Face.Contract;
 
 namespace AdaWebApp.Models.Entities
