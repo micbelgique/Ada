@@ -379,9 +379,6 @@
     <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Edit.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="ConnectionString.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Properties\PublishProfiles\AdaProd - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\AdaWebApp - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\AdaWebApp - FTP %283%29.pubxml" />

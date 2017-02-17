@@ -15,7 +15,7 @@ namespace AdaWebApp.Areas.Admin.Controllers
         private readonly UnitOfWork _uof;
 
         public VisitController()
-        {
+        { 
             _uof = new UnitOfWork();
         }
 
