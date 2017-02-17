@@ -20,12 +20,21 @@ namespace AdaWebApp.Models.DAL.Repositories
                 person.Visits.Last().NbPasses++;
         }
 
-        public List<Visit> getVisitsByDate()
+        public List<Visit> GetVisitsByDate()
         {
             DateTime day = DateTime.Today;
             List<Visit> visits = new List<Visit>();
             visits.Any(v => v.Date == day);
             return visits;
         }
+
+        public bool CheckVisitExist(int id)
+        {
+            if (!Table.Any(v => v.Id == id))
+            {
+                return true;
+            }
+            return false;
+        } 
     }
 }

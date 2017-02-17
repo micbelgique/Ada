@@ -10,26 +10,48 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AdaWebApp.Models.DAL;
 using AdaWebApp.Models.Entities;
+using AdaWebApp.Models.DAL.Repositories;
+using Common.Logging;
+using System.Threading.Tasks;
 
 namespace AdaWebApp.Controllers.API
 {
+    [RoutePrefix("api/Visits")]
     public class VisitsController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        //ATTENTION A éliminer! Le PUT et le POST utilisent encore le DBContext
+        //private ApplicationDbContext db = new ApplicationDbContext();
+        private UnitOfWork _unit;
+        private readonly ILog _logger;
 
-        // GET: api/Visits
-        public IQueryable<Visit> GetVisits()
+        public VisitsController()
         {
-            return db.Visits;
+            _unit = new UnitOfWork();
+
+            log4net.Config.XmlConfigurator.Configure();
+            _logger = LogManager.GetLogger(GetType());
         }
 
+        // GET: api/Visits
+        public async Task<IEnumerable<Visit>> GetVisits()
+        {
+           return await _unit.VisitsRepository.GetAll();
+        }
+
+        [HttpGet]
+        [Route("visitsToday")]
         // GET: get visits of the day
+        public List<Visit> GetVisitsToday()
+        {
+            return _unit.VisitsRepository.GetVisitsByDate();
+        }
 
         // GET: api/Visits/5
         [ResponseType(typeof(Visit))]
-        public IHttpActionResult GetVisit(int id)
+        public async Task<IHttpActionResult> GetVisit(int id)
         {
-            Visit visit = db.Visits.Find(id);
+            //Visit visit = db.Visits.Find(id);
+            Visit visit = await _unit.VisitsRepository.GetByIdAsync(id);
             if (visit == null)
             {
                 return NotFound();
@@ -38,6 +60,7 @@ namespace AdaWebApp.Controllers.API
             return Ok(visit);
         }
 
+        /*
         // PUT: api/Visits/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVisit(int id, Visit visit)
@@ -81,25 +104,30 @@ namespace AdaWebApp.Controllers.API
             {
                 return BadRequest(ModelState);
             }
-
+            //_unit.VisitsRepository.
             db.Visits.Add(visit);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = visit.Id }, visit);
         }
+        */
 
         // DELETE: api/Visits/5
         [ResponseType(typeof(Visit))]
-        public IHttpActionResult DeleteVisit(int id)
+        //public IHttpActionResult DeleteVisit(int id)
+        public async Task<IHttpActionResult> DeleteVisit(int id)
         {
-            Visit visit = db.Visits.Find(id);
+            //Visit visit = db.Visits.Find(id);
+            Visit visit = await _unit.VisitsRepository.GetByIdAsync(id);
             if (visit == null)
             {
                 return NotFound();
             }
 
-            db.Visits.Remove(visit);
-            db.SaveChanges();
+            await _unit.VisitsRepository.Remove(id);
+            await _unit.SaveAsync();
+            //db.Visits.Remove(visit);
+            //db.SaveChanges();
 
             return Ok(visit);
         }
@@ -108,14 +136,16 @@ namespace AdaWebApp.Controllers.API
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
+                _unit.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool VisitExists(int id)
         {
-            return db.Visits.Count(e => e.Id == id) > 0;
+            //return db.Visits.Count(e => e.Id == id) > 0;
+            return _unit.VisitsRepository.CheckVisitExist(id);
         }
     }
 }
