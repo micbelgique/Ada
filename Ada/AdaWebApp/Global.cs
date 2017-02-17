@@ -5,7 +5,7 @@ namespace AdaWebApp
     public static class Global
     {
         // Host of web application configured in azure app settings
-        public static readonly string Host = ConfigurationManager.AppSettings["host"];
+        public static readonly string Host = ConfigurationManager.AppSettings["Host"];
 
         // Oxford key for face api
         public static readonly string OxfordFaceApiKey = ConfigurationManager.AppSettings["OxfordFaceApiKey"];

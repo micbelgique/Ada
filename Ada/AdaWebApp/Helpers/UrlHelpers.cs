@@ -16,7 +16,7 @@ namespace AdaWebApp.Helpers
                 throw new ArgumentException("VirualPath must begin by [~/]");
             }
 
-            return Path.Combine(host, virtualPath.Substring(2));
+            return Path.Combine(host, virtualPath.Substring(2)).Replace('\\', '/');
         }
     }
 }
