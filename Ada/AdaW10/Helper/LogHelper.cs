@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using AdaBridge;
+using AdaSDK;
 using AdaW10.Messages;
 using System;
 using System.Collections.Generic;

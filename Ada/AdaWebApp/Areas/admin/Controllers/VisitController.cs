@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using AdaWebApp.Models.DAL;
 using AdaWebApp.Models.Entities;
 using PagedList;
+using System.Collections.Generic;
 
 namespace AdaWebApp.Areas.Admin.Controllers
 {
@@ -14,9 +15,9 @@ namespace AdaWebApp.Areas.Admin.Controllers
         private readonly UnitOfWork _uof;
 
         public VisitController()
-        {
+        { 
             _uof = new UnitOfWork();
-        } 
+        }
 
         public async Task<ActionResult> Detail(int? id)
         {

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using AdaBridge;
+using AdaSDK;
 using Newtonsoft.Json;
 using TokenManagerService = AdaW10.Models.AuthenticationServices.TokenManagerService;
 

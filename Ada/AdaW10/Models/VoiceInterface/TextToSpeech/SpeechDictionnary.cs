@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AdaBridge;
+using AdaSDK;
 
 namespace AdaW10.Models.VoiceInterface.TextToSpeech
 {

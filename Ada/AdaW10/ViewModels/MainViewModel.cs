@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
-using AdaBridge;
+using AdaSDK;
 using AdaW10.Helper;
 using AdaW10.Messages;
 using AdaW10.Models;

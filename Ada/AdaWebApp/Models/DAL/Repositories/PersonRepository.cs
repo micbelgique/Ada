@@ -1,4 +1,4 @@
-﻿using AdaBridge;
+﻿using AdaSDK;
 using AdaWebApp.Models.Entities;
 using Microsoft.ProjectOxford.Face.Contract;
 using System;
