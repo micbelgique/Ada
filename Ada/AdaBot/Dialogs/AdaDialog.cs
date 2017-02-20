@@ -102,9 +102,46 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisitPersonHello(IDialogContext context, LuisResult result)
         {
             string firstname = result.Entities[0].Entity;
-            string message = $"Voici la dernière visite de {firstname} :" ;
-            await context.PostAsync(message);
-            context.Wait(MessageReceived);
+            List<VisitDto> visits;
+
+            using (var client = new HttpClient())
+            {
+                //ToDo Addapter URL
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsToday" + "/" + firstname]);
+
+                if (httpResponse.StatusCode == HttpStatusCode.OK)
+
+                {
+                    var x = await httpResponse.Content.ReadAsStringAsync();
+                    visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+
+                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à ces dates:");
+                    replyToConversation.Recipient = _message.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visits)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{visit.ProfilePicture}"));
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            //Text = visit.PersonVisit.d,
+                            //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
+                            Images = cardImages
+                            //Buttons = cardButtons
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
+
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+            }
         }
 
 
