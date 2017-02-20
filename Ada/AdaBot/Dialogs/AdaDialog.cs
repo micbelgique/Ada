@@ -107,7 +107,7 @@ namespace AdaBot.Dialogs
             using (var client = new HttpClient())
             {
                 //ToDo Addapter URL
-                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsToday" + "/" + firstname]);
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsFirstname"] + "/" + firstname);
 
                 if (httpResponse.StatusCode == HttpStatusCode.OK)
 
