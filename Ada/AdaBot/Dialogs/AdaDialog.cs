@@ -8,13 +8,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AdaSDK;
+using System.Net.Http;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
+using System.Net;
+using Newtonsoft.Json;
+using AdaSDK.Models;
 
 namespace AdaBot.Dialogs
 {
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
-        private static Activity _message; 
+        private static Activity _message;
+        private List<VisitDto> visits;
 
         public AdaDialog(params ILuisService[] services): base(services)
         {
@@ -45,12 +52,50 @@ namespace AdaBot.Dialogs
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
+
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            string message = $"Voici la liste des visites du jour : ";
-            await context.PostAsync(message);
-            context.Wait(MessageReceived);
+            List<VisitDto> visits;
+
+            using (var client = new HttpClient())
+            {
+                //ToDo Addapter URL
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiUrlRecipes"]);
+
+                if (httpResponse.StatusCode == HttpStatusCode.OK)
+
+                {
+                    var x = await httpResponse.Content.ReadAsStringAsync();
+                    visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+
+                    Activity replyToConversation = _message.CreateReply("Voici les visites du jour:");
+                    replyToConversation.Recipient = _message.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visits)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{visit.ProfilePicture}"));
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            //Text = visit.PersonVisit.d,
+                            // Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
+                            Images = cardImages
+                            //Buttons = cardButtons
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
+
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+            }
         }
 
         [LuisIntent("GetLastVisitPerson")]

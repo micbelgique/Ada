@@ -42,7 +42,7 @@ namespace AdaWebApp.Models.Entities
                 ID = visit.Id,
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
-                //ProfilePicture = visit.ProfilePictures.toDto(),
+                ProfilePicture = visit.ProfilePictures.Last().ToDto(),
                 PersonVisit = visit.Person.ToDto()
             };
         }
@@ -57,13 +57,13 @@ namespace AdaWebApp.Models.Entities
             };
         }
 
-        //public static ProfilePictureDto ToDto(this ProfilePicture picture)
-        //{
-        //    return new PersonVisitDto()
-        //    {
-        //        PersonId = picture.Id
-        //    };
-        //}
+        public static ProfilePictureDto ToDto(this ProfilePicture picture)
+        {
+            return new ProfilePictureDto()
+            {
+                Uri = picture.Uri
+            };
+        }
 
     }
 }

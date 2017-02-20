@@ -8,5 +8,6 @@ namespace AdaSDK.Models
 {
     public class ProfilePictureDto
     {
+        public string Uri { get; set; }
     }
 }
