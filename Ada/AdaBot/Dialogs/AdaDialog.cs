@@ -101,7 +101,8 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetLastVisitPerson")]
         public async Task GetLastVisitPersonHello(IDialogContext context, LuisResult result)
         {
-            string firstname = result.Entities[0].Entity;
+            //string firstname = result.Entities[0].Entity;
+            string firstname = "Louis";
             List<VisitDto> visits;
 
             using (var client = new HttpClient())
@@ -115,7 +116,7 @@ namespace AdaBot.Dialogs
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
 
-                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à ces dates:");
+                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette dates:");
                     replyToConversation.Recipient = _message.From;
                     replyToConversation.Type = "message";
                     replyToConversation.Attachments = new List<Attachment>();
