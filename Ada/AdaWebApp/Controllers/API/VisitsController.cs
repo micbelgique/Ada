@@ -49,7 +49,7 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
-        [Route("LastVisitByFirstname")]
+        [Route("LastVisitByFirstname/{firstname}")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitByFirstname(string firstname)
         {
