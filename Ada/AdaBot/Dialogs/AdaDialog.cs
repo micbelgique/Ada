@@ -56,7 +56,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            List<PersonVisitDto> recipes;
+            List<VisitDto> visits;
 
             using (var client = new HttpClient())
             {
