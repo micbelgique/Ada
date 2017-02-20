@@ -21,7 +21,6 @@ namespace AdaBot.Dialogs
     public class AdaDialog : LuisDialog<object>
     {
         private static Activity _message;
-        private List<VisitDto> visits;
 
         public AdaDialog(params ILuisService[] services): base(services)
         {
@@ -64,7 +63,6 @@ namespace AdaBot.Dialogs
                 var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsToday"]);
 
                 if (httpResponse.StatusCode == HttpStatusCode.OK)
-
                 {
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
@@ -77,12 +75,12 @@ namespace AdaBot.Dialogs
                     foreach (var visit in visits)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{visit.ProfilePicture}"));
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
                         HeroCard plCard = new HeroCard()
                         {
                             Title = visit.PersonVisit.FirstName,
-                            //Text = visit.PersonVisit.d,
+                            Text = Convert.ToString(visit.PersonVisit.DateVisit),
                             //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
                             Images = cardImages
                             //Buttons = cardButtons
@@ -101,8 +99,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetLastVisitPerson")]
         public async Task GetLastVisitPersonHello(IDialogContext context, LuisResult result)
         {
-            //string firstname = result.Entities[0].Entity;
-            string firstname = "Louis";
+            string firstname = result.Entities[0].Entity;
             List<VisitDto> visits;
 
             using (var client = new HttpClient())
@@ -111,7 +108,6 @@ namespace AdaBot.Dialogs
                 var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsFirstname"] + "/" + firstname);
 
                 if (httpResponse.StatusCode == HttpStatusCode.OK)
-
                 {
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
@@ -124,12 +120,12 @@ namespace AdaBot.Dialogs
                     foreach (var visit in visits)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{visit.ProfilePicture}"));
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
                         HeroCard plCard = new HeroCard()
                         {
                             Title = visit.PersonVisit.FirstName,
-                            //Text = visit.PersonVisit.d,
+                            Text = Convert.ToString(visit.PersonVisit.DateVisit),
                             //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
                             Images = cardImages
                             //Buttons = cardButtons

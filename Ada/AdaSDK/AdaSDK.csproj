@@ -37,7 +37,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Models\GenderValues.cs" />
     <Compile Include="Models\PersonVisitDto.cs" />
     <Compile Include="Models\PersonDto.cs" />
