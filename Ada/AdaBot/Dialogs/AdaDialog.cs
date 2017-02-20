@@ -37,5 +37,14 @@ namespace AdaBot.Dialogs
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
+
+        [LuisIntent("SayHello")]
+        public async Task SayHello(IDialogContext context, LuisResult result)
+        {
+            string message = $"Bonjour";
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
     }
 }
