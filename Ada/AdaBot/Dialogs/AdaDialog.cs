@@ -61,7 +61,7 @@ namespace AdaBot.Dialogs
             using (var client = new HttpClient())
             {
                 //ToDo Addapter URL
-                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiUrlRecipes"]);
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsToday"]);
 
                 if (httpResponse.StatusCode == HttpStatusCode.OK)
 
@@ -83,7 +83,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = visit.PersonVisit.FirstName,
                             //Text = visit.PersonVisit.d,
-                            // Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
+                            //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
                             Images = cardImages
                             //Buttons = cardButtons
                         };
