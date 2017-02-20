@@ -45,6 +45,23 @@ namespace AdaBot.Dialogs
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
+        [LuisIntent("GetVisitsToday")]
+        public async Task GetVisitsToday(IDialogContext context, LuisResult result)
+        {
+            string message = $"Voici la liste des visites du jour : ";
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetLastVisitPerson")]
+        public async Task GetLastVisitPersonHello(IDialogContext context, LuisResult result)
+        {
+            string firstname = result.Entities[0].Entity;
+            string message = $"Voici la dernière visite de {firstname} :" ;
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
 
     }
 }
