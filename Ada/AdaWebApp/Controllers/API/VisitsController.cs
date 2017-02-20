@@ -40,11 +40,20 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
-        [Route("visitsToday")]
+        [Route("VisitsToday")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsToday()
         {
-            var visits = _unit.VisitsRepository.GetVisitsByDate(DateTime.Today); // ToDo : rajouter la date du jour en paramètre + adapter GetVisitByDate pour accepter un parametre de date
+            var visits = _unit.VisitsRepository.GetVisitsToday();
+            return visits.Select(v => v.ToDto()).ToList();
+        }
+
+        [HttpGet]
+        [Route("LastVisitByFirstname")]
+        // GET: get visits of the day
+        public List<VisitDto> GetVisitByFirstname(string firstname)
+        {
+            var visits = _unit.VisitsRepository.GetLastVisitForAPersonByFirstname(firstname);
             return visits.Select(v => v.ToDto()).ToList();
         }
 

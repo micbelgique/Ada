@@ -20,9 +20,22 @@ namespace AdaWebApp.Models.DAL.Repositories
                 person.Visits.Last().NbPasses++;
         }
 
-        public List<Visit> GetVisitsByDate(DateTime date)  // ajouter comme paramètre par défaut la date du jour
+        public List<Visit> GetVisitsToday()
         {
+            DateTime date = DateTime.Today;
             return Table.Include(v => v.Person).Where(v => v.Date >= date).ToList();
+        }
+
+        public List<Visit> GetLastVisitForAPersonByFirstname(string firstname)
+        {
+            //Compare the first time of the last visit of a day (v.Date) and the last visit of the person (DateOfBirth).
+            return Table.Include(v => v.Person).Where(v => v.Person.FirstName == firstname 
+                                                            && v.Person.DateOfBirth.Day == v.Date.Day
+                                                            && v.Person.DateOfBirth.Month == v.Date.Month)
+                                                            //On retire ici l'année car DateOfBirth calcul son année via l'estimation d'ada
+                                                            //et ne prend donc pas l'année de la dernière visite.
+                                                            //&& v.Person.DateOfBirth.Year == v.Date.Year)
+                                                            .ToList();
         }
 
         public bool CheckVisitExist(int id)
