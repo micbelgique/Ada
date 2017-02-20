@@ -253,3 +253,4 @@ paket-files/
 
 Ada/AdaWebApp/ConnectionString.config
 Ada/AdaW10/AppConfig.cs
+Ada/AdaBot/AppSettings.config
