@@ -12,7 +12,7 @@ namespace AdaWebApp.Models.DAL.Repositories
 
         public void AddOrUpdateVisit(Person person, DateTime dateOfVisit)
         {
-            if (person == null) return; 
+            if (person == null) return;
 
             if (!Table.Any(v => v.PersonId == person.Id && DbFunctions.DiffDays(v.Date, dateOfVisit) == 0))
                 person.Visits.Add(new Visit { Date = dateOfVisit, NbPasses = 1 });
@@ -20,12 +20,9 @@ namespace AdaWebApp.Models.DAL.Repositories
                 person.Visits.Last().NbPasses++;
         }
 
-        public List<Visit> GetVisitsByDate()
+        public List<Visit> GetVisitsByDate(DateTime date)  // ajouter comme paramètre par défaut la date du jour
         {
-            DateTime day = DateTime.Today;
-            List<Visit> visits = new List<Visit>();
-            visits.Any(v => v.Date == day);
-            return visits;
+            return Table.Include(v => v.Person).Where(v => v.Date >= date).ToList();
         }
 
         public bool CheckVisitExist(int id)
@@ -34,7 +31,7 @@ namespace AdaWebApp.Models.DAL.Repositories
             {
                 return true;
             }
-            return false; 
-        } 
+            return false;
+        }
     }
 }

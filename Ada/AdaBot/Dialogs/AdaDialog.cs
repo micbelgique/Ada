@@ -14,7 +14,7 @@ namespace AdaBot.Dialogs
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
-        private Activity _message;
+        private static Activity _message;
 
         public AdaDialog(params ILuisService[] services): base(services)
         {
