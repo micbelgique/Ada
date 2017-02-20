@@ -39,9 +39,12 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Models\GenderValues.cs" />
+    <Compile Include="Models\PersonVisitDto.cs" />
     <Compile Include="Models\PersonDto.cs" />
     <Compile Include="Models\PersonsFormat.cs" />
     <Compile Include="Models\PersonUpdateDto.cs" />
+    <Compile Include="Models\ProfilePictureDto.cs" />
+    <Compile Include="Models\VisitDto.cs" />
     <Compile Include="Models\WebServiceError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
