@@ -12,6 +12,6 @@ namespace AdaSDK.Models
         public int ID { get; set; }
         public int NbPasses { get; set; }
         public PersonVisitDto PersonVisit { get; set; }
-        public object ProfilePicture { get; set; }
+        public ProfilePictureDto ProfilePicture { get; set; }
     }
 }
