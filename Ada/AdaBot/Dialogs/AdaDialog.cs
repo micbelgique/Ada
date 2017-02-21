@@ -41,7 +41,7 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
             message = $"Je suis constamment en apprentissage, je vais demander à mes créateurs de m'apprendre ta phrase ;)";
             await context.PostAsync(message);
-            context.Wait(MessageReceived);
+            context.Wait(MessageReceived); 
         }
 
         [LuisIntent("SayHello")]
