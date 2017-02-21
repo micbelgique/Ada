@@ -39,7 +39,7 @@ namespace AdaBot.Dialogs
             string message = $"Je n'ai pas compris :/";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
-            message = $"Je suis constamment en apprentissage, je vais demander à mes administrateurs de me l'apprendre.";
+            message = $"Je suis constamment en apprentissage, je vais demander à mes créateurs de m'apprendre ta phrase ;)";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
@@ -76,7 +76,7 @@ namespace AdaBot.Dialogs
                     }
                     else
                     {
-                        replyToConversation = _message.CreateReply("Voici les visites du jour:");
+                        replyToConversation = _message.CreateReply("J'ai vu du monde aujourd'hui! :D");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
                         replyToConversation.AttachmentLayout = "carousel";
@@ -88,13 +88,53 @@ namespace AdaBot.Dialogs
                             cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
                             //Calcul la bonne année et la bonne heure.
+                            DateTime today = DateTime.Today;
                             int wrongDate = visit.PersonVisit.DateVisit.Year;
                             int goodDate = DateTime.Today.Year - wrongDate;
+                            string messageDate = "";
+                            string firstname = visit.PersonVisit.FirstName;
+
+                            //Préparation du message du HeroCard en fonction de la date de la visite
+                            if (visit.PersonVisit.DateVisit.Day == today.Day)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " ce matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " durant cet après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else
+                            {
+                                var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
+                                messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                            }
 
                             HeroCard plCard = new HeroCard()
                             {
                                 Title = visit.PersonVisit.FirstName,
-                                Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
+                                Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                                 //Subtitle = 
                                 Images = cardImages
                                 //Buttons = cardButtons
@@ -112,7 +152,7 @@ namespace AdaBot.Dialogs
         }
 
         [LuisIntent("GetLastVisitPerson")]
-        public async Task GetLastVisitPersonHello(IDialogContext context, LuisResult result)
+        public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
             string firstname = result.Entities[0].Entity;
             List<VisitDto> visits;
@@ -130,13 +170,13 @@ namespace AdaBot.Dialogs
 
                     if (visits.Count == 0)
                     {
-                        replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/");
+                        replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
                     }
                     else
                     {
-                        replyToConversation = _message.CreateReply("J'ai vu " + firstname + " :");
+                        replyToConversation = _message.CreateReply("Voyons voir...");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
                         replyToConversation.AttachmentLayout = "carousel";
@@ -148,13 +188,52 @@ namespace AdaBot.Dialogs
                             cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
                             //Calcul la bonne année et la bonne heure.
+                            DateTime today = DateTime.Today;
                             int wrongDate = visit.PersonVisit.DateVisit.Year;
                             int goodDate = DateTime.Today.Year - wrongDate;
+                            string messageDate = "";
+
+                            //Préparation du message du HeroCard en fonction de la date de la visite
+                            if (visit.PersonVisit.DateVisit.Day == today.Day)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " ce matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " durant cet après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else
+                            {
+                                var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
+                                messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                            }
 
                             HeroCard plCard = new HeroCard()
                             {
                                 Title = visit.PersonVisit.FirstName,
-                                Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
+                                Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                                 //Subtitle = 
                                 Images = cardImages
                                 //Buttons = cardButtons
