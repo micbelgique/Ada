@@ -136,7 +136,7 @@ namespace AdaBot.Dialogs
                     }
                     else
                     {
-                        replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette date:");
+                        replyToConversation = _message.CreateReply("J'ai vu " + firstname + " :");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
                         replyToConversation.AttachmentLayout = "carousel";
