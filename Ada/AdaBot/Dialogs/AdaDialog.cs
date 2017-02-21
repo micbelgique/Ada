@@ -47,7 +47,8 @@ namespace AdaBot.Dialogs
         [LuisIntent("SayHello")]
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
-            string message = $"Bonjour";
+            var nameUser = _message.From.Name;
+            string message = $"Bonjour {nameUser}";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
