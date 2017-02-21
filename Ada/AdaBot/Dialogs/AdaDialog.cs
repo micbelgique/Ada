@@ -87,10 +87,14 @@ namespace AdaBot.Dialogs
                             List<CardImage> cardImages = new List<CardImage>();
                             cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
+                            //Calcul la bonne année et la bonne heure.
+                            int wrongDate = visit.PersonVisit.DateVisit.Year;
+                            int goodDate = DateTime.Today.Year - wrongDate;
+
                             HeroCard plCard = new HeroCard()
                             {
                                 Title = visit.PersonVisit.FirstName,
-                                Text = Convert.ToString(visit.PersonVisit.DateVisit),
+                                Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
                                 //Subtitle = 
                                 Images = cardImages
                                 //Buttons = cardButtons
@@ -143,11 +147,15 @@ namespace AdaBot.Dialogs
                             List<CardImage> cardImages = new List<CardImage>();
                             cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
+                            //Calcul la bonne année et la bonne heure.
+                            int wrongDate = visit.PersonVisit.DateVisit.Year;
+                            int goodDate = DateTime.Today.Year - wrongDate;
+
                             HeroCard plCard = new HeroCard()
                             {
                                 Title = visit.PersonVisit.FirstName,
-                                Text = Convert.ToString(visit.PersonVisit.DateVisit),
-                                //Subtitle = recipe
+                                Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
+                                //Subtitle = 
                                 Images = cardImages
                                 //Buttons = cardButtons
                             };
