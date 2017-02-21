@@ -66,28 +66,39 @@ namespace AdaBot.Dialogs
                 {
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+                    Activity replyToConversation;
 
-                    Activity replyToConversation = _message.CreateReply("Voici les visites du jour:");
-                    replyToConversation.Recipient = _message.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-                    foreach (var visit in visits)
+                    if (visits.Count == 0)
                     {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+                        replyToConversation = _message.CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else
+                    {
+                        replyToConversation = _message.CreateReply("Voici les visites du jour:");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
 
-                        HeroCard plCard = new HeroCard()
+                        foreach (var visit in visits)
                         {
-                            Title = visit.PersonVisit.FirstName,
-                            Text = Convert.ToString(visit.PersonVisit.DateVisit),
-                            //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
-                            Images = cardImages
-                            //Buttons = cardButtons
-                        };
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
 
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Text = Convert.ToString(visit.PersonVisit.DateVisit),
+                                //Subtitle = 
+                                Images = cardImages
+                                //Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
                     }
 
                     await context.PostAsync(replyToConversation);
@@ -124,6 +135,7 @@ namespace AdaBot.Dialogs
                         replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette date:");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
                         replyToConversation.Attachments = new List<Attachment>();
 
                         foreach (var visit in visits)
@@ -135,7 +147,7 @@ namespace AdaBot.Dialogs
                             {
                                 Title = visit.PersonVisit.FirstName,
                                 Text = Convert.ToString(visit.PersonVisit.DateVisit),
-                                //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
+                                //Subtitle = recipe
                                 Images = cardImages
                                 //Buttons = cardButtons
                             };
@@ -144,9 +156,7 @@ namespace AdaBot.Dialogs
                             replyToConversation.Attachments.Add(plAttachment);
                         }
                     }
-
                     
-
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
                 }
