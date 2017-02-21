@@ -166,7 +166,7 @@ namespace AdaBot.Dialogs
                 {
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
-                    Activity replyToConversation;
+                    Activity replyToConversation; 
 
                     if (visits.Count == 0)
                     {
