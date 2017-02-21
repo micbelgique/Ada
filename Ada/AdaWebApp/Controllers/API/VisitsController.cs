@@ -45,6 +45,10 @@ namespace AdaWebApp.Controllers.API
         public List<VisitDto> GetVisitsToday()
         {
             var visits = _unit.VisitsRepository.GetVisitsToday();
+            if (visits == null)
+            {
+                return null;
+            }
             return visits.Select(v => v.ToDto()).ToList();
         }
 

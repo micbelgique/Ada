@@ -111,29 +111,41 @@ namespace AdaBot.Dialogs
                 {
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+                    Activity replyToConversation;
 
-                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette dates:");
-                    replyToConversation.Recipient = _message.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-                    foreach (var visit in visits)
+                    if (visits.Count == 0)
                     {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Text = Convert.ToString(visit.PersonVisit.DateVisit),
-                            //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
-                            Images = cardImages
-                            //Buttons = cardButtons
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
+                        replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
                     }
+                    else
+                    {
+                        replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette date:");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Text = Convert.ToString(visit.PersonVisit.DateVisit),
+                                //Subtitle = recipe.,  ToDo: Ajouter l'auteur de la recette
+                                Images = cardImages
+                                //Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                    }
+
+                    
 
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
