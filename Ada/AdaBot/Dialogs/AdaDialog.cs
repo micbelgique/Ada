@@ -112,7 +112,7 @@ namespace AdaBot.Dialogs
                     var x = await httpResponse.Content.ReadAsStringAsync();
                     visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
 
-                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette dates:");
+                    Activity replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette date:");
                     replyToConversation.Recipient = _message.From;
                     replyToConversation.Type = "message";
                     replyToConversation.Attachments = new List<Attachment>();
