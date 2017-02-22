@@ -1,11 +1,9 @@
 ﻿using AdaSDK.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
-using Newtonsoft.Json;
 
 namespace AdaSDK
 {
@@ -35,11 +33,11 @@ namespace AdaSDK
             }
         }
 
-        public async Task<List<VisitDto>> GetLastVisitPerson()
+        public async Task<List<VisitDto>> GetLastVisitPerson(string firstname)
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/LastVisitByFirstname"));
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/LastVisitByFirstname/" + firstname));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
