@@ -76,7 +76,7 @@ namespace AdaBot.Dialogs
                     }
                     else
                     {
-                        replyToConversation = _message.CreateReply("J'ai vu du monde aujourd'hui! :D");
+                        replyToConversation = _message.CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
                         replyToConversation.Recipient = _message.From;
                         replyToConversation.Type = "message";
                         replyToConversation.AttachmentLayout = "carousel";
@@ -92,7 +92,17 @@ namespace AdaBot.Dialogs
                             int wrongDate = visit.PersonVisit.DateVisit.Year;
                             int goodDate = DateTime.Today.Year - wrongDate;
                             string messageDate = "";
-                            string firstname = visit.PersonVisit.FirstName;
+                            string firstname;
+
+                            //Recherche du prénom de la personne
+                            if (visit.PersonVisit.FirstName == null)
+                            {
+                                firstname = "une personne inconnue";
+                            }
+                            else
+                            {
+                                firstname = visit.PersonVisit.FirstName;
+                            }
 
                             //Préparation du message du HeroCard en fonction de la date de la visite
                             if (visit.PersonVisit.DateVisit.Day == today.Day)
@@ -249,7 +259,12 @@ namespace AdaBot.Dialogs
                 }
             }
         }
-
-
+        [LuisIntent("GetHelp")]
+        public async Task Help(IDialogContext context, LuisResult result)
+        {
+            string message = $"Un renseignement? Une question vous turlupine? Je suis Ada, l'assistante virtuelle du MIC et je serai bientôt en mesure de répondre à votre demande! :D";
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
     }
 }
