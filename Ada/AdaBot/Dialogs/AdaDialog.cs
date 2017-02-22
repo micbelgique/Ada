@@ -50,7 +50,7 @@ namespace AdaBot.Dialogs
             var nameUser = _message.From.Name;
             string message = $"Bonjour {nameUser}";
             await context.PostAsync(message);
-            context.Wait(MessageReceived); 
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetVisitsToday")]
