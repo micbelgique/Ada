@@ -17,7 +17,7 @@ using AdaSDK.Models;
 
 namespace AdaBot.Dialogs
 {
-    [Serializable]
+    [Serializable] 
     public class AdaDialog : LuisDialog<object>
     {
         private static Activity _message;
