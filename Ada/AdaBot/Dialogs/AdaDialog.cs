@@ -4,10 +4,12 @@ using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AdaSDK;
 using System.Net.Http;
+using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Net;
 using Newtonsoft.Json;
@@ -20,7 +22,7 @@ namespace AdaBot.Dialogs
     {
         private static Activity _message;
 
-        public AdaDialog(params ILuisService[] services) : base(services)
+        public AdaDialog(params ILuisService[] services): base(services)
         {
 
         }
@@ -37,7 +39,7 @@ namespace AdaBot.Dialogs
             string message = $"Je n'ai pas compris :/";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
-            message = $"Je suis constamment en apprentissage, je vais demander à mes administrateurs de me l'apprendre.";
+            message = $"Je suis constamment en apprentissage, je vais demander à mes créateurs de m'apprendre ta phrase ;)";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
@@ -53,99 +55,215 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient();
-            List<VisitDto> visits = await client.GetVisitsToday();
+            List<VisitDto> visits;
 
-            Activity replyToConversation;
-
-            if (visits.Count == 0)
+            using (var client = new HttpClient())
             {
-                replyToConversation = _message.CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
-                replyToConversation.Recipient = _message.From;
-                replyToConversation.Type = "message";
-            }
-            else
-            {
-                replyToConversation = _message.CreateReply("Voici les visites du jour:");
-                replyToConversation.Recipient = _message.From;
-                replyToConversation.Type = "message";
-                replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
+                //ToDo Addapter URL
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsToday"]);
 
-                foreach (var visit in visits)
+                if (httpResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    List<CardImage> cardImages = new List<CardImage>();
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+                    var x = await httpResponse.Content.ReadAsStringAsync();
+                    visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+                    Activity replyToConversation;
 
-                    //Calcul la bonne année et la bonne heure.
-                    int wrongDate = visit.PersonVisit.DateVisit.Year;
-                    int goodDate = DateTime.Today.Year - wrongDate;
-
-                    HeroCard plCard = new HeroCard()
+                    if (visits.Count == 0)
                     {
-                        Title = visit.PersonVisit.FirstName,
-                        Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
-                        //Subtitle = 
-                        Images = cardImages
-                        //Buttons = cardButtons
-                    };
+                        replyToConversation = _message.CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else
+                    {
+                        replyToConversation = _message.CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
 
-                    Attachment plAttachment = plCard.ToAttachment();
-                    replyToConversation.Attachments.Add(plAttachment);
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+
+                            //Calcul la bonne année et la bonne heure.
+                            DateTime today = DateTime.Today;
+                            int wrongDate = visit.PersonVisit.DateVisit.Year;
+                            int goodDate = DateTime.Today.Year - wrongDate;
+                            string messageDate = "";
+                            string firstname;
+
+                            //Recherche du prénom de la personne
+                            if (visit.PersonVisit.FirstName == null)
+                            {
+                                firstname = "une personne inconnue";
+                            }
+                            else
+                            {
+                                firstname = visit.PersonVisit.FirstName;
+                            }
+
+                            //Préparation du message du HeroCard en fonction de la date de la visite
+                            if (visit.PersonVisit.DateVisit.Day == today.Day)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " ce matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cet après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else
+                            {
+                                var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
+                                messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                            }
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                                //Subtitle = 
+                                Images = cardImages
+                                //Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                    }
+
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
                 }
             }
-
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetLastVisitPerson")]
         public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
             string firstname = result.Entities[0].Entity;
-            AdaClient client = new AdaClient();
-            List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+            List<VisitDto> visits;
 
-            Activity replyToConversation;
-
-            if (visits.Count == 0)
+            using (var client = new HttpClient())
             {
-                replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/");
-                replyToConversation.Recipient = _message.From;
-                replyToConversation.Type = "message";
-            }
-            else
-            {
-                replyToConversation = _message.CreateReply("J'ai vu " + firstname + " à cette date:");
-                replyToConversation.Recipient = _message.From;
-                replyToConversation.Type = "message";
-                replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
+                //ToDo Addapter URL
+                var httpResponse = await client.GetAsync(ConfigurationManager.AppSettings["ApiGetVisitsFirstname"] + "/" + firstname);
 
-                foreach (var visit in visits)
+                if (httpResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    List<CardImage> cardImages = new List<CardImage>();
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+                    var x = await httpResponse.Content.ReadAsStringAsync();
+                    visits = JsonConvert.DeserializeObject<List<VisitDto>>(x);
+                    Activity replyToConversation; 
 
-                    //Calcul la bonne année et la bonne heure.
-                    int wrongDate = visit.PersonVisit.DateVisit.Year;
-                    int goodDate = DateTime.Today.Year - wrongDate;
-
-                    HeroCard plCard = new HeroCard()
+                    if (visits.Count == 0)
                     {
-                        Title = visit.PersonVisit.FirstName,
-                        Text = Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)),
-                        //Subtitle = 
-                        Images = cardImages
-                        //Buttons = cardButtons
-                    };
+                        replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else
+                    {
+                        replyToConversation = _message.CreateReply("Voyons voir...");
+                        replyToConversation.Recipient = _message.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
 
-                    Attachment plAttachment = plCard.ToAttachment();
-                    replyToConversation.Attachments.Add(plAttachment);
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}"));
+
+                            //Calcul la bonne année et la bonne heure.
+                            DateTime today = DateTime.Today;
+                            int wrongDate = visit.PersonVisit.DateVisit.Year;
+                            int goodDate = DateTime.Today.Year - wrongDate;
+                            string messageDate = "";
+
+                            //Préparation du message du HeroCard en fonction de la date de la visite
+                            if (visit.PersonVisit.DateVisit.Day == today.Day)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " ce matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cet après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
+                            {
+                                if (visit.PersonVisit.DateVisit.Hour <= 12)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier matin.";
+                                }
+                                else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " hier après-midi.";
+                                }
+                                else
+                                {
+                                    messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
+                                }
+                            }
+                            else
+                            {
+                                var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
+                                messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                            }
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                                //Subtitle = 
+                                Images = cardImages
+                                //Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                    }
+                    
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
                 }
             }
-
-            await context.PostAsync(replyToConversation);
+        }
+        [LuisIntent("GetHelp")]
+        public async Task Help(IDialogContext context, LuisResult result)
+        {
+            string message = $"Un renseignement? Une question vous turlupine? Je suis Ada, l'assistante virtuelle du MIC et je serai bientôt en mesure de répondre à votre demande! :D";
+            await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
     }
