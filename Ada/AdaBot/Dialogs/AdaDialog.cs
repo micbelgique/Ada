@@ -103,7 +103,7 @@ namespace AdaBot.Dialogs
                                 }
                                 else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
                                 {
-                                    messageDate = "J'ai croisé " + firstname + " durant cet après-midi.";
+                                    messageDate = "J'ai croisé " + firstname + " cet après-midi.";
                                 }
                                 else
                                 {
@@ -202,7 +202,7 @@ namespace AdaBot.Dialogs
                                 }
                                 else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
                                 {
-                                    messageDate = "J'ai croisé " + firstname + " durant cet après-midi.";
+                                    messageDate = "J'ai croisé " + firstname + " cet après-midi.";
                                 }
                                 else
                                 {
