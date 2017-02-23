@@ -219,7 +219,7 @@ namespace AdaBot.Dialogs
                     }
                     else
                     {
-                        var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
+                        var dayDiff = today.Day - visit.PersonVisit.DateVisit.Day;
                         messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
                     }
 
