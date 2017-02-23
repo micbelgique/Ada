@@ -101,7 +101,7 @@ namespace AdaBot.Dialogs
                     //Préparation du message du HeroCard en fonction de la date de la visite
                     if (visit.PersonVisit.DateVisit.Day == today.Day)
                     {
-                        if (visit.PersonVisit.DateVisit.Hour <= 12)
+                        if (visit.PersonVisit.DateVisit.Hour < 12)
                         {
                             messageDate = "J'ai croisé " + firstname + " ce matin.";
                         }
@@ -116,7 +116,7 @@ namespace AdaBot.Dialogs
                     }
                     else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
                     {
-                        if (visit.PersonVisit.DateVisit.Hour <= 12)
+                        if (visit.PersonVisit.DateVisit.Hour < 12)
                         {
                             messageDate = "J'ai croisé " + firstname + " hier matin.";
                         }
@@ -190,7 +190,7 @@ namespace AdaBot.Dialogs
                     //Préparation du message du HeroCard en fonction de la date de la visite
                     if (visit.PersonVisit.DateVisit.Day == today.Day)
                     {
-                        if (visit.PersonVisit.DateVisit.Hour <= 12)
+                        if (visit.PersonVisit.DateVisit.Hour < 12)
                         {
                             messageDate = "J'ai croisé " + firstname + " ce matin.";
                         }
@@ -205,7 +205,7 @@ namespace AdaBot.Dialogs
                     }
                     else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
                     {
-                        if (visit.PersonVisit.DateVisit.Hour <= 12)
+                        if (visit.PersonVisit.DateVisit.Hour < 12)
                         {
                             messageDate = "J'ai croisé " + firstname + " hier matin.";
                         }
