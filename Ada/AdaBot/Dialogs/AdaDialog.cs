@@ -21,10 +21,11 @@ namespace AdaBot.Dialogs
     public class AdaDialog : LuisDialog<object>
     {
         private Activity _message;
+        private CreateDialog customDialog = new CreateDialog();
 
         public AdaDialog(params ILuisService[] services): base(services)
         {
-
+            
         }
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
@@ -87,6 +88,7 @@ namespace AdaBot.Dialogs
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
                     string firstname;
+                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
                     //Recherche du prénom de la personne
                     if (visit.PersonVisit.FirstName == null)
@@ -98,42 +100,7 @@ namespace AdaBot.Dialogs
                         firstname = visit.PersonVisit.FirstName;
                     }
 
-                    //Préparation du message du HeroCard en fonction de la date de la visite
-                    if (visit.PersonVisit.DateVisit.Day == today.Day)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " ce matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cet après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else
-                    {
-                        var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
-                        messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
-                    }
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                     HeroCard plCard = new HeroCard()
                     {
@@ -186,43 +153,9 @@ namespace AdaBot.Dialogs
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
+                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
-                    //Préparation du message du HeroCard en fonction de la date de la visite
-                    if (visit.PersonVisit.DateVisit.Day == today.Day)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " ce matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cet après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else
-                    {
-                        var dayDiff = today.Day - visit.PersonVisit.DateVisit.Day;
-                        messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
-                    }
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                     HeroCard plCard = new HeroCard()
                     {
