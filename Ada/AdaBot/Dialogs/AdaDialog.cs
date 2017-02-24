@@ -86,7 +86,7 @@ namespace AdaBot.Dialogs
                     DateTime today = DateTime.Today;
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
-                    string messageDate = "";
+                    string messageDate = ""; 
                     string firstname;
                     DateTime visitDate = visit.PersonVisit.DateVisit;
 
