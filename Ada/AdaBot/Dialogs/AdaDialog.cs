@@ -248,13 +248,15 @@ namespace AdaBot.Dialogs
             Activity replyToConversation = null;
             AdaClient client = new AdaClient();
 
+            int nbVisit = 10;
+
             if (result.Entities[0].Type == "ChoosePersonId")
             {
                 var splitResult = result.Entities[0].Entity.Split(':');
 
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
-                int nbVisit = Convert.ToInt32(splitResult[4]);
+                nbVisit = Convert.ToInt32(splitResult[3]);
 
                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson,nbVisit);
 
@@ -271,7 +273,6 @@ namespace AdaBot.Dialogs
             else
             {
                 string firstname = null;
-                int nbVisit = 10;
 
                 int nbEntities = result.Entities.Count();
                 for (int i = 0; i < nbEntities; i++)
