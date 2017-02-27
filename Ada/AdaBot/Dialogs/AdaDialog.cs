@@ -182,7 +182,8 @@ namespace AdaBot.Dialogs
             List<VisitDto> allvisits = await client.GetVisitsToday();
             List<VisitDto> visitsReturn = new List<VisitDto>();
 
-            for (int i=0; i<result.Entities.Count(); i++)
+            int nbEntities = result.Entities.Count();
+            for (int i=0 ; i< nbEntities ; i++)
             {
                 if (result.Entities[i].Type == "Gender")
                 {
@@ -194,7 +195,7 @@ namespace AdaBot.Dialogs
                     }
 
                     int nbVisits = allvisits.Count();
-                    for (int y=34; y< nbVisits; y++)
+                    for (int y=0; y< nbVisits; y++)
                     {
                         if (allvisits[y].PersonVisit.Gender == gender)
                         {
@@ -213,7 +214,7 @@ namespace AdaBot.Dialogs
             }
 
             //Test results
-            string test = visitsReturn.ToString();
+            int nbReturn = visitsReturn.Count();
         }
     }
 }
