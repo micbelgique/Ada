@@ -76,11 +76,11 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
-        [Route("VisitPersonById/{id}")]
+        [Route("VisitPersonById/{id}/{nbVisit}")]
         // GET: get visits of the day
-        public List<VisitDto> GetVisitPersonById(int id)
+        public List<VisitDto> GetVisitPersonById(int id,int nbVisit)
         {
-            var visits = _unit.VisitsRepository.GetVisitForAPersonById(id);
+            var visits = _unit.VisitsRepository.GetVisitForAPersonById(id,nbVisit);
             return visits.Select(v => v.ToDto()).ToList();
         }
 
