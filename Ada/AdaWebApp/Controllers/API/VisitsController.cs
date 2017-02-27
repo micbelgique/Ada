@@ -61,6 +61,15 @@ namespace AdaWebApp.Controllers.API
             return visits.Select(v => v.ToDto()).ToList();
         }
 
+        [HttpGet]
+        [Route("VisitPersonById/{id}")]
+        // GET: get visits of the day
+        public List<VisitDto> GetVisitPersonById(int id)
+        {
+            var visits = _unit.VisitsRepository.GetVisitForAPersonById(id);
+            return visits.Select(v => v.ToDto()).ToList();
+        }
+
         // GET: api/Visits/5
         [ResponseType(typeof(Visit))]
         public async Task<IHttpActionResult> GetVisit(int id)

@@ -48,5 +48,21 @@ namespace AdaSDK
                 return new List<VisitDto>();
             }
         }
+
+        public async Task<List<VisitDto>> GetVisitPersonById(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitPersonById/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
+                return visits;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<VisitDto>();
+            }
+        }
     }
 }

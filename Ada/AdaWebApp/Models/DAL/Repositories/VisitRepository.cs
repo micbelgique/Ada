@@ -38,6 +38,11 @@ namespace AdaWebApp.Models.DAL.Repositories
                                                             .ToList();
         }
 
+        public List<Visit> GetVisitForAPersonById(int id)
+        {
+            return Table.Include(v => v.Person).Where(v => v.Person.Id == id).Take(10).ToList();
+        }
+
         public bool CheckVisitExist(int id)
         {
             if (!Table.Any(v => v.Id == id))
