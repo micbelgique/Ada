@@ -254,7 +254,9 @@ namespace AdaBot.Dialogs
 
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
-                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson);
+                int nbVisit = Convert.ToInt32(splitResult[4]);
+
+               List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson,nbVisit);
 
                 string reply = "Je l'ai vu(e) à ces dates : <br>";
                 reply += Environment.NewLine;
@@ -268,7 +270,22 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                string firstname = result.Entities[0].Entity;
+                string firstname = null;
+                int nbVisit = 10;
+
+                int nbEntities = result.Entities.Count();
+                for (int i = 0; i < nbEntities; i++)
+                {
+                    if (result.Entities[i].Type == "Firstname")
+                    {
+                        firstname = result.Entities[i].Entity;
+                    }
+                    if(result.Entities[i].Type == "Number")
+                    {
+                        nbVisit = Convert.ToInt32(result.Entities[i].Entity);
+                    }
+                }
+                        
                 List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
                 if (visits.Count == 0)
@@ -280,7 +297,8 @@ namespace AdaBot.Dialogs
                 else if (visits.Count == 1)
                 {
                     int id = visits[0].PersonVisit.PersonId;
-                    List<VisitDto> visitsById = await client.GetVisitPersonById(id);
+
+                    List<VisitDto> visitsById = await client.GetVisitPersonById(id,nbVisit);
 
                     string reply = "J'ai vu " + firstname + " à ces dates : <br>";
                     reply += Environment.NewLine;
@@ -310,7 +328,7 @@ namespace AdaBot.Dialogs
                         CardAction plButtonChoice = new CardAction()
                         {
 
-                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId,
+                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId +" : nbVisit :"+nbVisit,
                             Type = "postBack",
                             Title = "Le voilà !"
                         };
@@ -320,7 +338,6 @@ namespace AdaBot.Dialogs
                         {
                             Title = visit.PersonVisit.FirstName,
                             Images = cardImages,
-                           // Subtitle = Convert.ToString(await GetVisitePersonByIdButton(visit.PersonVisit, context)),
                             Buttons = cardButtons
                         };
 
@@ -332,25 +349,6 @@ namespace AdaBot.Dialogs
 
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
-        }
-
-        private async Task<string> GetVisitePersonByIdButton(PersonVisitDto person, IDialogContext context)
-        {
-            int id = person.PersonId;
-
-            AdaClient client = new AdaClient();
-            List<VisitDto> visitsById = await client.GetVisitPersonById(id);
-
-            string reply = "J'ai vu " + person.FirstName + " à ces dates : ";
-
-            foreach (var visit in visitsById)
-            {
-                int wrongDate = visit.PersonVisit.DateVisit.Year;
-                int goodDate = DateTime.Today.Year - wrongDate;
-                reply += "     -" + Convert.ToString(visit.Date.AddHours(1));
-            }
-
-            return reply;
         }
     }
 }
