@@ -53,7 +53,8 @@ namespace AdaWebApp.Models.Entities
             {
                 PersonId = person.Id,
                 FirstName = person.FirstName,
-                DateVisit = person.DateOfBirth
+                DateVisit = person.DateOfBirth,
+                Gender = person.Gender
             };
         }
 

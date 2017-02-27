@@ -7,6 +7,7 @@ namespace AdaSDK
         public int PersonId  { get; set; }
         public string FirstName { get; set; }
         public DateTime DateVisit { get; set; }
+        public GenderValues Gender { get; set; }
 
         public override string ToString()
         {

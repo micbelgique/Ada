@@ -23,9 +23,9 @@ namespace AdaBot.Dialogs
         private Activity _message;
         private CreateDialog customDialog = new CreateDialog();
 
-        public AdaDialog(params ILuisService[] services): base(services)
+        public AdaDialog(params ILuisService[] services) : base(services)
         {
-            
+
         }
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
@@ -86,7 +86,7 @@ namespace AdaBot.Dialogs
                     DateTime today = DateTime.Today;
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
-                    string messageDate = ""; 
+                    string messageDate = "";
                     string firstname;
                     DateTime visitDate = visit.PersonVisit.DateVisit;
 
@@ -137,7 +137,7 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                replyToConversation = _message.CreateReply("Voyons voir..."); 
+                replyToConversation = _message.CreateReply("Voyons voir...");
                 replyToConversation.Recipient = _message.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
@@ -173,6 +173,47 @@ namespace AdaBot.Dialogs
 
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetStatsVisits")]
+        public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient();
+            List<VisitDto> allvisits = await client.GetVisitsToday();
+            List<VisitDto> visitsReturn = new List<VisitDto>();
+
+            for (int i=0; i<result.Entities.Count(); i++)
+            {
+                if (result.Entities[i].Type == "Gender")
+                {
+                    string value = result.Entities[i].Entity;
+                    GenderValues gender = GenderValues.Male;
+                    if ( value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    {
+                        gender = GenderValues.Female;
+                    }
+
+                    int nbVisits = allvisits.Count();
+                    for (int y=34; y< nbVisits; y++)
+                    {
+                        if (allvisits[y].PersonVisit.Gender == gender)
+                        {
+                            visitsReturn.Add(allvisits[i]);
+                        }
+                    }
+                }
+                else if (result.Entities[i].Type == "Emotion")
+                {
+                    
+                }
+                else if (result.Entities[i].Type == "age")
+                {
+                    
+                }
+            }
+
+            //Test results
+            string test = visitsReturn.ToString();
         }
     }
 }
