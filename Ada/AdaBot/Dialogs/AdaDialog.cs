@@ -179,45 +179,48 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
             AdaClient client = new AdaClient();
+
+            //Lists for different stats
             List<VisitDto> allvisits = await client.GetVisitsToday();
-            int nbVisits = allvisits.Count();
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
+            int nbVisits = tmp.Count();
 
             int age = -1;
             int age2 = -1;
             int agePerson;
 
             int nbEntities = result.Entities.Count();
-            for (int i=0 ; i< nbEntities ; i++)
+            for (int i = 0; i < nbEntities; i++)
             {
                 //Get actual number of visits return
                 if (visitsReturn.Count() != 0)
                 {
                     nbVisits = visitsReturn.Count();
-                    tmp = new List<VisitDto>(visitsReturn);
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
                 }
 
                 if (result.Entities[i].Type == "Gender")
                 {
                     string value = result.Entities[i].Entity;
                     GenderValues gender = GenderValues.Male;
-                    if ( value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
                     {
                         gender = GenderValues.Female;
                     }
-                    
-                    for (int y=0; y< nbVisits; y++)
+
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        if (allvisits[y].PersonVisit.Gender == gender)
+                        if (tmp[y].PersonVisit.Gender == gender)
                         {
-                            visitsReturn.Add(allvisits[i]);
+                            visitsReturn.Add(tmp[y]);
                         }
                     }
                 }
                 else if (result.Entities[i].Type == "Emotion")
                 {
-                    
+
                 }
                 else if (result.Entities[i].Type == "builtin.age")
                 {
@@ -229,38 +232,36 @@ namespace AdaBot.Dialogs
                     {
                         age = Convert.ToInt32(result.Entities[i].Entity);
                     }
-                    if (i == nbEntities - 1)
+                    if (age2 < age && age2 != -1)
                     {
-                        visitsReturn.Clear();
-
-                        if (age2 < age)
+                        int ageTmp = age;
+                        age = age2;
+                        age2 = ageTmp;
+                    }
+                }
+                if (i == nbEntities - 1)
+                {
+                    if (age2 != -1)
+                    {
+                        //Interval of ages
+                        for (int y = 0; y < nbVisits; y++)
                         {
-                            int ageTmp = age;
-                            age = age2;
-                            age2 = ageTmp;
-                        }
-                        if (age2 != -1)
-                        {
-                            //Interval of ages
-                            for (int y = 0; y < nbVisits ; y++)
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson >= age && agePerson <= age2)
                             {
-                                agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                                if (agePerson >= age && agePerson <= age2)
-                                {
-                                    visitsReturn.Add(tmp[y]);
-                                }
+                                visitsReturn.Add(tmp[y]);
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        //Juste one age
+                        for (int y = 0; y < nbVisits; y++)
                         {
-                            //Juste one age
-                            for (int y = 0; y < nbVisits ; y++)
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson == age)
                             {
-                                agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                                if (agePerson == age)
-                                {
-                                    visitsReturn.Add(tmp[y]);
-                                }
+                                visitsReturn.Add(tmp[y]);
                             }
                         }
                     }
