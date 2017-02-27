@@ -40,7 +40,7 @@ namespace AdaWebApp.Models.DAL.Repositories
 
         public List<Visit> GetVisitForAPersonById(int id,int nbVisit)
         {
-            return Table.Include(v => v.Person).Where(v => v.Person.Id == id).Reverse().Take(nbVisit).Reverse().ToList();
+            return Table.OrderByDescending(v => v.Date).Where(v => v.Person.Id == id).Reverse().Take(nbVisit).Reverse().ToList();
         }
 
         public bool CheckVisitExist(int id)
