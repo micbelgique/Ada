@@ -290,7 +290,7 @@ namespace AdaBot.Dialogs
                     List<CardAction> cardButtons = new List<CardAction>();
 
                     CardAction plButtonChoice = new CardAction()
-                    {
+                    { 
 
                         Value = $"http://adawebapp.azurewebsites.net/Api/Visits/VisitPersonById/"+visit.PersonVisit.PersonId,//GetVisitePersonByIdButton(visit.PersonVisit, context),
                         Type = "imBack",
