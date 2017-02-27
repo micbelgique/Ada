@@ -182,10 +182,22 @@ namespace AdaBot.Dialogs
             List<VisitDto> allvisits = await client.GetVisitsToday();
             int nbVisits = allvisits.Count();
             List<VisitDto> visitsReturn = new List<VisitDto>();
+            List<VisitDto> tmp = allvisits.ToList();
+
+            int age = -1;
+            int age2 = -1;
+            int agePerson;
 
             int nbEntities = result.Entities.Count();
             for (int i=0 ; i< nbEntities ; i++)
             {
+                //Get actual number of visits return
+                if (visitsReturn.Count() != 0)
+                {
+                    nbVisits = visitsReturn.Count();
+                    tmp = new List<VisitDto>(visitsReturn);
+                }
+
                 if (result.Entities[i].Type == "Gender")
                 {
                     string value = result.Entities[i].Entity;
@@ -207,36 +219,32 @@ namespace AdaBot.Dialogs
                 {
                     
                 }
-                else if (result.Entities[i].Type == "age")
+                else if (result.Entities[i].Type == "builtin.age")
                 {
-                    int age = -1;
-                    int age2 = -1;
-                    int agePerson;
-
-                    if (age == -1)
-                    {
-                        age = Convert.ToInt32(result.Entities[i].Entity);
-                    }
                     if (age != -1)
                     {
                         age2 = Convert.ToInt32(result.Entities[i].Entity);
                     }
+                    if (age == -1)
+                    {
+                        age = Convert.ToInt32(result.Entities[i].Entity);
+                    }
                     if (i == nbEntities - 1)
                     {
-                        if (age2 < age && age2 != -1)
-                        {
-                            //Interval of ages
-                            int nbVisitsReturn = visitsReturn.Count();
-                            List<VisitDto> tmp = visitsReturn;
-                            visitsReturn.Clear();
+                        visitsReturn.Clear();
 
+                        if (age2 < age)
+                        {
                             int ageTmp = age;
                             age = age2;
                             age2 = ageTmp;
-
-                            for (int y = 0; y < nbVisitsReturn; y++)
+                        }
+                        if (age2 != -1)
+                        {
+                            //Interval of ages
+                            for (int y = 0; y < nbVisits ; y++)
                             {
-                                agePerson = DateTime.Now.Year - tmp[y].PersonVisit.Age;
+                                agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
                                 if (agePerson >= age && agePerson <= age2)
                                 {
                                     visitsReturn.Add(tmp[y]);
@@ -246,13 +254,9 @@ namespace AdaBot.Dialogs
                         else
                         {
                             //Juste one age
-                            int nbVisitsReturn = visitsReturn.Count();
-                            List<VisitDto> tmp = visitsReturn;
-                            visitsReturn.Clear();
-
-                            for (int y = 0; y < nbVisitsReturn; y++)
+                            for (int y = 0; y < nbVisits ; y++)
                             {
-                                agePerson = DateTime.Now.Year - tmp[y].PersonVisit.Age;
+                                agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
                                 if (agePerson == age)
                                 {
                                     visitsReturn.Add(tmp[y]);
