@@ -183,8 +183,10 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
             AdaClient client = new AdaClient();
+            CreateDialog customDialog = new CreateDialog();
 
             //Lists for different stats
+            //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
             List<VisitDto> allvisits = await client.GetVisitsToday();
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
@@ -222,7 +224,27 @@ namespace AdaBot.Dialogs
                 }
                 else if (result.Entities[i].Type == "Emotion")
                 {
-
+                    //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
+                    string emotion = result.Entities[i].Entity;
+                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses")
+                    {
+                        emotion = "Happiness";
+                    }
+                    if (emotion == "neutre" || emotion == "neutres")
+                    {
+                        emotion = "Neutral";
+                    }
+                    if (emotion == "triste" || emotion == "tristes")
+                    {
+                        emotion = "Sadness";
+                    }
+                    for (int y = 0; y < nbVisits; y++)
+                    {
+                        if (customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) == emotion)
+                        {
+                            visitsReturn.Add(tmp[y]);
+                        }
+                    }
                 }
             }
             //CompositeEntities

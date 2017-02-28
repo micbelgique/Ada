@@ -65,7 +65,6 @@ namespace AdaWebApp.Controllers.API
         [ResponseType(typeof(Visit))]
         public async Task<IHttpActionResult> GetVisit(int id)
         {
-            //Visit visit = db.Visits.Find(id);
             Visit visit = await _unit.VisitsRepository.GetByIdAsync(id);
             if (visit == null)
             {
