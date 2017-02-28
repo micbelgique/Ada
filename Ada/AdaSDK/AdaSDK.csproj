@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AdaClient.cs" />
+    <Compile Include="Models\EmotionDto.cs" />
     <Compile Include="Models\GenderValues.cs" />
     <Compile Include="Models\PersonVisitDto.cs" />
     <Compile Include="Models\PersonDto.cs" />

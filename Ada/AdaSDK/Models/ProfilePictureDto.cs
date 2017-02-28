@@ -8,6 +8,7 @@ namespace AdaSDK.Models
 {
     public class ProfilePictureDto
     {
+        public EmotionDto EmotionScore { get; set; }
         public string Uri { get; set; }
     }
 }

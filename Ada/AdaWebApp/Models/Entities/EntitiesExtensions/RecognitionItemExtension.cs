@@ -63,7 +63,23 @@ namespace AdaWebApp.Models.Entities
         {
             return new ProfilePictureDto()
             {
-                Uri = picture.Uri
+                Uri = picture.Uri,
+                EmotionScore = picture.EmotionScores.ToDto()
+            };
+        }
+
+        public static EmotionDto ToDto(this EmotionScores emotion)
+        {
+            return new EmotionDto()
+            {
+                Anger = emotion.Anger,
+                Contempt = emotion.Contempt,
+                Disgust = emotion.Disgust,
+                Fear = emotion.Fear,
+                Happiness = emotion.Happiness,
+                Neutral = emotion.Neutral,
+                Sadness = emotion.Sadness,
+                Surprise = emotion.Surprise
             };
         }
 
