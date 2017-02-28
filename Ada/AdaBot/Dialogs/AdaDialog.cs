@@ -190,6 +190,8 @@ namespace AdaBot.Dialogs
             List<VisitDto> allvisits = await client.GetVisitsToday();
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
+
+            Activity replyToConversation;
             int nbVisits = tmp.Count();
             int agePerson;
 
@@ -248,52 +250,59 @@ namespace AdaBot.Dialogs
                 }
             }
             //CompositeEntities
-            nbEntities = result.CompositeEntities.Count();
-            for (int i = 0; i < nbEntities; i++)
+            if (result.CompositeEntities != null)
             {
-                if (visitsReturn.Count() != 0)
+                nbEntities = result.CompositeEntities.Count();
+                for (int i = 0; i < nbEntities; i++)
                 {
-                    nbVisits = visitsReturn.Count();
-                    tmp = visitsReturn.ToList();
-                    visitsReturn.Clear();
-                }
-
-                //Process of ages
-                if (result.CompositeEntities[i].ParentType == "SingleAge")
-                {
-                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                    for (int y = 0; y < nbVisits; y++)
+                    if (visitsReturn.Count() != 0)
                     {
-                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                        if (agePerson == age)
+                        nbVisits = visitsReturn.Count();
+                        tmp = visitsReturn.ToList();
+                        visitsReturn.Clear();
+                    }
+
+                    //Process of ages
+                    if (result.CompositeEntities[i].ParentType == "SingleAge")
+                    {
+                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        for (int y = 0; y < nbVisits; y++)
                         {
-                            visitsReturn.Add(tmp[y]);
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson == age)
+                            {
+                                visitsReturn.Add(tmp[y]);
+                            }
                         }
                     }
-                }
-                else if (result.CompositeEntities[i].ParentType == "IntervalAge")
-                {
-                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                    int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
-                    if (age2 < age && age2 != -1)
+                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
                     {
-                        int ageTmp = age;
-                        age = age2;
-                        age2 = ageTmp;
-                    }
-                    for (int y = 0; y < nbVisits; y++)
-                    {
-                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                        if (agePerson >= age && agePerson <= age2)
+                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                        if (age2 < age && age2 != -1)
                         {
-                            visitsReturn.Add(tmp[y]);
+                            int ageTmp = age;
+                            age = age2;
+                            age2 = ageTmp;
+                        }
+                        for (int y = 0; y < nbVisits; y++)
+                        {
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson >= age && agePerson <= age2)
+                            {
+                                visitsReturn.Add(tmp[y]);
+                            }
                         }
                     }
                 }
             }
-
-            //Test results
+            //Return results
             int nbReturn = visitsReturn.Count();
+            replyToConversation = ((Activity)context.Activity).CreateReply("Aujourd'hui, j'ai croisé " + nbReturn + " personnes correspondant à ta description.");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
     }
 }
