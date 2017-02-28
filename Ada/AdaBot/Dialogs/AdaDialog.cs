@@ -41,7 +41,6 @@ namespace AdaBot.Dialogs
         {
             string message = $"Je n'ai pas compris :/";
             await context.PostAsync(message);
-            context.Wait(MessageReceived);
             message = $"Je suis constamment en apprentissage, je vais demander à mes créateurs de m'apprendre ta phrase ;)";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
@@ -301,12 +300,12 @@ namespace AdaBot.Dialogs
 
                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson,nbVisit);
 
-                string reply = "Je l'ai vu(e) à ces dates : <br>";
+                string reply = "Je l'ai vu(e) à ces dates : ";
                 reply += Environment.NewLine;
 
                 foreach (var visit in visitsById)
                 {
-                    reply += "     -" + Convert.ToString(visit.Date.AddHours(1)) + "<br>";
+                    reply += "     -" + Convert.ToString(visit.Date.AddHours(1));
                 }
 
                 replyToConversation = ((Activity)context.Activity).CreateReply(reply);
