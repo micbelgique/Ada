@@ -259,26 +259,22 @@ namespace AdaBot.Dialogs
                         age = age2;
                         age2 = ageTmp;
                     }
-
-                    HeroCard plCard = new HeroCard()
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        Title = visit.PersonVisit.FirstName,
-                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
-                        //Subtitle = 
-                        Images = cardImages
-                        //Buttons = cardButtons
-                    };
-
-                    Attachment plAttachment = plCard.ToAttachment();
-                    replyToConversation.Attachments.Add(plAttachment);
+                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                        if (agePerson >= age && agePerson <= age2)
+                        {
+                            visitsReturn.Add(tmp[y]);
+                        }
+                    }
                 }
             }
 
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
+            //Test results
+            int nbReturn = visitsReturn.Count();
         }
 
-        [LuisIntent("GetVisitsPersonByFirstname")]
+    [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result) 
         {
             Activity replyToConversation = null;
