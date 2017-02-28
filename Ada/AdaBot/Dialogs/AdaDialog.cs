@@ -235,7 +235,7 @@ namespace AdaBot.Dialogs
                     if (visitsReturn.Count() != 0)
                     {
                         nbVisits = visitsReturn.Count();
-                        tmp = visitsReturn.ToList();
+                        tmp = visitsReturn.ToList(); 
                         visitsReturn.Clear();
                     }
 
