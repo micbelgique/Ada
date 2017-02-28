@@ -243,7 +243,7 @@ namespace AdaBot.Dialogs
         }
 
         [LuisIntent("GetVisitsPersonByFirstname")]
-        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
+        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result) 
         {
             Activity replyToConversation = null;
             AdaClient client = new AdaClient();
