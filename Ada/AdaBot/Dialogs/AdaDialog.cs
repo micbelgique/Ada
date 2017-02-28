@@ -300,7 +300,7 @@ namespace AdaBot.Dialogs
                     reply += "     -" + Convert.ToString(visit.Date.AddHours(1)) + "<br>";
                 }
 
-                replyToConversation = _message.CreateReply(reply);
+                replyToConversation = ((Activity)context.Activity).CreateReply(reply);
             }
             else
             {
@@ -323,8 +323,8 @@ namespace AdaBot.Dialogs
 
                 if (visits.Count == 0)
                 {
-                    replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
-                    replyToConversation.Recipient = _message.From;
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                    replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Type = "message";
                 }
                 else if (visits.Count == 1)
@@ -341,12 +341,12 @@ namespace AdaBot.Dialogs
                         reply += "     -" + Convert.ToString(visit.Date.AddHours(1)) + "<br>";
                     }
 
-                    replyToConversation = _message.CreateReply(reply);
+                    replyToConversation = ((Activity)context.Activity).CreateReply(reply);
                 }
                 else
                 {
-                    replyToConversation = _message.CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
-                    replyToConversation.Recipient = _message.From;
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                    replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Type = "message";
                     replyToConversation.AttachmentLayout = "carousel";
                     replyToConversation.Attachments = new List<Attachment>();
@@ -380,8 +380,8 @@ namespace AdaBot.Dialogs
                 }
             }
 
-            //Test results
-            int nbReturn = visitsReturn.Count();
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
     }
 }
