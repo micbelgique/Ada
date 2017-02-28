@@ -187,7 +187,7 @@ namespace AdaBot.Dialogs
 
             //Lists for different stats
             //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
-            List<VisitDto> allvisits = await client.GetVisitsToday();
+            List<VisitDto> allvisits = await client.GetVisitsToday(); 
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
 
