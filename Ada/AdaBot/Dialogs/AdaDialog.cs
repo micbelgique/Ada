@@ -20,8 +20,10 @@ namespace AdaBot.Dialogs
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
-        private Activity _message;
-        private CreateDialog customDialog = new CreateDialog();
+        //[NonSerialized]
+        //private Activity context.Activity;
+        //[NonSerialized]
+        //private CreateDialog customDialog = new CreateDialog();
 
         public AdaDialog(params ILuisService[] services) : base(services)
         {
@@ -30,7 +32,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            _message = (Activity)await item;
+            var message = (Activity)await item;
             await base.MessageReceived(context, item);
         }
 
@@ -48,7 +50,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("SayHello")]
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
-            string nameUser = _message.From.Name;
+            string nameUser = context.Activity.From.Name;
             string[] firstNameUser = nameUser.Split(' ');
             string message = $"Bonjour {firstNameUser[0]}";
             await context.PostAsync(message);
@@ -65,14 +67,14 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = _message.CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = _message.CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
@@ -100,6 +102,7 @@ namespace AdaBot.Dialogs
                         firstname = visit.PersonVisit.FirstName;
                     }
 
+                    var customDialog = new CreateDialog();
                     messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                     HeroCard plCard = new HeroCard()
@@ -131,14 +134,14 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = _message.CreateReply("Voyons voir...");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Voyons voir...");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
@@ -155,6 +158,7 @@ namespace AdaBot.Dialogs
                     string messageDate = "";
                     DateTime visitDate = visit.PersonVisit.DateVisit;
 
+                    var customDialog = new CreateDialog();
                     messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                     HeroCard plCard = new HeroCard()
@@ -185,11 +189,9 @@ namespace AdaBot.Dialogs
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
             int nbVisits = tmp.Count();
-
-            int age = -1;
-            int age2 = -1;
             int agePerson;
 
+            //Single Entities
             int nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
@@ -222,47 +224,47 @@ namespace AdaBot.Dialogs
                 {
 
                 }
-                else if (result.Entities[i].Type == "builtin.age")
+            }
+            //CompositeEntities
+            nbEntities = result.CompositeEntities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (visitsReturn.Count() != 0)
                 {
-                    if (age != -1)
+                    nbVisits = visitsReturn.Count();
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
+                }
+
+                //Process of ages
+                if (result.CompositeEntities[i].ParentType == "SingleAge")
+                {
+                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        age2 = Convert.ToInt32(result.Entities[i].Entity);
+                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                        if (agePerson == age)
+                        {
+                            visitsReturn.Add(tmp[y]);
+                        }
                     }
-                    if (age == -1)
-                    {
-                        age = Convert.ToInt32(result.Entities[i].Entity);
-                    }
+                }
+                else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                {
+                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
                     if (age2 < age && age2 != -1)
                     {
                         int ageTmp = age;
                         age = age2;
                         age2 = ageTmp;
                     }
-                }
-                if (i == nbEntities - 1)
-                {
-                    if (age2 != -1)
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        //Interval of ages
-                        for (int y = 0; y < nbVisits; y++)
+                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                        if (agePerson >= age && agePerson <= age2)
                         {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson >= age && agePerson <= age2)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //Juste one age
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson == age)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
+                            visitsReturn.Add(tmp[y]);
                         }
                     }
                 }
