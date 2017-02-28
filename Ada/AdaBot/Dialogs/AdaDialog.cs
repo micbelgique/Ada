@@ -185,7 +185,7 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
 
             //Lists for different stats
-            List<VisitDto> allvisits = await client.GetVisitsToday();
+            List<VisitDto> allvisits = await client.GetVisitsToday(); 
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
             
