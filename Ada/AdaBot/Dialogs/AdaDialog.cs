@@ -20,16 +20,19 @@ namespace AdaBot.Dialogs
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
-        private Activity _message;
+        //[NonSerialized]
+        //private Activity context.Activity;
+        //[NonSerialized]
+        //private CreateDialog customDialog = new CreateDialog();
 
-        public AdaDialog(params ILuisService[] services): base(services)
+        public AdaDialog(params ILuisService[] services) : base(services) 
         {
 
         }
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            _message = (Activity)await item;
+            var message = (Activity)await item;
             await base.MessageReceived(context, item);
         }
 
@@ -47,7 +50,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("SayHello")]
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
-            string nameUser = _message.From.Name;
+            string nameUser = context.Activity.From.Name;
             string[] firstNameUser = nameUser.Split(' ');
             string message = $"Bonjour {firstNameUser[0]}";
             await context.PostAsync(message);
@@ -64,14 +67,14 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = _message.CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = _message.CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
@@ -87,6 +90,7 @@ namespace AdaBot.Dialogs
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
                     string firstname;
+                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
                     //Recherche du prénom de la personne
                     if (visit.PersonVisit.FirstName == null)
@@ -98,42 +102,8 @@ namespace AdaBot.Dialogs
                         firstname = visit.PersonVisit.FirstName;
                     }
 
-                    //Préparation du message du HeroCard en fonction de la date de la visite
-                    if (visit.PersonVisit.DateVisit.Day == today.Day)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " ce matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cet après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
-                    {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
-                        }
-                    }
-                    else
-                    {
-                        var dayDiff = visit.PersonVisit.DateVisit.Day - today.Day;
-                        messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
-                    }
+                    var customDialog = new CreateDialog();
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                     HeroCard plCard = new HeroCard()
                     {
@@ -164,14 +134,14 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = _message.CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = _message.CreateReply("Voyons voir...");
-                replyToConversation.Recipient = _message.From;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Voyons voir...");
+                replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
@@ -186,42 +156,108 @@ namespace AdaBot.Dialogs
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
+                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
-                    //Préparation du message du HeroCard en fonction de la date de la visite
-                    if (visit.PersonVisit.DateVisit.Day == today.Day)
+                    var customDialog = new CreateDialog();
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
+
+                    HeroCard plCard = new HeroCard()
                     {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
+                        Title = visit.PersonVisit.FirstName,
+                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                        //Subtitle = 
+                        Images = cardImages
+                        //Buttons = cardButtons
+                    };
+
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
+                }
+            }
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetStatsVisits")]
+        public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient();
+
+            //Lists for different stats
+            List<VisitDto> allvisits = await client.GetVisitsToday();
+            List<VisitDto> visitsReturn = new List<VisitDto>();
+            List<VisitDto> tmp = allvisits.ToList();
+            int nbVisits = tmp.Count();
+            int agePerson;
+
+            //Single Entities
+            int nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                //Get actual number of visits return
+                if (visitsReturn.Count() != 0)
+                {
+                    nbVisits = visitsReturn.Count();
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
+                }
+
+                if (result.Entities[i].Type == "Gender")
+                {
+                    string value = result.Entities[i].Entity;
+                    GenderValues gender = GenderValues.Male;
+                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    {
+                        gender = GenderValues.Female;
+                    }
+
+                    for (int y = 0; y < nbVisits; y++)
+                    {
+                        if (tmp[y].PersonVisit.Gender == gender)
                         {
-                            messageDate = "J'ai croisé " + firstname + " ce matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cet après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
+                            visitsReturn.Add(tmp[y]);
                         }
                     }
-                    else if (visit.PersonVisit.DateVisit.Day == today.Day - 1)
+                }
+                else if (result.Entities[i].Type == "Emotion")
+                {
+
+                }
+            }
+            //CompositeEntities
+            nbEntities = result.CompositeEntities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (visitsReturn.Count() != 0)
+                {
+                    nbVisits = visitsReturn.Count();
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
+                }
+
+                //Process of ages
+                if (result.CompositeEntities[i].ParentType == "SingleAge")
+                {
+                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        if (visit.PersonVisit.DateVisit.Hour < 12)
+                        agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                        if (agePerson == age)
                         {
-                            messageDate = "J'ai croisé " + firstname + " hier matin.";
-                        }
-                        else if (visit.PersonVisit.DateVisit.Hour >= 12 && visit.PersonVisit.DateVisit.Hour <= 17)
-                        {
-                            messageDate = "J'ai croisé " + firstname + " hier après-midi.";
-                        }
-                        else
-                        {
-                            messageDate = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
+                            visitsReturn.Add(tmp[y]);
                         }
                     }
-                    else
+                }
+                else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                {
+                    int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                    if (age2 < age && age2 != -1)
                     {
-                        var dayDiff = today.Day - visit.PersonVisit.DateVisit.Day;
-                        messageDate = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                        int ageTmp = age;
+                        age = age2;
+                        age2 = ageTmp;
                     }
 
                     HeroCard plCard = new HeroCard()
@@ -348,8 +384,8 @@ namespace AdaBot.Dialogs
                 }
             }
 
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
+            //Test results
+            int nbReturn = visitsReturn.Count();
         }
     }
 }
