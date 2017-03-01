@@ -16,9 +16,9 @@ namespace AdaBot.Dialogs
 
         public string GetVisitsMessage(string firstname, DateTime dateVisit)
         {
-            string message; 
+            string message;
 
-            if (dateVisit.Day == DateTime.Today.Day)
+            if ( dateVisit.Day == DateTime.Today.Day)
             {
                 if (dateVisit.Hour < 12)
                 {

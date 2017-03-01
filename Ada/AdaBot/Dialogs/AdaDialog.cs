@@ -85,6 +85,7 @@ namespace AdaBot.Dialogs
 
                     //Calcul la bonne année et la bonne heure.
                     DateTime today = DateTime.Today;
+                    int yearVisit = visit.Date.Year;
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
@@ -102,7 +103,7 @@ namespace AdaBot.Dialogs
                     }
 
                     var customDialog = new CreateDialog();
-                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
 
                     HeroCard plCard = new HeroCard()
                     {
@@ -152,13 +153,14 @@ namespace AdaBot.Dialogs
 
                     //Calcul la bonne année et la bonne heure.
                     DateTime today = DateTime.Today;
+                    int yearVisit = visit.Date.Year;
                     int wrongDate = visit.PersonVisit.DateVisit.Year;
                     int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
                     DateTime visitDate = visit.PersonVisit.DateVisit;
 
                     var customDialog = new CreateDialog();
-                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
 
                     HeroCard plCard = new HeroCard()
                     {
