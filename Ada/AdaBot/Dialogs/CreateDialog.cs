@@ -81,14 +81,14 @@ namespace AdaBot.Dialogs
 
                     if (yearDiff == 1)
                     {
-
+                        message = "J'ai croisé " + firstname + " l'année passée.";
+                    }
+                    else
+                    {
+                        message = "J'ai croisé " + firstname + " il y a " + yearDiff + " années.";
                     }
 
                 }
-
-                dayDiff = DateTime.Today.Day - dateVisit.Day;
-
-                message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
             }
 
             return message;
