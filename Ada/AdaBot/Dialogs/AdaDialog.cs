@@ -363,12 +363,12 @@ namespace AdaBot.Dialogs
 
                     List<VisitDto> visitsById = await client.GetVisitPersonById(id,nbVisit);
 
-                    string reply = "J'ai vu " + firstname + " à ces dates : <br>";
+                    string reply = "J'ai vu " + firstname + " à ces dates : ";
                     reply += Environment.NewLine;
 
                     foreach (var visit in visitsById)
                     {
-                        reply += "     -" + Convert.ToString(visit.Date.AddHours(1)) + "<br>";
+                        reply += "     -" + Convert.ToString(visit.Date.AddHours(1));
                     }
 
                     replyToConversation = ((Activity)context.Activity).CreateReply(reply);
