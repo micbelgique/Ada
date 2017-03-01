@@ -226,7 +226,7 @@ namespace AdaBot.Dialogs
                 {
                     //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
                     string emotion = result.Entities[i].Entity;
-                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses")
+                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses") 
                     {
                         emotion = "Happiness";
                     }
