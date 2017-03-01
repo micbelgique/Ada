@@ -247,7 +247,7 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            //CompositeEntities
+            //CompositeEntities 
             if (result.CompositeEntities != null)
             {
                 nbEntities = result.CompositeEntities.Count();
