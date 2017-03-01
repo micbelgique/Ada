@@ -24,7 +24,7 @@ namespace AdaBot.Dialogs
         //private Activity context.Activity;
         //[NonSerialized]
         //private CreateDialog customDialog = new CreateDialog();
-
+         
         public AdaDialog(params ILuisService[] services) : base(services) 
         {
 
