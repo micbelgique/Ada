@@ -58,7 +58,7 @@ namespace AdaBot.Dialogs
         }
 
         public string getEmotion(EmotionDto emotion)
-        {
+        { 
             if (emotion != null)
             {
                 float test = emotion.Happiness;
