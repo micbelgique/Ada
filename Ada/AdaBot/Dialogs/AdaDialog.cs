@@ -207,7 +207,7 @@ namespace AdaBot.Dialogs
             for (int i = 0; i < nbEntities; i++)
             {
                 //Get actual number of visits return
-                if (visitsReturn.Count() != 0)
+                if (i != 0)
                 {
                     nbVisits = visitsReturn.Count();
                     tmp = visitsReturn.ToList();
@@ -241,7 +241,7 @@ namespace AdaBot.Dialogs
                     askingEmotion = true;
                     //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
                     string emotion = result.Entities[i].Entity;
-                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses")
+                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
                         emotion = "Happiness";
                         emotionReturn = " heureux(ses)";
@@ -255,6 +255,16 @@ namespace AdaBot.Dialogs
                     {
                         emotion = "Sadness";
                         emotionReturn = " tristes";
+                    }
+                    if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
+                    {
+                        emotion = "Anger";
+                        emotionReturn = " faché(es)";
+                    }
+                    if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
+                    {
+                        emotion = "Surprise";
+                        emotionReturn = " surpris(es)";
                     }
                     for (int y = 0; y < nbVisits; y++)
                     {
@@ -324,50 +334,54 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visitsReturn.Count() + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
             replyToConversation.Recipient = context.Activity.From; 
             replyToConversation.Type = "message";
-            replyToConversation.AttachmentLayout = "carousel";
-            replyToConversation.Attachments = new List<Attachment>();
-            int compteur = 0;
-            foreach (var visit in visitsReturn)
+
+            if (visitsReturn.Count() != 0)
             {
-                List<CardImage> cardImages = new List<CardImage>();
-                if (!askingEmotion)
+                replyToConversation.AttachmentLayout = "carousel";
+                replyToConversation.Attachments = new List<Attachment>();
+                int compteur = 0;
+                foreach (var visit in visitsReturn)
                 {
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
-                }
-                else
-                {
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(EmotionPicture[compteur].Uri)}")); // a mettre dans le SDK
-                }
-                //Calcul la bonne année et la bonne heure.
-                DateTime today = DateTime.Today;
-                int wrongDate = visit.PersonVisit.DateVisit.Year;
-                int goodDate = DateTime.Today.Year - wrongDate;
-                string messageDate = "";
-                string firstname = "";
-                DateTime visitDate = visit.PersonVisit.DateVisit;
+                    List<CardImage> cardImages = new List<CardImage>();
+                    if (!askingEmotion)
+                    {
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+                    }
+                    else
+                    {
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(EmotionPicture[compteur].Uri)}")); // a mettre dans le SDK
+                    }
+                    //Calcul la bonne année et la bonne heure.
+                    DateTime today = DateTime.Today;
+                    int wrongDate = visit.PersonVisit.DateVisit.Year;
+                    int goodDate = DateTime.Today.Year - wrongDate;
+                    string messageDate = "";
+                    string firstname = "";
+                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
-                if (visit.PersonVisit.FirstName == null) 
-                {
-                    firstname = "une personne inconnue";
-                }
-                else
-                {
-                    firstname = visit.PersonVisit.FirstName;
-                }
-                messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
+                    if (visit.PersonVisit.FirstName == null)
+                    {
+                        firstname = "une personne inconnue";
+                    }
+                    else
+                    {
+                        firstname = visit.PersonVisit.FirstName;
+                    }
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
-                HeroCard plCard = new HeroCard()
-                {
-                    Title = firstname,
-                    Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
-                    //Subtitle = 
-                    Images = cardImages
-                    //Buttons = cardButtons
-                };
+                    HeroCard plCard = new HeroCard()
+                    {
+                        Title = firstname,
+                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
+                        //Subtitle = 
+                        Images = cardImages
+                        //Buttons = cardButtons
+                    };
 
-                Attachment plAttachment = plCard.ToAttachment();
-                replyToConversation.Attachments.Add(plAttachment);
-                compteur++;
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
+                    compteur++;
+                }
             }
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);

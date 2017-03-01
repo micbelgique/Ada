@@ -110,6 +110,16 @@ namespace AdaBot.Dialogs
                     test = emotion.Neutral;
                     result = "Neutral";
                 }
+                if (test < emotion.Surprise)
+                {
+                    test = emotion.Surprise;
+                    result = "Surprise";
+                }
+                if (test < emotion.Anger)
+                {
+                    test = emotion.Anger;
+                    result = "Anger";
+                }
                 return result;
             }
             return null;
