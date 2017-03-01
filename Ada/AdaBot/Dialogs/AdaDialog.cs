@@ -190,7 +190,9 @@ namespace AdaBot.Dialogs
             List<VisitDto> allvisits = await client.GetVisitsToday();
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
+
             List<ProfilePictureDto> EmotionPicture = new List<ProfilePictureDto>();
+            bool askingEmotion = false;
 
             int nbVisits = tmp.Count();
             int agePerson;
@@ -234,6 +236,7 @@ namespace AdaBot.Dialogs
                 }
                 else if (result.Entities[i].Type == "Emotion")
                 {
+                    askingEmotion = true;
                     //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
                     string emotion = result.Entities[i].Entity;
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses")
@@ -325,7 +328,7 @@ namespace AdaBot.Dialogs
             foreach (var visit in visitsReturn)
             {
                 List<CardImage> cardImages = new List<CardImage>();
-                if (result.CompositeEntities == null)
+                if (!askingEmotion)
                 {
                     cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
                 }
@@ -338,13 +341,22 @@ namespace AdaBot.Dialogs
                 int wrongDate = visit.PersonVisit.DateVisit.Year;
                 int goodDate = DateTime.Today.Year - wrongDate;
                 string messageDate = "";
+                string firstname = "";
                 DateTime visitDate = visit.PersonVisit.DateVisit;
 
-                messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visitDate);
+                if (visit.PersonVisit.FirstName == null)
+                {
+                    firstname = "une personne inconnue";
+                }
+                else
+                {
+                    firstname = visit.PersonVisit.FirstName;
+                }
+                messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
 
                 HeroCard plCard = new HeroCard()
                 {
-                    Title = visit.PersonVisit.FirstName,
+                    Title = firstname,
                     Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
                     //Subtitle = 
                     Images = cardImages
