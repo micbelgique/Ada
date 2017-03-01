@@ -183,6 +183,9 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetStatsVisits")]
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
+            //Message d'attente
+            await context.PostAsync("Un petit instant, je vais te chercher ça! ;)");
+
             AdaClient client = new AdaClient();
             Activity replyToConversation;
             CreateDialog customDialog = new CreateDialog();
