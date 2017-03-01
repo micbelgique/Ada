@@ -51,7 +51,7 @@ namespace AdaBot.Dialogs
         {
             string nameUser = context.Activity.From.Name;
             string[] firstNameUser = nameUser.Split(' ');
-            string message = $"Bonjour {firstNameUser[0]}"; 
+            string message = $"Bonjour {firstNameUser[0]}";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
