@@ -24,7 +24,7 @@ namespace AdaBot.Dialogs
         //private Activity context.Activity;
         //[NonSerialized]
         //private CreateDialog customDialog = new CreateDialog();
-         
+ 
         public AdaDialog(params ILuisService[] services) : base(services) 
         {
 
@@ -81,7 +81,7 @@ namespace AdaBot.Dialogs
                 foreach (var visit in visits)
                 {
                     List<CardImage> cardImages = new List<CardImage>();
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}")); //A mettre dans le SDK
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); //A mettre dans le SDK
 
                     //Calcul la bonne année et la bonne heure.
                     DateTime today = DateTime.Today;
@@ -148,7 +148,7 @@ namespace AdaBot.Dialogs
                 foreach (var visit in visits)
                 {
                     List<CardImage> cardImages = new List<CardImage>();
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}")); // a mettre dans le SDK
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
 
                     //Calcul la bonne année et la bonne heure.
                     DateTime today = DateTime.Today;
@@ -240,8 +240,10 @@ namespace AdaBot.Dialogs
                     }
                     for (int y = 0; y < nbVisits; y++)
                     {
-                        if (customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) == emotion &&
-                            customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) != null)
+                        int nbEmotion = tmp[y].ProfilePicture.Count();
+                        for (int z=0; z< nbEmotion ; z++)
+                        if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
+                            customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
                         {
                             visitsReturn.Add(tmp[y]);
                         }
@@ -384,7 +386,7 @@ namespace AdaBot.Dialogs
                     foreach (var visit in visits)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Uri)}")); // a mettre dans le SDK
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
 
                         List<CardAction> cardButtons = new List<CardAction>();
 

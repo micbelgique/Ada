@@ -4,6 +4,7 @@ using AdaSDK;
 using AdaWebApp.Helpers;
 using AdaSDK.Models;
 using AdaWebApp.Models.Entities;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace AdaWebApp.Models.Entities
@@ -37,12 +38,14 @@ namespace AdaWebApp.Models.Entities
 
         public static VisitDto ToDto(this Visit visit)
         {
+            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
             return new VisitDto()
             {
                 ID = visit.Id,
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
-                ProfilePicture = visit.ProfilePictures.Last().ToDto(),
+                //ProfilePicture = visit.ProfilePictures.Last().ToDto(),
+                ProfilePicture = tmp.ToDto(),
                 PersonVisit = visit.Person.ToDto()
             };
         }
@@ -59,24 +62,29 @@ namespace AdaWebApp.Models.Entities
             };
         }
 
-        public static ProfilePictureDto ToDto(this ProfilePicture picture)
+        public static List<ProfilePictureDto> ToDto(this List<ProfilePicture> picture)
         {
-            if (picture.EmotionScores == null)
+            List<ProfilePictureDto> listReturn = new List<ProfilePictureDto>();
+            for (int i = 0 ; i<picture.Count() ; i++)
             {
-                return new ProfilePictureDto()
+                if (picture[i].EmotionScores == null)
                 {
-                    Uri = picture.Uri,
-                    EmotionScore = null
-                };
-            }
-            else
-            {
-                return new ProfilePictureDto()
+                    listReturn.Add(new ProfilePictureDto()
+                    {
+                        Uri = picture[i].Uri,
+                        EmotionScore = null
+                    });
+                }
+                else
                 {
-                    Uri = picture.Uri,
-                    EmotionScore = picture.EmotionScores.ToDto()
-                };
+                    listReturn.Add(new ProfilePictureDto()
+                    {
+                        Uri = picture[i].Uri,
+                        EmotionScore = picture[i].EmotionScores.ToDto()
+                    });
+                }
             }
+            return listReturn;
         }
 
         public static EmotionDto ToDto(this EmotionScores emotion)
