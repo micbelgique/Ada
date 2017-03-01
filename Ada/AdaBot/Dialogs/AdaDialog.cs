@@ -24,8 +24,8 @@ namespace AdaBot.Dialogs
         //private Activity context.Activity;
         //[NonSerialized]
         //private CreateDialog customDialog = new CreateDialog();
- 
-        public AdaDialog(params ILuisService[] services) : base(services) 
+
+        public AdaDialog(params ILuisService[] services) : base(services)
         {
 
         }
@@ -108,7 +108,7 @@ namespace AdaBot.Dialogs
                     HeroCard plCard = new HeroCard()
                     {
                         Title = visit.PersonVisit.FirstName,
-                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                         //Subtitle = 
                         Images = cardImages
                         //Buttons = cardButtons
@@ -165,7 +165,7 @@ namespace AdaBot.Dialogs
                     HeroCard plCard = new HeroCard()
                     {
                         Title = visit.PersonVisit.FirstName,
-                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                         //Subtitle = 
                         Images = cardImages
                         //Buttons = cardButtons
@@ -189,11 +189,16 @@ namespace AdaBot.Dialogs
 
             //Lists for different stats
             //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
-            List<VisitDto> allvisits = await client.GetVisitsToday(); 
+            List<VisitDto> allvisits = await client.GetVisitsToday();
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = allvisits.ToList();
+            List<ProfilePictureDto> EmotionPicture = new List<ProfilePictureDto>();
+
             int nbVisits = tmp.Count();
             int agePerson;
+            string genderReturn = "personnes";
+            string ageReturn = "";
+            string emotionReturn = "";
 
             //Single Entities
             int nbEntities = result.Entities.Count();
@@ -214,6 +219,11 @@ namespace AdaBot.Dialogs
                     if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
                     {
                         gender = GenderValues.Female;
+                        genderReturn = " femmes";
+                    }
+                    else
+                    {
+                        genderReturn = " hommes";
                     }
 
                     for (int y = 0; y < nbVisits; y++)
@@ -224,30 +234,36 @@ namespace AdaBot.Dialogs
                         }
                     }
                 }
-                else if (result.Entities[i].Type == "Emotion") 
+                else if (result.Entities[i].Type == "Emotion")
                 {
                     //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
                     string emotion = result.Entities[i].Entity;
-                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses") 
+                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses")
                     {
                         emotion = "Happiness";
+                        emotionReturn = " heureux(ses)";
                     }
                     if (emotion == "neutre" || emotion == "neutres")
                     {
                         emotion = "Neutral";
+                        emotionReturn = " neutres";
                     }
                     if (emotion == "triste" || emotion == "tristes")
                     {
                         emotion = "Sadness";
+                        emotionReturn = " tristes";
                     }
                     for (int y = 0; y < nbVisits; y++)
                     {
                         int nbEmotion = tmp[y].ProfilePicture.Count();
-                        for (int z=0; z< nbEmotion ; z++)
-                        if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
-                            customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
+                        for (int z = 0; z < nbEmotion; z++)
                         {
-                            visitsReturn.Add(tmp[y]);
+                            if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
+                            customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
+                            {
+                                visitsReturn.Add(tmp[y]);
+                                EmotionPicture.Add(tmp[y].ProfilePicture[z]);
+                            }
                         }
                     }
                 }
@@ -261,7 +277,7 @@ namespace AdaBot.Dialogs
                     if (visitsReturn.Count() != 0)
                     {
                         nbVisits = visitsReturn.Count();
-                        tmp = visitsReturn.ToList(); 
+                        tmp = visitsReturn.ToList();
                         visitsReturn.Clear();
                     }
 
@@ -269,6 +285,7 @@ namespace AdaBot.Dialogs
                     if (result.CompositeEntities[i].ParentType == "SingleAge")
                     {
                         int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        ageReturn = " de " + age + " ans";
                         for (int y = 0; y < nbVisits; y++)
                         {
                             agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
@@ -288,6 +305,7 @@ namespace AdaBot.Dialogs
                             age = age2;
                             age2 = ageTmp;
                         }
+                        ageReturn = " entre " + age + " et " + age2 + " ans";
                         for (int y = 0; y < nbVisits; y++)
                         {
                             agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
@@ -300,16 +318,51 @@ namespace AdaBot.Dialogs
                 }
             }
             //Return results
-            int nbReturn = visitsReturn.Count();
-            replyToConversation = ((Activity)context.Activity).CreateReply("Aujourd'hui, j'ai croisé " + nbReturn + " personnes correspondant à ta description.");
-            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visitsReturn.Count() + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
+            replyToConversation.Recipient = context.Activity.From; 
             replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+            int compteur = 0;
+            foreach (var visit in visitsReturn)
+            {
+                List<CardImage> cardImages = new List<CardImage>();
+                if (result.CompositeEntities == null)
+                {
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+                }
+                else
+                {
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(EmotionPicture[compteur].Uri)}")); // a mettre dans le SDK
+                }
+                //Calcul la bonne année et la bonne heure.
+                DateTime today = DateTime.Today;
+                int wrongDate = visit.PersonVisit.DateVisit.Year;
+                int goodDate = DateTime.Today.Year - wrongDate;
+                string messageDate = "";
+                DateTime visitDate = visit.PersonVisit.DateVisit;
+
+                messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visitDate);
+
+                HeroCard plCard = new HeroCard()
+                {
+                    Title = visit.PersonVisit.FirstName,
+                    Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
+                    //Subtitle = 
+                    Images = cardImages
+                    //Buttons = cardButtons
+                };
+
+                Attachment plAttachment = plCard.ToAttachment();
+                replyToConversation.Attachments.Add(plAttachment);
+                compteur++;
+            }
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
-    [LuisIntent("GetVisitsPersonByFirstname")]
-        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result) 
+        [LuisIntent("GetVisitsPersonByFirstname")]
+        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
             Activity replyToConversation = null;
             AdaClient client = new AdaClient();
@@ -324,7 +377,7 @@ namespace AdaBot.Dialogs
 
                 nbVisit = Convert.ToInt32(splitResult[3]);
 
-               List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson,nbVisit);
+                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
 
                 string reply = "Je l'ai vu(e) à ces dates : ";
                 reply += Environment.NewLine;
@@ -347,12 +400,12 @@ namespace AdaBot.Dialogs
                     {
                         firstname = result.Entities[i].Entity;
                     }
-                    if(result.Entities[i].Type == "Number")
+                    if (result.Entities[i].Type == "Number")
                     {
                         nbVisit = Convert.ToInt32(result.Entities[i].Entity);
                     }
                 }
-                        
+
                 List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
                 if (visits.Count == 0)
@@ -365,7 +418,7 @@ namespace AdaBot.Dialogs
                 {
                     int id = visits[0].PersonVisit.PersonId;
 
-                    List<VisitDto> visitsById = await client.GetVisitPersonById(id,nbVisit);
+                    List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
 
                     string reply = "J'ai vu " + firstname + " à ces dates : ";
                     reply += Environment.NewLine;
@@ -395,7 +448,7 @@ namespace AdaBot.Dialogs
                         CardAction plButtonChoice = new CardAction()
                         {
 
-                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId +" : nbVisit :"+nbVisit,
+                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId + " : nbVisit :" + nbVisit,
                             Type = "postBack",
                             Title = "Le voilà !"
                         };
