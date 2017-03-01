@@ -240,7 +240,8 @@ namespace AdaBot.Dialogs
                     }
                     for (int y = 0; y < nbVisits; y++)
                     {
-                        if (customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) == emotion)
+                        if (customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) == emotion &&
+                            customDialog.getEmotion(tmp[y].ProfilePicture.EmotionScore) != null)
                         {
                             visitsReturn.Add(tmp[y]);
                         }

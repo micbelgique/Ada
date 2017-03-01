@@ -61,11 +61,22 @@ namespace AdaWebApp.Models.Entities
 
         public static ProfilePictureDto ToDto(this ProfilePicture picture)
         {
-            return new ProfilePictureDto()
+            if (picture.EmotionScores == null)
             {
-                Uri = picture.Uri,
-                EmotionScore = picture.EmotionScores.ToDto()
-            };
+                return new ProfilePictureDto()
+                {
+                    Uri = picture.Uri,
+                    EmotionScore = null
+                };
+            }
+            else
+            {
+                return new ProfilePictureDto()
+                {
+                    Uri = picture.Uri,
+                    EmotionScore = picture.EmotionScores.ToDto()
+                };
+            }
         }
 
         public static EmotionDto ToDto(this EmotionScores emotion)
