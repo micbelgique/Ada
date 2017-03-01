@@ -76,7 +76,7 @@ namespace AdaBot.Dialogs
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
+                replyToConversation.Attachments = new List<Attachment>(); 
 
                 foreach (var visit in visits)
                 {
