@@ -317,7 +317,7 @@ namespace AdaBot.Dialogs
             }
             //Return results
             replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visitsReturn.Count() + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
-            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Recipient = context.Activity.From; 
             replyToConversation.Type = "message";
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
