@@ -107,7 +107,7 @@ namespace AdaBot.Dialogs
                     HeroCard plCard = new HeroCard()
                     {
                         Title = visit.PersonVisit.FirstName,
-                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                         //Subtitle = 
                         Images = cardImages
                         //Buttons = cardButtons
@@ -163,7 +163,7 @@ namespace AdaBot.Dialogs
                     HeroCard plCard = new HeroCard()
                     {
                         Title = visit.PersonVisit.FirstName,
-                        Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                         //Subtitle = 
                         Images = cardImages
                         //Buttons = cardButtons
@@ -345,7 +345,7 @@ namespace AdaBot.Dialogs
                 HeroCard plCard = new HeroCard()
                 {
                     Title = visit.PersonVisit.FirstName,
-                    Text = messageDate + "(" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                    Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
                     //Subtitle = 
                     Images = cardImages
                     //Buttons = cardButtons
