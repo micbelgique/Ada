@@ -346,7 +346,7 @@ namespace AdaBot.Dialogs
                 string firstname = "";
                 DateTime visitDate = visit.PersonVisit.DateVisit;
 
-                if (visit.PersonVisit.FirstName == null)
+                if (visit.PersonVisit.FirstName == null) 
                 {
                     firstname = "une personne inconnue";
                 }
