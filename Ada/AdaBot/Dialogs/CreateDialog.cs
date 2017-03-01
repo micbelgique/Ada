@@ -50,7 +50,44 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                var dayDiff = DateTime.Today.Day - dateVisit.Day;
+                int monthDiff;
+                int dayDiff;
+                if (DateTime.Today.Year == dateVisit.Year)
+                {
+                    if(DateTime.Today.Month == dateVisit.Month)
+                    {
+                        dayDiff = DateTime.Today.Day - dateVisit.Day;
+
+                        message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                    }
+                    else
+                    {
+                        monthDiff = DateTime.Today.Month - dateVisit.Month;
+
+                        if (monthDiff == 1)
+                        {
+                            message = "J'ai croisé " + firstname + " le mois passé.";
+                        }
+                        else
+                        {
+                            message = "J'ai croisé " + firstname + " il y a " + monthDiff + " mois.";
+                        }
+                    }
+                }
+                else
+                {
+                    int yearDiff;
+                    yearDiff = DateTime.Today.Year - dateVisit.Year;
+
+                    if (yearDiff == 1)
+                    {
+
+                    }
+
+                }
+
+                dayDiff = DateTime.Today.Day - dateVisit.Day;
+
                 message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
             }
 
