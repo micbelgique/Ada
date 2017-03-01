@@ -59,19 +59,23 @@ namespace AdaBot.Dialogs
 
         public string getEmotion(EmotionDto emotion)
         {
-            float test = emotion.Happiness;
-            string result = "Happiness";
-            if (test < emotion.Sadness)
+            if (emotion != null)
             {
-                test = emotion.Sadness;
-                result = "Sadness";
+                float test = emotion.Happiness;
+                string result = "Happiness";
+                if (test < emotion.Sadness)
+                {
+                    test = emotion.Sadness;
+                    result = "Sadness";
+                }
+                if (test < emotion.Neutral)
+                {
+                    test = emotion.Neutral;
+                    result = "Neutral";
+                }
+                return result;
             }
-            if (test < emotion.Neutral)
-            {
-                test = emotion.Neutral;
-                result = "Neutral";
-            }
-            return result;
+            return null;
         }
     }
 }
