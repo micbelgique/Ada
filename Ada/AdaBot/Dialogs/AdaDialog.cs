@@ -222,7 +222,7 @@ namespace AdaBot.Dialogs
                         }
                     }
                 }
-                else if (result.Entities[i].Type == "Emotion")
+                else if (result.Entities[i].Type == "Emotion") 
                 {
                     //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
                     string emotion = result.Entities[i].Entity;
