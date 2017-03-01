@@ -77,7 +77,7 @@ namespace AdaBot.Dialogs
                 else
                 {
                     int yearDiff;
-                    yearDiff = DateTime.Today.Year - dateVisit.Year;
+                    yearDiff = DateTime.Today.Year - dateVisit.Year; 
 
                     if (yearDiff == 1)
                     {
