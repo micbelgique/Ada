@@ -83,15 +83,6 @@ namespace AdaWebApp.Controllers.API
             return Ok(visit);
         }
 
-        [HttpGet]
-        [Route("VisitPersonById/{id}/{nbVisit}")]
-        // GET: get visits of the day
-        public List<VisitDto> GetVisitPersonById(int id,int nbVisit)
-        {
-            var visits = _unit.VisitsRepository.GetVisitForAPersonById(id,nbVisit);
-            return visits.Select(v => v.ToDto()).ToList();
-        }
-
         /*
         // PUT: api/Visits/5
         [ResponseType(typeof(void))]
