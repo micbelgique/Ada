@@ -371,7 +371,7 @@ namespace AdaBot.Dialogs
 
             if (visitsReturn.Count() != 0)
             {
-                replyToConversation.AttachmentLayout = "carousel";
+                replyToConversation.AttachmentLayout = "carousel"; 
                 replyToConversation.Attachments = new List<Attachment>();
                 int compteur = 0;
                 foreach (var visit in visitsReturn)
