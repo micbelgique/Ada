@@ -17,7 +17,7 @@ namespace AdaBot.Dialogs
         public string GetVisitsMessage(string firstname, DateTime dateVisit)
         {
             string message;
-            dateVisit = dateVisit.AddHours(1);
+            //dateVisit = dateVisit.AddHours(1);
 
             var diffDate = DateTime.Now - dateVisit;
 
