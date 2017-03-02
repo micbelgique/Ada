@@ -17,83 +17,38 @@ namespace AdaBot.Dialogs
         public string GetVisitsMessage(string firstname, DateTime dateVisit)
         {
             string message;
+            dateVisit = dateVisit.AddHours(1);
 
-            if ( dateVisit.Day == DateTime.Today.Day)
+            var diffDate = DateTime.Now - dateVisit;
+
+            if(diffDate.TotalMinutes < 60)
             {
-                if (dateVisit.Hour < 12)
-                {
-                    message = "J'ai croisé " + firstname + " ce matin.";
-                }
-                else if (dateVisit.Hour >= 12 && dateVisit.Hour <= 17)
-                {
-                    message = "J'ai croisé " + firstname + " cet après-midi.";
-                }
-                else
-                {
-                    message = "J'ai croisé " + firstname + " cette nuit... Il doit sûrement faire des heures sup'!";
-                }
+                message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Minutes) + " minute(s)";
             }
-            else if (dateVisit.Day == DateTime.Today.Day - 1)
+            else if(diffDate.TotalHours < 24)
             {
-                if (dateVisit.Hour < 12)
-                {
-                    message = "J'ai croisé " + firstname + " hier matin.";
-                }
-                else if (dateVisit.Hour >= 12 && dateVisit.Hour <= 17)
-                {
-                    message = "J'ai croisé " + firstname + " hier après-midi.";
-                }
-                else
-                {
-                    message = "J'ai croisé " + firstname + " la nuit dernière... Il doit sûrement faire des heures sup'!";
-                }
+                message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Hours) + " heure(s)";
+            }
+            else if (diffDate.TotalDays < 30)
+            {
+                message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Days) + " jour(s)";
+            }
+            else if(diffDate.TotalDays < 366)
+            {
+                int nbMonth = Convert.ToInt32((diffDate.TotalDays) / 30);
+
+                message = "J'ai croisé " + firstname + " il y a " + nbMonth + " mois";
             }
             else
             {
-                int monthDiff;
-                int dayDiff;
-                if (DateTime.Today.Year == dateVisit.Year)
-                {
-                    if(DateTime.Today.Month == dateVisit.Month)
-                    {
-                        dayDiff = DateTime.Today.Day - dateVisit.Day;
+                int nbYears = Convert.ToInt32((diffDate.TotalDays) / 365);
 
-                        message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
-                    }
-                    else
-                    {
-                        monthDiff = DateTime.Today.Month - dateVisit.Month;
-
-                        if (monthDiff == 1)
-                        {
-                            message = "J'ai croisé " + firstname + " le mois passé.";
-                        }
-                        else
-                        {
-                            message = "J'ai croisé " + firstname + " il y a " + monthDiff + " mois.";
-                        }
-                    }
-                }
-                else
-                {
-                    int yearDiff;
-                    yearDiff = DateTime.Today.Year - dateVisit.Year; 
-
-                    if (yearDiff == 1)
-                    {
-                        message = "J'ai croisé " + firstname + " l'année passée.";
-                    }
-                    else
-                    {
-                        message = "J'ai croisé " + firstname + " il y a " + yearDiff + " années.";
-                    }
-
-                }
+                message = "J'ai croisé " + firstname + " il y a " + nbYears + " année(s)";
             }
+
 
             return message;
         }
-
         public string getEmotion(EmotionDto emotion)
         { 
             if (emotion != null)
