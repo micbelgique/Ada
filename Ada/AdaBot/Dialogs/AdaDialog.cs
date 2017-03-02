@@ -343,7 +343,7 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description aujourd'ui... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description aujourd'hui... :/");
             }
 
             if (visitsReturn.Count() != 0)
