@@ -59,6 +59,9 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
+            //Message d'attente
+            await context.PostAsync("Un petit instant, je vais te chercher ça! ;)");
+
             AdaClient client = new AdaClient();
             List<VisitDto> visits = await client.GetVisitsToday();
 
@@ -198,6 +201,7 @@ namespace AdaBot.Dialogs
 
             List<ProfilePictureDto> EmotionPicture = new List<ProfilePictureDto>();
             bool askingEmotion = false;
+            string emotion = "";
 
             int nbVisits = tmp.Count();
             int agePerson;
@@ -210,7 +214,7 @@ namespace AdaBot.Dialogs
             for (int i = 0; i < nbEntities; i++)
             {
                 //Get actual number of visits return
-                if (i != 0)
+                if (i != 0 && visitsReturn.Count() != 0)
                 {
                     nbVisits = visitsReturn.Count();
                     tmp = visitsReturn.ToList();
@@ -239,46 +243,53 @@ namespace AdaBot.Dialogs
                         }
                     }
                 }
-                else if (result.Entities[i].Type == "Emotion")
+                else if (result.Entities[i].Type == "Emotion" || emotion != null)
                 {
-                    askingEmotion = true;
-                    //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
-                    string emotion = result.Entities[i].Entity;
-                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
+                    if (result.Entities[i].Type == "Emotion")
                     {
-                        emotion = "Happiness";
-                        emotionReturn = "heureux(ses)";
+                        emotion = result.Entities[i].Entity;
                     }
-                    if (emotion == "neutre" || emotion == "neutres")
+
+                    if (i == nbEntities - 1)
                     {
-                        emotion = "Neutral";
-                        emotionReturn = "neutre(s)";
-                    }
-                    if (emotion == "triste" || emotion == "tristes")
-                    {
-                        emotion = "Sadness";
-                        emotionReturn = "triste(s)";
-                    }
-                    if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
-                    {
-                        emotion = "Anger";
-                        emotionReturn = "faché(es)";
-                    }
-                    if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
-                    {
-                        emotion = "Surprise";
-                        emotionReturn = "surpris(es)";
-                    }
-                    for (int y = 0; y < nbVisits; y++)
-                    {
-                        int nbEmotion = tmp[y].ProfilePicture.Count();
-                        for (int z = 0; z < nbEmotion; z++)
+                        //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
+                        if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                         {
-                            if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
-                            customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
+                            emotion = "Happiness";
+                            emotionReturn = "heureux(ses)";
+                        }
+                        if (emotion == "neutre" || emotion == "neutres")
+                        {
+                            emotion = "Neutral";
+                            emotionReturn = "neutre(s)";
+                        }
+                        if (emotion == "triste" || emotion == "tristes")
+                        {
+                            emotion = "Sadness";
+                            emotionReturn = "triste(s)";
+                        }
+                        if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
+                        {
+                            emotion = "Anger";
+                            emotionReturn = "faché(es)";
+                        }
+                        if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
+                        {
+                            emotion = "Surprise";
+                            emotionReturn = "surpris(es)";
+                        }
+                        for (int y = 0; y < nbVisits; y++)
+                        {
+                            int nbEmotion = tmp[y].ProfilePicture.Count();
+                            for (int z = 0; z < nbEmotion; z++)
                             {
-                                visitsReturn.Add(tmp[y]);
-                                EmotionPicture.Add(tmp[y].ProfilePicture[z]);
+                                if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
+                                customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
+                                {
+                                    visitsReturn.Add(tmp[y]);
+                                    EmotionPicture.Add(tmp[y].ProfilePicture[z]);
+                                    askingEmotion = true;
+                                }
                             }
                         }
                     }
@@ -333,10 +344,30 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
+
+            //NbPersonForReal
+            int nbPerson = 0;
+            List<int> listID = new List<int>();
+            foreach (var visit in visitsReturn)
+            {
+                if (! listID.Contains(visit.ID))
+                {
+                    listID.Add(visit.ID);
+                    nbPerson += 1;
+                }
+            }
+
             //Return results
-            replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visitsReturn.Count() + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
-            replyToConversation.Recipient = context.Activity.From; 
-            replyToConversation.Type = "message";
+            if (nbPerson != 0)
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description... :/");
+            }
 
             if (visitsReturn.Count() != 0)
             {
