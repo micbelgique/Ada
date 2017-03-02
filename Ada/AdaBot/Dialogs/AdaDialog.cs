@@ -373,7 +373,7 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
-                int compteur = 0; 
+                int compteur = 0;
                 foreach (var visit in visitsReturn)
                 {
                     List<CardImage> cardImages = new List<CardImage>();
