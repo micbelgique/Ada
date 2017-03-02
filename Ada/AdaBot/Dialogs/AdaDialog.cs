@@ -59,6 +59,8 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
+            await context.PostAsync("Un petit instant, je vais te chercher ça! ;)");
+
             AdaClient client = new AdaClient();
             List<VisitDto> visits = await client.GetVisitsToday();
 
