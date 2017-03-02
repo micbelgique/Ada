@@ -397,7 +397,7 @@ namespace AdaBot.Dialogs
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
-         
+        
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
