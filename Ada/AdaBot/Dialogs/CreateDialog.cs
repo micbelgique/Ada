@@ -16,9 +16,9 @@ namespace AdaBot.Dialogs
 
         public string GetVisitsMessage(string firstname, DateTime dateVisit)
         {
-            string message; 
+            string message;
 
-            if (dateVisit.Day == DateTime.Today.Day)
+            if ( dateVisit.Day == DateTime.Today.Day)
             {
                 if (dateVisit.Hour < 12)
                 {
@@ -50,8 +50,45 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                var dayDiff = DateTime.Today.Day - dateVisit.Day;
-                message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                int monthDiff;
+                int dayDiff;
+                if (DateTime.Today.Year == dateVisit.Year)
+                {
+                    if(DateTime.Today.Month == dateVisit.Month)
+                    {
+                        dayDiff = DateTime.Today.Day - dateVisit.Day;
+
+                        message = "J'ai croisé " + firstname + " il y a " + dayDiff + " jours.";
+                    }
+                    else
+                    {
+                        monthDiff = DateTime.Today.Month - dateVisit.Month;
+
+                        if (monthDiff == 1)
+                        {
+                            message = "J'ai croisé " + firstname + " le mois passé.";
+                        }
+                        else
+                        {
+                            message = "J'ai croisé " + firstname + " il y a " + monthDiff + " mois.";
+                        }
+                    }
+                }
+                else
+                {
+                    int yearDiff;
+                    yearDiff = DateTime.Today.Year - dateVisit.Year; 
+
+                    if (yearDiff == 1)
+                    {
+                        message = "J'ai croisé " + firstname + " l'année passée.";
+                    }
+                    else
+                    {
+                        message = "J'ai croisé " + firstname + " il y a " + yearDiff + " années.";
+                    }
+
+                }
             }
 
             return message;
@@ -72,6 +109,16 @@ namespace AdaBot.Dialogs
                 {
                     test = emotion.Neutral;
                     result = "Neutral";
+                }
+                if (test < emotion.Surprise)
+                {
+                    test = emotion.Surprise;
+                    result = "Surprise";
+                }
+                if (test < emotion.Anger)
+                {
+                    test = emotion.Anger;
+                    result = "Anger";
                 }
                 return result;
             }
