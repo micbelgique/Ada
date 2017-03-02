@@ -345,7 +345,7 @@ namespace AdaBot.Dialogs
                 int compteur = 0;
                 foreach (var visit in visitsReturn)
                 {
-                    List<CardImage> cardImages = new List<CardImage>();
+                    List<CardImage> cardImages = new List<CardImage>(); 
                     if (!askingEmotion)
                     {
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
