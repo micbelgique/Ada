@@ -406,9 +406,10 @@ namespace AdaBot.Dialogs
 
             int nbVisit = 10;
 
-            if (result.Entities[0].Type == "ChoosePersonId")
+            var splitResult = result.Query.Split(':');
+
+            if (splitResult[0] == "ChoosePersonId ")
             {
-                var splitResult = result.Entities[0].Entity.Split(':');
 
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
