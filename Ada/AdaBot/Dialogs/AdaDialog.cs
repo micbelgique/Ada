@@ -231,7 +231,7 @@ namespace AdaBot.Dialogs
                 {
                     if (result.Entities[i].Type == "Emotion")
                     {
-                        emotion = result.Entities[i].Entity; 
+                        emotion = result.Entities[i].Entity;
                     }
 
                     if (i == nbEntities - 1)
