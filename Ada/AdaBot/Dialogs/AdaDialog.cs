@@ -201,7 +201,7 @@ namespace AdaBot.Dialogs
 
             int nbVisits = tmp.Count();
             int agePerson;
-            string genderReturn = "personnes";
+            string genderReturn = "personne(s)";
             string ageReturn = "";
             string emotionReturn = "";
 
@@ -224,11 +224,11 @@ namespace AdaBot.Dialogs
                     if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
                     {
                         gender = GenderValues.Female;
-                        genderReturn = " femmes";
+                        genderReturn = "femme(s)";
                     }
                     else
                     {
-                        genderReturn = " hommes";
+                        genderReturn = "homme(s)";
                     }
 
                     for (int y = 0; y < nbVisits; y++)
@@ -247,27 +247,27 @@ namespace AdaBot.Dialogs
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
                         emotion = "Happiness";
-                        emotionReturn = " heureux(ses)";
+                        emotionReturn = "heureux(ses)";
                     }
                     if (emotion == "neutre" || emotion == "neutres")
                     {
                         emotion = "Neutral";
-                        emotionReturn = " neutres";
+                        emotionReturn = "neutre(s)";
                     }
                     if (emotion == "triste" || emotion == "tristes")
                     {
                         emotion = "Sadness";
-                        emotionReturn = " tristes";
+                        emotionReturn = "triste(s)";
                     }
                     if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
                     {
                         emotion = "Anger";
-                        emotionReturn = " faché(es)";
+                        emotionReturn = "faché(es)";
                     }
                     if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
                     {
                         emotion = "Surprise";
-                        emotionReturn = " surpris(es)";
+                        emotionReturn = "surpris(es)";
                     }
                     for (int y = 0; y < nbVisits; y++)
                     {
