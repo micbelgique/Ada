@@ -337,13 +337,13 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("Aujourd'hui, j'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description aujourd'ui... :/");
             }
 
             if (visitsReturn.Count() != 0)
