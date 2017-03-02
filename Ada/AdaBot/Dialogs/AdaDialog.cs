@@ -192,6 +192,7 @@ namespace AdaBot.Dialogs
             AdaClient client = new AdaClient();
             Activity replyToConversation;
             CreateDialog customDialog = new CreateDialog();
+            TreatmentDialog treatment = new TreatmentDialog();
 
             //Lists for different stats
             //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
@@ -224,24 +225,7 @@ namespace AdaBot.Dialogs
                 if (result.Entities[i].Type == "Gender")
                 {
                     string value = result.Entities[i].Entity;
-                    GenderValues gender = GenderValues.Male;
-                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
-                    {
-                        gender = GenderValues.Female;
-                        genderReturn = "femme(s)";
-                    }
-                    else
-                    {
-                        genderReturn = "homme(s)";
-                    }
-
-                    for (int y = 0; y < nbVisits; y++)
-                    {
-                        if (tmp[y].PersonVisit.Gender == gender)
-                        {
-                            visitsReturn.Add(tmp[y]);
-                        }
-                    }
+                    visitsReturn = treatment.getVisitsByGender(value, tmp, visitsReturn, nbVisits);
                 }
                 else if (result.Entities[i].Type == "Emotion" || emotion != null)
                 {
@@ -347,15 +331,8 @@ namespace AdaBot.Dialogs
 
             //NbPersonForReal
             int nbPerson = 0;
-            List<int> listID = new List<int>();
-            foreach (var visit in visitsReturn)
-            {
-                if (! listID.Contains(visit.ID))
-                {
-                    listID.Add(visit.ID);
-                    nbPerson += 1;
-                }
-            }
+            nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
+            
 
             //Return results
             if (nbPerson != 0)

@@ -127,6 +127,7 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AdaDialog.cs" />
     <Compile Include="Dialogs\CreateDialog.cs" />
+    <Compile Include="Dialogs\TreatmentDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
