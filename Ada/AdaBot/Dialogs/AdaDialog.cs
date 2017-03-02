@@ -401,7 +401,7 @@ namespace AdaBot.Dialogs
                     {
                         firstname = visit.PersonVisit.FirstName;
                     }
-                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate);
+                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
 
                     HeroCard plCard = new HeroCard()
                     {
