@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using AdaSDK;
 using System.Net.Http;
-using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
-using System.Net;
-using Newtonsoft.Json;
 using AdaSDK.Models;
+using AdaBot.BotFrameworkHelpers;
 
 namespace AdaBot.Dialogs
 {
@@ -50,7 +48,7 @@ namespace AdaBot.Dialogs
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
-            string[] firstNameUser = nameUser.Split(' '); 
+            string[] firstNameUser = nameUser.Split(' ');
             string message = $"Bonjour {firstNameUser[0]}";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
@@ -79,7 +77,7 @@ namespace AdaBot.Dialogs
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>(); 
+                replyToConversation.Attachments = new List<Attachment>();
 
                 foreach (var visit in visits)
                 {
@@ -196,22 +194,128 @@ namespace AdaBot.Dialogs
 
             //Lists for different stats
             //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
-            List<VisitDto> allvisits = await client.GetVisitsToday();
+            List<VisitDto> allvisits = new List<VisitDto>();
             List<VisitDto> visitsReturn = new List<VisitDto>();
-            List<VisitDto> tmp = allvisits.ToList();
+            List<VisitDto> tmp = new List<VisitDto>();
 
             List<ProfilePictureDto> EmotionPicture = new List<ProfilePictureDto>();
             bool askingEmotion = false;
             string emotion = "";
 
+            int nbEntities;
             int nbVisits = tmp.Count();
             int agePerson;
             string genderReturn = "personne(s)";
             string ageReturn = "";
             string emotionReturn = "";
+            string dateReturn = "aujourd'hui";
+
+            //getVisitsByDate
+            if (result.CompositeEntities != null)
+            {
+                nbEntities = result.CompositeEntities.Count();
+                for (int i = 0; i < nbEntities; i++)
+                {
+                    if (result.CompositeEntities[i].ParentType == "IntervalDate")
+                    {
+                        EntityRecognizer recog = new EntityRecognizer();
+                        DateTime? date1 = null;
+                        DateTime? date2 = null;
+
+                        foreach (var entity in result.Entities)
+                        {
+                            if (entity.Type == "builtin.datetime.date")
+                            {
+                                DateTime? date;
+                                List<EntityRecommendation> dates = new List<EntityRecommendation>();
+                                dates.Add(entity);
+                                recog.ParseDateTime(dates, out date);
+
+                                if (date1 == null)
+                                {
+                                    date1 = date;
+                                    dateReturn = "le " + date1;
+                                }
+                                else
+                                {
+                                    date2 = date;
+                                    dateReturn = "entre le " + date1 + " et le" + date2;
+                                }
+                            }
+                        }
+                        if (date2 < date1 && date2 != null)
+                        {
+                            DateTime? tmpDate = date1;
+                            date1 = date2;
+                            date2 = tmpDate;
+                        }
+
+                        //Get visits by date
+                        //ATTENTION CHANGER FORMAT DATE: YYYY/mm/dd
+                        allvisits = await client.GetVisitsByDate(date1, date2);
+                        tmp = allvisits.ToList();
+                    }
+                }
+            }
+            else
+            {
+                //Get visits for today
+                allvisits = await client.GetVisitsToday();
+                tmp = allvisits.ToList();
+            }
+
+            //CompositeEntities
+            if (result.CompositeEntities != null)
+            {
+                nbEntities = result.CompositeEntities.Count();
+                for (int i = 0; i < nbEntities; i++)
+                {
+                    if (visitsReturn.Count() != 0)
+                    {
+                        nbVisits = visitsReturn.Count();
+                        tmp = visitsReturn.ToList();
+                        visitsReturn.Clear();
+                    }
+
+                    //Process of ages
+                    if (result.CompositeEntities[i].ParentType == "SingleAge")
+                    {
+                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        ageReturn = " de " + age + " ans";
+                        for (int y = 0; y < nbVisits; y++)
+                        {
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson == age)
+                            {
+                                visitsReturn.Add(tmp[y]);
+                            }
+                        }
+                    }
+                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                    {
+                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                        if (age2 < age && age2 != -1)
+                        {
+                            int ageTmp = age;
+                            age = age2;
+                            age2 = ageTmp;
+                        }
+                        ageReturn = " entre " + age + " et " + age2 + " ans";
+                        for (int y = 0; y < nbVisits; y++)
+                        {
+                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
+                            if (agePerson >= age && agePerson <= age2)
+                            {
+                                visitsReturn.Add(tmp[y]);
+                            }
+                        }
+                    }
+                }
+            }
 
             //Single Entities
-            int nbEntities = result.Entities.Count();
+            nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
                 //Get actual number of visits return
@@ -279,81 +383,32 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            //CompositeEntities 
-            if (result.CompositeEntities != null)
-            {
-                nbEntities = result.CompositeEntities.Count();
-                for (int i = 0; i < nbEntities; i++)
-                {
-                    if (visitsReturn.Count() != 0)
-                    {
-                        nbVisits = visitsReturn.Count();
-                        tmp = visitsReturn.ToList();
-                        visitsReturn.Clear();
-                    }
-
-                    //Process of ages
-                    if (result.CompositeEntities[i].ParentType == "SingleAge")
-                    {
-                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        ageReturn = " de " + age + " ans";
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson == age)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
-                        }
-                    }
-                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
-                    {
-                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
-                        if (age2 < age && age2 != -1)
-                        {
-                            int ageTmp = age;
-                            age = age2;
-                            age2 = ageTmp;
-                        }
-                        ageReturn = " entre " + age + " et " + age2 + " ans";
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson >= age && agePerson <= age2)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
-                        }
-                    }
-                }
-            }
 
             //NbPersonForReal
             int nbPerson = 0;
             nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
-            
+
 
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Aujourd'hui, j'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + " " + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description aujourd'ui... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description " + dateReturn + "... :/");
             }
 
             if (visitsReturn.Count() != 0)
             {
-                replyToConversation.AttachmentLayout = "carousel"; 
+                replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
                 int compteur = 0;
                 foreach (var visit in visitsReturn)
                 {
-                    List<CardImage> cardImages = new List<CardImage>(); 
+                    List<CardImage> cardImages = new List<CardImage>();
                     if (!askingEmotion)
                     {
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK

@@ -33,6 +33,22 @@ namespace AdaSDK
             }
         }
 
+        public async Task<List<VisitDto>> GetVisitsByDate(DateTime? date1, DateTime? date2)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsByDate/" + date1 + "/" + date2));
+                var content = await response.Content.ReadAsStringAsync();
+                var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
+                return visits;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<VisitDto>();
+            }
+        }
+
         public async Task<List<VisitDto>> GetLastVisitPerson(string firstname)
         {
             try

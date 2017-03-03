@@ -26,6 +26,18 @@ namespace AdaWebApp.Models.DAL.Repositories
             return Table.Include(v => v.Person).Where(v => v.Date >= date).ToList();
         }
 
+        public List<Visit> GetVisitsByDate(DateTime? date1, DateTime? date2)
+        {
+            if (date2 == null)
+            {
+                return Table.Include(v => v.Person).Where(v => v.Date >= date1).ToList();
+            }
+            else
+            {
+                return Table.Include(v => v.Person).Where(v => v.Date >= date1 && v.Date <= date2).ToList();
+            }
+        }
+
         public List<Visit> GetLastVisitForAPersonByFirstname(string firstname)
         {
             //Compare the first time of the last visit of a day (v.Date) and the last visit of the person (DateOfBirth).
