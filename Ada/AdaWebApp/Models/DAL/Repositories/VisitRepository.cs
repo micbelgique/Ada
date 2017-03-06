@@ -34,7 +34,9 @@ namespace AdaWebApp.Models.DAL.Repositories
             }
             else
             {
-                return Table.Include(v => v.Person).Where(v => v.Date >= date1 && v.Date <= date2).ToList();
+                DateTime tmp = Convert.ToDateTime(date2);
+                tmp = tmp.AddDays(1);
+                return Table.Include(v => v.Person).Where(v => v.Date >= date1 && v.Date <= tmp).ToList();
             }
         }
 
