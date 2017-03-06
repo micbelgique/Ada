@@ -1,4 +1,5 @@
-﻿using AdaWebApp.Models.Entities;
+﻿using AdaSDK;
+using AdaWebApp.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -41,6 +42,49 @@ namespace AdaWebApp.Models.DAL.Repositories
         public List<Visit> GetVisitForAPersonById(int id,int nbVisit)
         {
             return Table.OrderByDescending(v => v.Date).Where(v => v.Person.Id == id).Take(nbVisit).ToList();
+        }
+
+        public int GetNbVisits(GenderValues? gender ,int? age1, int? age2)
+        {
+            DateTime dateAverage = DateTime.Today.AddDays(-120);
+
+            if(age1 == null && gender == null)
+            {
+                return Table.Count(v => v.Date > dateAverage);
+            }
+            else if(age1 == null)
+            {
+                return Table.Where(v => v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+            }
+            else if(gender == null)
+            {
+                age1 = DateTime.Today.Year - age1;
+
+                if (age2 == null)
+                {
+                    return Table.Where(v => v.Person.DateOfBirth.Year == age1).Count(v => v.Date > dateAverage);
+                }
+                else
+                {
+                    age2 = DateTime.Today.Year - age2;
+
+                    return Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2).Count(v => v.Date > dateAverage);
+                }
+            }
+            else 
+            {
+                age1 = DateTime.Today.Year - age1;
+
+                if (age2 == null)
+                {
+                    return Table.Where(v => v.Person.DateOfBirth.Year == age1 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+                }
+                else
+                {
+                    age2 = DateTime.Today.Year - age2;
+                    return Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+                }
+            }
         }
 
         public bool CheckVisitExist(int id)

@@ -64,5 +64,21 @@ namespace AdaSDK
                 return new List<VisitDto>();
             }
         }
+
+        public async Task<int> GetNbVisits(string gender,string age1, string age2)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/GetNbVisits/" + gender + "/" + age1 + "/" + age2));
+                var content = await response.Content.ReadAsStringAsync();
+                var nbVisitsAge = JsonConvert.DeserializeObject<int>(content);
+                return nbVisitsAge;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new int();
+            }
+        }
     }
 }

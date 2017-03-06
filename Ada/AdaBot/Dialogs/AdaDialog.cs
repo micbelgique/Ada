@@ -50,7 +50,7 @@ namespace AdaBot.Dialogs
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
-            string[] firstNameUser = nameUser.Split(' '); 
+            string[] firstNameUser = nameUser.Split(' ');
             string message = $"Bonjour {firstNameUser[0]}";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
@@ -79,7 +79,7 @@ namespace AdaBot.Dialogs
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>(); 
+                replyToConversation.Attachments = new List<Attachment>();
 
                 foreach (var visit in visits)
                 {
@@ -332,7 +332,7 @@ namespace AdaBot.Dialogs
             //NbPersonForReal
             int nbPerson = 0;
             nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
-            
+
 
             //Return results
             if (nbPerson != 0)
@@ -348,12 +348,12 @@ namespace AdaBot.Dialogs
 
             if (visitsReturn.Count() != 0)
             {
-                replyToConversation.AttachmentLayout = "carousel"; 
+                replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
                 int compteur = 0;
                 foreach (var visit in visitsReturn)
                 {
-                    List<CardImage> cardImages = new List<CardImage>(); 
+                    List<CardImage> cardImages = new List<CardImage>();
                     if (!askingEmotion)
                     {
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
@@ -397,7 +397,7 @@ namespace AdaBot.Dialogs
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
-        
+
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
@@ -506,6 +506,77 @@ namespace AdaBot.Dialogs
             }
 
             await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetAverageVisits")]
+        public async Task GetAverageVisits(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient();
+
+            GenderValues? gender;
+            int? age1 = null;
+            string ageReturn1 = "null";
+            int? age2 = null;
+            string ageReturn2 = "null";
+            string ageReturn = "";
+            string genderReturn = "null";
+
+            int nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (result.Entities[i].Type == "Gender")
+                {
+                    string value = result.Entities[i].Entity;
+
+                    gender = GenderValues.Male;
+                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    {
+                        gender = GenderValues.Female;
+                    }
+                    genderReturn = Convert.ToString(gender.Value);
+
+                }
+            }
+
+            if (result.CompositeEntities != null)
+            {
+                nbEntities = result.CompositeEntities.Count();
+                for (int i = 0; i< nbEntities; i++)
+                {
+                    //Process of ages
+                    if (result.CompositeEntities[i].ParentType == "SingleAge")
+                    {
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        ageReturn1 = Convert.ToString(age1);
+                        ageReturn = " de " + age1 + " ans";
+                    }
+                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                    {
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                        if (age2 < age1 && age2 != -1)
+                        {
+                            int? ageTmp = age1;
+                            age1 = age2;
+                            age2 = ageTmp;
+                        }
+                        ageReturn1 = Convert.ToString(age1);
+                        ageReturn2 = Convert.ToString(age2);
+
+                        ageReturn = " entre " + age1 + " et " + age2 + " ans";
+                    }
+                }
+                
+            }
+            var nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
+
+            if(genderReturn == "null")
+            {
+                genderReturn = "";
+            }
+            string message = "J'ai vu en moyenne : " + Math.Round((float)nbVisits / 86, 2) + " " + genderReturn + " " + ageReturn + " par jour.";
+            await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
     }
