@@ -251,7 +251,6 @@ namespace AdaBot.Dialogs
                         }
 
                         //Get visits by date
-                        //ATTENTION CHANGER FORMAT DATE: YYYY/mm/dd
                         allvisits = await client.GetVisitsByDate(date1, date2);
                         tmp = allvisits.ToList();
                     }
@@ -270,7 +269,7 @@ namespace AdaBot.Dialogs
                 nbEntities = result.CompositeEntities.Count();
                 for (int i = 0; i < nbEntities; i++)
                 {
-                    if (visitsReturn.Count() != 0)
+                    if (visitsReturn.Count() != 0 && i!=0)
                     {
                         nbVisits = visitsReturn.Count();
                         tmp = visitsReturn.ToList();

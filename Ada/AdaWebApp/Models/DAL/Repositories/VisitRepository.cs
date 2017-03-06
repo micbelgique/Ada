@@ -31,7 +31,7 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             if (date2 == null)
             {
-                return Table.Include(v => v.Person).Where(v => v.Date >= date1).ToList();
+                return Table.Include(v => v.Person).Where(v => v.Date == date1).ToList();
             }
             else
             {
