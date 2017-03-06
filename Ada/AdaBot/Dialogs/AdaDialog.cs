@@ -331,13 +331,17 @@ namespace AdaBot.Dialogs
                 {
                     string value = result.Entities[i].Entity;
                     visitsReturn = treatment.getVisitsByGender(value, tmp, visitsReturn, nbVisits);
-                    if (visitsReturn[0].PersonVisit.Gender == GenderValues.Male)
+
+                    if (visitsReturn[0] != null)
                     {
-                        genderReturn = "homme(s)";
-                    }
-                    else
-                    {
-                        genderReturn = "femme(s)";
+                        if (visitsReturn[0].PersonVisit.Gender == GenderValues.Male)
+                        {
+                            genderReturn = "homme(s)";
+                        }
+                        else
+                        {
+                            genderReturn = "femme(s)";
+                        }
                     }
                 }
                 else if (result.Entities[i].Type == "Emotion" || emotion != "")
