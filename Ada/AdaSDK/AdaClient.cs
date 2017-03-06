@@ -37,7 +37,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsByDate/" + date1 + "/" + date2));
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsByDate/" + date1 + "/" + date2.Value));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
