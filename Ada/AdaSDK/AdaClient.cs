@@ -40,6 +40,8 @@ namespace AdaSDK
                 //Convertion date1
                 var tmp = Convert.ToString(date1).Split(' ');
                 tmp[0] = tmp[0].Replace('/', '-');
+                date1 = Convert.ToDateTime(tmp[0]);
+                tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
                 //Convertion date2
                 var tmp2 = Convert.ToString(date2).Split(' ');
                 tmp2[0] = tmp2[0].Replace('/', '-');
