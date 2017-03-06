@@ -578,7 +578,7 @@ namespace AdaBot.Dialogs
 
             int nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
-            { 
+            {
                 if (result.Entities[i].Type == "Gender")
                 {
                     string value = result.Entities[i].Entity;
