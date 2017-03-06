@@ -573,7 +573,7 @@ namespace AdaBot.Dialogs
 
             if(genderReturn == "null")
             {
-                genderReturn = "personne";
+                genderReturn = "personne"; 
             }
             else if(genderReturn == Convert.ToString(GenderValues.Female))
             {
