@@ -39,7 +39,7 @@ namespace AdaWebApp.Models.DAL.Repositories
                                                             .ToList();
         }
 
-        public List<Visit> GetVisitForAPersonById(int id,int nbVisit)
+        public List<Visit> GetVisitForAPersonById(int id,int nbVisit) 
         {
             return Table.OrderByDescending(v => v.Date).Where(v => v.Person.Id == id).Take(nbVisit).ToList();
         }
