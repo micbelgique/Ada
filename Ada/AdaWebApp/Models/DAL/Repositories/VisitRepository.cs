@@ -3,6 +3,7 @@ using AdaWebApp.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 
 namespace AdaWebApp.Models.DAL.Repositories
@@ -37,7 +38,7 @@ namespace AdaWebApp.Models.DAL.Repositories
                                                             //et ne prend donc pas l'année de la dernière visite.
                                                             //&& v.Person.DateOfBirth.Year == v.Date.Year)
                                                             .ToList();
-        }
+        } 
 
         public List<Visit> GetVisitForAPersonById(int id,int nbVisit)
         {
@@ -47,14 +48,17 @@ namespace AdaWebApp.Models.DAL.Repositories
         public int GetNbVisits(GenderValues? gender ,int? age1, int? age2)
         {
             DateTime dateAverage = DateTime.Today.AddDays(-120);
+            int date = DateTime.Now.Day;
+            int nbDayVisits = Table.Where(v => v.Date > dateAverage).GroupBy(x => DbFunctions.TruncateTime(x.Date)).Count();
+            int nbVisits;
 
             if(age1 == null && gender == null)
             {
-                return Table.Count(v => v.Date > dateAverage);
+                nbVisits = Table.Count(v => v.Date > dateAverage);
             }
             else if(age1 == null)
             {
-                return Table.Where(v => v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+                nbVisits = Table.Where(v => v.Person.Gender == gender).Count(v => v.Date > dateAverage);
             }
             else if(gender == null)
             {
@@ -62,13 +66,13 @@ namespace AdaWebApp.Models.DAL.Repositories
 
                 if (age2 == null)
                 {
-                    return Table.Where(v => v.Person.DateOfBirth.Year == age1).Count(v => v.Date > dateAverage);
+                    nbVisits = Table.Where(v => v.Person.DateOfBirth.Year == age1).Count(v => v.Date > dateAverage);
                 }
                 else
                 {
                     age2 = DateTime.Today.Year - age2;
 
-                    return Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2).Count(v => v.Date > dateAverage);
+                    nbVisits = Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2).Count(v => v.Date > dateAverage);
                 }
             }
             else 
@@ -77,14 +81,18 @@ namespace AdaWebApp.Models.DAL.Repositories
 
                 if (age2 == null)
                 {
-                    return Table.Where(v => v.Person.DateOfBirth.Year == age1 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+                    nbVisits = Table.Where(v => v.Person.DateOfBirth.Year == age1 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
                 }
                 else
                 {
                     age2 = DateTime.Today.Year - age2;
-                    return Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
+                    nbVisits = Table.Where(v => v.Person.DateOfBirth.Year <= age1 && v.Person.DateOfBirth.Year >= age2 && v.Person.Gender == gender).Count(v => v.Date > dateAverage);
                 }
             }
+
+            float result = nbVisits / nbDayVisits;
+
+            return Math.Floor((int)result);
         }
 
         public bool CheckVisitExist(int id)
