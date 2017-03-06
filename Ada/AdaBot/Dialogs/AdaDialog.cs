@@ -461,9 +461,10 @@ namespace AdaBot.Dialogs
 
             int nbVisit = 10;
 
-            if (result.Entities[0].Type == "ChoosePersonId")
+            var splitResult = result.Query.Split(':');
+
+            if (splitResult[0] == "ChoosePersonId ")
             {
-                var splitResult = result.Entities[0].Entity.Split(':');
 
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
@@ -560,6 +561,86 @@ namespace AdaBot.Dialogs
             }
 
             await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetAverageVisits")]
+        public async Task GetAverageVisits(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient();
+
+            GenderValues? gender;
+            int? age1 = null;
+            string ageReturn1 = "null";
+            int? age2 = null;
+            string ageReturn2 = "null";
+            string ageReturn = "";
+            string genderReturn = "null";
+
+            int nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (result.Entities[i].Type == "Gender")
+                {
+                    string value = result.Entities[i].Entity;
+
+                    gender = GenderValues.Male;
+                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    {
+                        gender = GenderValues.Female;
+                    }
+                    genderReturn = Convert.ToString(gender.Value);
+
+                }
+            }
+
+            if (result.CompositeEntities != null)
+            {
+                nbEntities = result.CompositeEntities.Count();
+                for (int i = 0; i< nbEntities; i++)
+                {
+                    //Process of ages
+                    if (result.CompositeEntities[i].ParentType == "SingleAge")
+                    {
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        ageReturn1 = Convert.ToString(age1);
+                        ageReturn = " de " + age1 + " ans";
+                    }
+                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                    {
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                        if (age2 < age1 && age2 != -1)
+                        {
+                            int? ageTmp = age1;
+                            age1 = age2;
+                            age2 = ageTmp;
+                        }
+                        ageReturn1 = Convert.ToString(age1);
+                        ageReturn2 = Convert.ToString(age2);
+
+                        ageReturn = " entre " + age1 + " et " + age2 + " ans";
+                    }
+                }
+                
+            }
+            var nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
+
+            if(genderReturn == "null")
+            {
+                genderReturn = "personne";
+            }
+            else if(genderReturn == Convert.ToString(GenderValues.Female))
+            {
+                genderReturn = "femme(s)";
+            }
+            else
+            {
+                genderReturn = "homme(s)";
+            }
+
+            string message = "J'ai vu en moyenne : " + Math.Round((float)nbVisits / 86, 2) + " " + genderReturn + " " + ageReturn + " par jour.";
+            await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
     }

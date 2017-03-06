@@ -14,6 +14,7 @@ using AdaWebApp.Models.DAL.Repositories;
 using Common.Logging;
 using System.Threading.Tasks;
 using AdaSDK.Models;
+using AdaSDK;
 
 namespace AdaWebApp.Controllers.API
 {
@@ -81,6 +82,15 @@ namespace AdaWebApp.Controllers.API
         {
             var visits = _unit.VisitsRepository.GetVisitForAPersonById(id,nbVisit);
             return visits.Select(v => v.ToDto()).ToList();
+        }
+       
+        [HttpGet]
+        [Route("GetNbVisits/{gender}/{age1}/{age2}")]
+        // GET: get visits of the day
+        public int GetNbVisits(GenderValues? gender ,int? age1, int? age2)
+        {
+            int nbVisits = _unit.VisitsRepository.GetNbVisits(gender,age1, age2);
+            return nbVisits;
         }
 
         // GET: api/Visits/5
