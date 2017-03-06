@@ -43,8 +43,10 @@ namespace AdaSDK
                 date1 = Convert.ToDateTime(tmp[0]);
                 tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
                 //Convertion date2
-                var tmp2 = Convert.ToString(date2).Split(' ');
+                var tmp2 = Convert.ToString(date1).Split(' ');
                 tmp2[0] = tmp2[0].Replace('/', '-');
+                date1 = Convert.ToDateTime(tmp2[0]);
+                tmp2[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
                 if (date2 == null)
                 {
                     tmp2[0] = "null";

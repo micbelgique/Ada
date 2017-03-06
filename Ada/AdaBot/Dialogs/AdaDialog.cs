@@ -234,12 +234,12 @@ namespace AdaBot.Dialogs
                                 if (date1 == null)
                                 {
                                     date1 = date;
-                                    dateReturn = "depuis le " + date1;
+                                    dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") ;
                                 }
                                 else
                                 {
                                     date2 = date;
-                                    dateReturn = "entre le " + date1 + " et le" + date2;
+                                    dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le" + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
                                 }
                             }
                         }
@@ -253,6 +253,7 @@ namespace AdaBot.Dialogs
                         //Get visits by date
                         allvisits = await client.GetVisitsByDate(date1, date2);
                         tmp = allvisits.ToList();
+                        visitsReturn = tmp.ToList();
                     }
                 }
             }
@@ -261,6 +262,7 @@ namespace AdaBot.Dialogs
                 //Get visits for today
                 allvisits = await client.GetVisitsToday();
                 tmp = allvisits.ToList();
+                visitsReturn = tmp.ToList();
             }
 
             //CompositeEntities
@@ -384,6 +386,10 @@ namespace AdaBot.Dialogs
             }
 
             //NbPersonForReal
+            nbVisits = visitsReturn.Count();
+            tmp = visitsReturn.ToList();
+            visitsReturn.Clear();
+            visitsReturn = tmp.ToList();
             int nbPerson = 0;
             nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
 
@@ -416,13 +422,8 @@ namespace AdaBot.Dialogs
                     {
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(EmotionPicture[compteur].Uri)}")); // a mettre dans le SDK
                     }
-                    //Calcul la bonne année et la bonne heure.
-                    DateTime today = DateTime.Today;
-                    int wrongDate = visit.PersonVisit.DateVisit.Year;
-                    int goodDate = DateTime.Today.Year - wrongDate;
                     string messageDate = "";
                     string firstname = "";
-                    DateTime visitDate = visit.PersonVisit.DateVisit;
 
                     if (visit.PersonVisit.FirstName == null)
                     {
@@ -432,12 +433,12 @@ namespace AdaBot.Dialogs
                     {
                         firstname = visit.PersonVisit.FirstName;
                     }
-                    messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
+                    messageDate = customDialog.GetVisitsMessage(firstname, visit.Date);
 
                     HeroCard plCard = new HeroCard()
                     {
                         Title = firstname,
-                        Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate).ToString("dd/MM/yyyy")) + ")",
+                        Text = messageDate + " (" + Convert.ToString(visit.Date.ToString("dd/MM/yyyy")) + ")",
                         //Subtitle = 
                         Images = cardImages
                         //Buttons = cardButtons
