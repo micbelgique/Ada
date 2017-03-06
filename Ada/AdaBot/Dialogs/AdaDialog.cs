@@ -575,6 +575,14 @@ namespace AdaBot.Dialogs
             {
                 genderReturn = "personne";
             }
+            else if(genderReturn == Convert.ToString(GenderValues.Female))
+            {
+                genderReturn = "femme(s)";
+            }
+            else
+            {
+                genderReturn = "homme(s)";
+            }
 
             string message = "J'ai vu en moyenne : " + Math.Round((float)nbVisits / 86, 2) + " " + genderReturn + " " + ageReturn + " par jour.";
             await context.PostAsync(message);
