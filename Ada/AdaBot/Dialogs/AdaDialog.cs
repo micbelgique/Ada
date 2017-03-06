@@ -330,7 +330,7 @@ namespace AdaBot.Dialogs
                     string value = result.Entities[i].Entity;
                     visitsReturn = treatment.getVisitsByGender(value, tmp, visitsReturn, nbVisits);
                 }
-                else if (result.Entities[i].Type == "Emotion" || emotion != null)
+                else if (result.Entities[i].Type == "Emotion" || emotion != "")
                 {
                     if (result.Entities[i].Type == "Emotion")
                     {
