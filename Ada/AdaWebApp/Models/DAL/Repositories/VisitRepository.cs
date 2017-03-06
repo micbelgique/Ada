@@ -90,9 +90,9 @@ namespace AdaWebApp.Models.DAL.Repositories
                 }
             }
 
-            float result = nbVisits / nbDayVisits;
+            double result = (nbVisits / nbDayVisits) +0.5;
 
-            return Math.Floor((int)result);
+            return (int)Math.Round(result, 0);
         }
 
         public bool CheckVisitExist(int id)

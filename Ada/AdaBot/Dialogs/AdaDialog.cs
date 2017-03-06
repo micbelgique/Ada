@@ -569,7 +569,8 @@ namespace AdaBot.Dialogs
                 }
                 
             }
-            var nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
+
+            int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
 
             if(genderReturn == "null")
             {
@@ -584,7 +585,7 @@ namespace AdaBot.Dialogs
                 genderReturn = "homme(s)";
             }
 
-            string message = "J'ai vu en moyenne : " + Math.Round((float)nbVisits / 86, 2) + " " + genderReturn + " " + ageReturn + " par jour.";
+            string message = "J'ai vu en moyenne : " + nbVisits + " " + genderReturn + " " + ageReturn + " par jour.";
             await context.PostAsync(message);
             context.Wait(MessageReceived);
         }
