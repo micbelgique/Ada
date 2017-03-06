@@ -234,7 +234,7 @@ namespace AdaBot.Dialogs
                                 if (date1 == null)
                                 {
                                     date1 = date;
-                                    dateReturn = "le " + date1;
+                                    dateReturn = "depuis le " + date1;
                                 }
                                 else
                                 {
