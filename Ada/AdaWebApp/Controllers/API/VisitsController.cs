@@ -56,7 +56,7 @@ namespace AdaWebApp.Controllers.API
         [HttpGet]
         [Route("VisitsByDate/{date1}/{date2}")]
         // GET: get visits of the day
-        public List<VisitDto> GetVisitsByDate(DateTime? date1, DateTime? date2)
+        public List<VisitDto> GetVisitsByDate(DateTime date1, DateTime? date2)
         {
             var visits = _unit.VisitsRepository.GetVisitsByDate(date1, date2);
             if (visits == null)
