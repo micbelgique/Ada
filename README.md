@@ -21,7 +21,7 @@ OxfordPersonGroupId : The id of person group created on Microsoft Cognitive Face
 Host : the full address of website (ex : http://martine-o-bot.azurewebsites.net)
 Warning : The keys are case sensitive !
 
-[![](/doc/assets/KeyAzure.png)]()
+[![](/doc/assets/KeyAzure.PNG)]()
 
 In the Connection strings section, set the connection string to sql database with DefaultConnection as key.
 
