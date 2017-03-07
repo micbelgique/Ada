@@ -569,7 +569,7 @@ namespace AdaBot.Dialogs
                 }
                 
             }
-
+             
             int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
 
             if(genderReturn == "null")
