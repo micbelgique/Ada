@@ -234,7 +234,7 @@ namespace AdaBot.Dialogs
                                 if (date1 == null)
                                 {
                                     date1 = date;
-                                    dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") ;
+                                    dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
                                 }
                                 else
                                 {
@@ -255,6 +255,13 @@ namespace AdaBot.Dialogs
                         tmp = allvisits.ToList();
                         visitsReturn = tmp.ToList();
                     }
+                    else
+                    {
+                        //Get visits for today
+                        allvisits = await client.GetVisitsToday();
+                        tmp = allvisits.ToList();
+                        visitsReturn = tmp.ToList();
+                    }
                 }
             }
             else
@@ -271,16 +278,13 @@ namespace AdaBot.Dialogs
                 nbEntities = result.CompositeEntities.Count();
                 for (int i = 0; i < nbEntities; i++)
                 {
-                    if (visitsReturn.Count() != 0 && i!=0)
+                    //Process of ages
+                    if (result.CompositeEntities[i].ParentType == "SingleAge")
                     {
                         nbVisits = visitsReturn.Count();
                         tmp = visitsReturn.ToList();
                         visitsReturn.Clear();
-                    }
 
-                    //Process of ages
-                    if (result.CompositeEntities[i].ParentType == "SingleAge")
-                    {
                         int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
                         ageReturn = " de " + age + " ans";
                         for (int y = 0; y < nbVisits; y++)
@@ -294,6 +298,10 @@ namespace AdaBot.Dialogs
                     }
                     else if (result.CompositeEntities[i].ParentType == "IntervalAge")
                     {
+                        nbVisits = visitsReturn.Count();
+                        tmp = visitsReturn.ToList();
+                        visitsReturn.Clear();
+
                         int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
                         int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
                         if (age2 < age && age2 != -1)
@@ -315,24 +323,23 @@ namespace AdaBot.Dialogs
                 }
             }
 
-            //Single Entities
+            /* For the single entities, we can't do all the traitment into the same "for" because
+             * the emotions must be run at last.
+            */
+            //Gender
             nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
-                //Get actual number of visits return
-                if (i != 0 && visitsReturn.Count() != 0)
+                if (result.Entities[i].Type == "Gender")
                 {
                     nbVisits = visitsReturn.Count();
                     tmp = visitsReturn.ToList();
                     visitsReturn.Clear();
-                }
 
-                if (result.Entities[i].Type == "Gender")
-                {
                     string value = result.Entities[i].Entity;
                     visitsReturn = treatment.getVisitsByGender(value, tmp, visitsReturn, nbVisits);
 
-                    if (visitsReturn[0] != null)
+                    if (visitsReturn.Count() != 0)
                     {
                         if (visitsReturn[0].PersonVisit.Gender == GenderValues.Male)
                         {
@@ -343,54 +350,58 @@ namespace AdaBot.Dialogs
                             genderReturn = "femme(s)";
                         }
                     }
+
                 }
-                else if (result.Entities[i].Type == "Emotion" || emotion != "")
+            }
+
+            //Emotion
+            nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (result.Entities[i].Type == "Emotion")
                 {
-                    if (result.Entities[i].Type == "Emotion")
+                    nbVisits = visitsReturn.Count();
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
+                    emotion = result.Entities[i].Entity;
+                    //Pour le moment, on gère avec code (à modifier une fois Dico OK)
+                    if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
-                        emotion = result.Entities[i].Entity;
+                        emotion = "Happiness";
+                        emotionReturn = "heureux(ses)";
+                    }
+                    if (emotion == "neutre" || emotion == "neutres")
+                    {
+                        emotion = "Neutral";
+                        emotionReturn = "neutre(s)";
+                    }
+                    if (emotion == "triste" || emotion == "tristes")
+                    {
+                        emotion = "Sadness";
+                        emotionReturn = "triste(s)";
+                    }
+                    if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
+                    {
+                        emotion = "Anger";
+                        emotionReturn = "faché(es)";
+                    }
+                    if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
+                    {
+                        emotion = "Surprise";
+                        emotionReturn = "surpris(es)";
                     }
 
-                    if (i == nbEntities - 1)
+                    for (int y = 0; y < nbVisits; y++)
                     {
-                        //Pour le moment, on gère HAPPY - NEUTRAL - SAD (à modifier une fois Dico OK)
-                        if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
+                        int nbEmotion = tmp[y].ProfilePicture.Count();
+                        for (int z = 0; z < nbEmotion; z++)
                         {
-                            emotion = "Happiness";
-                            emotionReturn = "heureux(ses)";
-                        }
-                        if (emotion == "neutre" || emotion == "neutres")
-                        {
-                            emotion = "Neutral";
-                            emotionReturn = "neutre(s)";
-                        }
-                        if (emotion == "triste" || emotion == "tristes")
-                        {
-                            emotion = "Sadness";
-                            emotionReturn = "triste(s)";
-                        }
-                        if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
-                        {
-                            emotion = "Anger";
-                            emotionReturn = "faché(es)";
-                        }
-                        if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
-                        {
-                            emotion = "Surprise";
-                            emotionReturn = "surpris(es)";
-                        }
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            int nbEmotion = tmp[y].ProfilePicture.Count();
-                            for (int z = 0; z < nbEmotion; z++)
+                            if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
+                            customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
                             {
-                                if (customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) == emotion &&
-                                customDialog.getEmotion(tmp[y].ProfilePicture[z].EmotionScore) != null)
-                                {
-                                    visitsReturn.Add(tmp[y]);
-                                    EmotionPicture.Add(tmp[y].ProfilePicture[z]);
-                                    askingEmotion = true;
-                                }
+                                visitsReturn.Add(tmp[y]);
+                                EmotionPicture.Add(tmp[y].ProfilePicture[z]);
+                                askingEmotion = true;
                             }
                         }
                     }
@@ -609,7 +620,7 @@ namespace AdaBot.Dialogs
             if (result.CompositeEntities != null)
             {
                 nbEntities = result.CompositeEntities.Count();
-                for (int i = 0; i< nbEntities; i++)
+                for (int i = 0; i < nbEntities; i++)
                 {
                     //Process of ages
                     if (result.CompositeEntities[i].ParentType == "SingleAge")
@@ -634,16 +645,16 @@ namespace AdaBot.Dialogs
                         ageReturn = " entre " + age1 + " et " + age2 + " ans";
                     }
                 }
-                
+
             }
 
             int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
 
-            if(genderReturn == "null")
+            if (genderReturn == "null")
             {
                 genderReturn = "personne";
-            } 
-            else if(genderReturn == Convert.ToString(GenderValues.Female))
+            }
+            else if (genderReturn == Convert.ToString(GenderValues.Female))
             {
                 genderReturn = "femme(s)";
             }

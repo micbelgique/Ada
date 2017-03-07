@@ -52,26 +52,23 @@ namespace AdaBot.Dialogs
         { 
             if (emotion != null)
             {
-                float test = emotion.Happiness;
-                string result = "Happiness";
-                if (test < emotion.Sadness)
+                string result = "Neutral";
+                double value = 0.75 ;
+
+                if (emotion.Sadness > value)
                 {
-                    test = emotion.Sadness;
                     result = "Sadness";
                 }
-                if (test < emotion.Neutral)
+                if (emotion.Happiness > value)
                 {
-                    test = emotion.Neutral;
-                    result = "Neutral";
+                    result = "Happiness";
                 }
-                if (test < emotion.Surprise)
+                if (emotion.Surprise > value)
                 {
-                    test = emotion.Surprise;
                     result = "Surprise";
                 }
-                if (test < emotion.Anger)
+                if (emotion.Anger > value)
                 {
-                    test = emotion.Anger;
                     result = "Anger";
                 }
                 return result;
