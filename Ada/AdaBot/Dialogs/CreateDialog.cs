@@ -32,7 +32,7 @@ namespace AdaBot.Dialogs
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Days) + " jour(s)";
             }
-            else if(diffDate.TotalDays < 366)
+            else if(diffDate.TotalDays < 366) 
             {
                 int nbMonth = Convert.ToInt32((diffDate.TotalDays) / 30);
 
