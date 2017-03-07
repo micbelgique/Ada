@@ -3,9 +3,11 @@
 ## Deployment
 ### Microsoft Cognitive Services
 
-The first step to deploy the web application is to subscribe to Microsoft Cognitive Services Face and Emotion apis and get keys.
+The first step to deploy the web application is to subscribe to Microsoft Cognitive Services Face and Emotion apis and get keys.(https://www.microsoft.com/cognitive-services/en-us/)
 
 On Microsoft Cognitive Face web console (https://goo.gl/afkZ6R), create a new persons group with a generated guid as group id.
+
+[![](/doc/assets/PersonGroupId.png)]()
 
 ### Web application + SQL Database
 
@@ -18,6 +20,8 @@ OxfordEmotionApiKey : The key of the Microsoft Cognitive Emotion api
 OxfordPersonGroupId : The id of person group created on Microsoft Cognitive Face api
 Host : the full address of website (ex : http://martine-o-bot.azurewebsites.net)
 Warning : The keys are case sensitive !
+
+[![](/doc/assets/KeyAzure.png)]()
 
 In the Connection strings section, set the connection string to sql database with DefaultConnection as key.
 
