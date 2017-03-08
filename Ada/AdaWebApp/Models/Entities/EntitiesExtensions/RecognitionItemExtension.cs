@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AdaBridge;
+using AdaSDK;
 using AdaWebApp.Helpers;
+using AdaSDK.Models;
+using AdaWebApp.Models.Entities;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace AdaWebApp.Models.Entities
@@ -13,11 +16,11 @@ namespace AdaWebApp.Models.Entities
         {
             var lastVisit = recognitionItem.Person?.Visits.LastOrDefault();
 
-            var age = recognitionItem.Person != null 
+            var age = recognitionItem.Person != null
                 ? DateHelpers.ConvertDateOfBirthToAge(recognitionItem.Person.DateOfBirth)
                 : recognitionItem.Face.FaceAttributes.Age;
 
-            var gender = recognitionItem.Person?.Gender ?? 
+            var gender = recognitionItem.Person?.Gender ??
                 GenderValuesHelper.Parse(recognitionItem.Face.FaceAttributes.Gender);
 
             return new PersonDto
@@ -27,10 +30,77 @@ namespace AdaWebApp.Models.Entities
                 IsRecognized = recognitionItem.Person != null,
                 PersonId = recognitionItem.Person?.PersonApiId ?? default(Guid),
                 NbPasses = lastVisit?.NbPasses ?? 0,
-                ReasonOfVisit = lastVisit?.Reason, 
-                Age = (int)age, 
+                ReasonOfVisit = lastVisit?.Reason,
+                Age = (int)age,
                 Gender = gender
             };
         }
+
+        public static VisitDto ToDto(this Visit visit)
+        {
+            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
+            return new VisitDto()
+            {
+                ID = visit.Id,
+                Date = visit.Date,
+                NbPasses = visit.NbPasses,
+                //ProfilePicture = visit.ProfilePictures.Last().ToDto(),
+                ProfilePicture = tmp.ToDto(),
+                PersonVisit = visit.Person.ToDto()
+            };
+        }
+
+        public static PersonVisitDto ToDto(this Person person)
+        {
+            return new PersonVisitDto()
+            {
+                PersonId = person.Id,
+                FirstName = person.FirstName,
+                DateVisit = person.DateOfBirth,
+                Gender = person.Gender,
+                Age = person.DateOfBirth.Year
+            };
+        }
+
+        public static List<ProfilePictureDto> ToDto(this List<ProfilePicture> picture)
+        {
+            List<ProfilePictureDto> listReturn = new List<ProfilePictureDto>();
+            for (int i = 0 ; i<picture.Count() ; i++)
+            {
+                if (picture[i].EmotionScores == null)
+                {
+                    listReturn.Add(new ProfilePictureDto()
+                    {
+                        Uri = picture[i].Uri,
+                        EmotionScore = null
+                    });
+                }
+                else
+                {
+                    listReturn.Add(new ProfilePictureDto()
+                    {
+                        Uri = picture[i].Uri,
+                        EmotionScore = picture[i].EmotionScores.ToDto()
+                    });
+                }
+            }
+            return listReturn;
+        }
+
+        public static EmotionDto ToDto(this EmotionScores emotion)
+        {
+            return new EmotionDto()
+            {
+                Anger = emotion.Anger,
+                Contempt = emotion.Contempt,
+                Disgust = emotion.Disgust,
+                Fear = emotion.Fear,
+                Happiness = emotion.Happiness,
+                Neutral = emotion.Neutral,
+                Sadness = emotion.Sadness,
+                Surprise = emotion.Surprise
+            };
+        }
+
     }
 }

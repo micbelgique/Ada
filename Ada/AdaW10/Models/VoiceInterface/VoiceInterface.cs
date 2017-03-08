@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Media.SpeechRecognition;
-using AdaBridge;
+using AdaSDK;
 using AdaW10.Models.VoiceInterface.SpeechToText;
 using AdaW10.Models.VoiceInterface.TextToSpeech;
 

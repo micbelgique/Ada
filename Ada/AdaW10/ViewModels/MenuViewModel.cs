@@ -7,7 +7,7 @@ using AdaW10.Models.VoiceInterface;
 using Microsoft.Practices.ServiceLocation;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
-using AdaBridge;
+using AdaSDK;
 
 namespace AdaW10.ViewModels
 {
