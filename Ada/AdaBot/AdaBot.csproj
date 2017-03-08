@@ -128,6 +128,7 @@
     <Compile Include="Dialogs\AdaDialog.cs" />
     <Compile Include="Dialogs\CreateDialog.cs" />
     <Compile Include="Dialogs\TreatmentDialog.cs" />
+    <Compile Include="Dialogs\TrivialCommunication.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -136,7 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="AppSettings.config" />
+    <Content Include="AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\AdaDevBot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaDevBot - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">

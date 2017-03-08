@@ -18,11 +18,6 @@ namespace AdaBot.Dialogs
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
-        //[NonSerialized]
-        //private Activity context.Activity;
-        //[NonSerialized]
-        //private CreateDialog customDialog = new CreateDialog();
-
         public AdaDialog(params ILuisService[] services) : base(services)
         {
 
@@ -37,10 +32,11 @@ namespace AdaBot.Dialogs
         [LuisIntent("")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"Je n'ai pas compris :/";
-            await context.PostAsync(message);
-            message = $"Je suis constamment en apprentissage, je vais demander à mes créateurs de m'apprendre ta phrase ;)";
-            await context.PostAsync(message);
+            new TrivialCommunication(
+                    new LuisService(new LuisModelAttribute(
+                    ConfigurationManager.AppSettings["ModelIdTrivial"],
+                    ConfigurationManager.AppSettings["SubscriptionKeyTrivial"])));
+
             context.Wait(MessageReceived);
         }
 
@@ -647,15 +643,15 @@ namespace AdaBot.Dialogs
                 }
 
             }
-             
+
             int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
 
             if (genderReturn == "null")
             {
                 genderReturn = "personne(s)";
-            } 
-            else if(genderReturn == Convert.ToString(GenderValues.Female))
-            { 
+            }
+            else if (genderReturn == Convert.ToString(GenderValues.Female))
+            {
                 genderReturn = "femme(s)";
             }
             else
