@@ -244,7 +244,7 @@ namespace AdaBot.Dialogs
                                         date1 = date2;
                                         date2 = tmpDate;
                                     }
-                                    dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le" + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                                    dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
                                 }
                             }
                         }
@@ -300,6 +300,7 @@ namespace AdaBot.Dialogs
                 {
                     tmp = visitsReturn.ToList();
                     visitsReturn.Clear();
+                    emotion = result.Entities[i].Entity;
                     //Pour le moment, on gère avec code (à modifier une fois Dico OK)
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {

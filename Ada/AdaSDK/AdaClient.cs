@@ -37,22 +37,73 @@ namespace AdaSDK
         {
             try
             {
-                //Convertion date1
-                var tmp = Convert.ToString(date1).Split(' ');
-                tmp[0] = tmp[0].Replace('/', '-');
-                date1 = Convert.ToDateTime(tmp[0]);
-                tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
-                //Convertion date2
-                var tmp2 = Convert.ToString(date1).Split(' ');
-                tmp2[0] = tmp2[0].Replace('/', '-');
-                date1 = Convert.ToDateTime(tmp2[0]);
-                tmp2[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
-                if (date2 == null)
+                string d1 = null;
+                string d2 = null;
+                string gend = null;
+                string a1 = null;
+                string a2 = null;
+                string[] tmp = { "null" };
+                string[] tmp2 = { "null" };
+
+                if (date1 != null)
                 {
-                    tmp2[0] = "null";
+                    //Convertion date1
+                    tmp = Convert.ToString(date1).Split(' ');
+                    tmp[0] = tmp[0].Replace('/', '-');
+                    date1 = Convert.ToDateTime(tmp[0]);
+                    tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                    
+                    if (date2 != null)
+                    {
+                        //Convertion date2
+                        tmp2 = Convert.ToString(date1).Split(' ');
+                        tmp2[0] = tmp2[0].Replace('/', '-');
+                        date1 = Convert.ToDateTime(tmp2[0]);
+                        tmp2[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                    }
+                }
+                if (tmp[0] == null)
+                {
+                    d1 = "null";
+                }
+                else
+                {
+                    d1 = tmp[0];
+                }
+                if (tmp2[0] == null)
+                {
+                    d2 = "null";
+                }
+                else
+                {
+                    d2 = tmp2[0];
+                }
+                if (gender == null)
+                {
+                    gend = "null";
+                }
+                else
+                {
+                    gend = gender.ToString();
+                }
+                if (age1 == null)
+                {
+                    a1 = "null";
+                }
+                else
+                {
+                    a1 = age1.ToString();
+                }
+                if (age2 == null)
+                {
+                    a2 = "null";
+                }
+                else
+                {
+                    a2 = age2.ToString();
                 }
 
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + tmp[0] + "/" + tmp2[0] + "/" + gender + "/" + age1 + "/" + age2));
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -96,7 +147,7 @@ namespace AdaSDK
             }
         }
 
-        public async Task<int> GetNbVisits(string gender,string age1, string age2)
+        public async Task<int> GetNbVisits(string gender, string age1, string age2)
         {
             try
             {
