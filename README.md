@@ -44,3 +44,32 @@ To deploy the application on azure :
 Right clic on project → publish
 In the wizard, select the azure resource, select database and check pre-compile and migration checkbox.
 Publish.
+
+### Application UWP
+
+To use the UWP application you need to add a class named : AppConfig.cs directly in the UWP project.
+
+The class is used for the URL and the login to the web application.
+
+The class must be like : 
+
+```
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AdaW10
+{
+    public static class AppConfig
+    {
+#if DEBUG
+        public static readonly string WebUri = "";      // WebApp URL for Test
+#else
+        public static readonly string WebUri = "";      // WebApp URL fro Prod
+#endif
+        public static readonly string UserName = "";    // Use to get the API token
+        public static readonly string Password = "";
+    }
+}
+```
