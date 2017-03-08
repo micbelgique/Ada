@@ -1,7 +1,6 @@
 # Ada
 
 [![](/doc/assets/ada hello.jpg)]()
-ada hello
 
 ## Deployment
 ### Microsoft Cognitive Services
