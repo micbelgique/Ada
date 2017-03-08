@@ -191,26 +191,29 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             CreateDialog customDialog = new CreateDialog();
             TreatmentDialog treatment = new TreatmentDialog();
-
-            //Lists for different stats
-            //ATTENTION Le tri n'est bassé pour l'instant que sur les visites du jour! => A modifier une fois les dates OK
-            List<VisitDto> allvisits = new List<VisitDto>();
+            EntityRecognizer recog = new EntityRecognizer();
+            
             List<VisitDto> visitsReturn = new List<VisitDto>();
             List<VisitDto> tmp = new List<VisitDto>();
-
             List<ProfilePictureDto> EmotionPicture = new List<ProfilePictureDto>();
             bool askingEmotion = false;
-            string emotion = "";
 
             int nbEntities;
-            int nbVisits = tmp.Count();
             int agePerson;
+            int nbVisits = 0;
             string genderReturn = "personne(s)";
             string ageReturn = "";
             string emotionReturn = "";
+            string emotion = "";
             string dateReturn = "aujourd'hui";
 
-            //getVisitsByDate
+            DateTime? date1 = null;
+            DateTime? date2 = null;
+            int? age1 = null;
+            int? age2 = null;
+            GenderValues? gender = null;
+
+            //Composite Entities
             if (result.CompositeEntities != null)
             {
                 nbEntities = result.CompositeEntities.Count();
@@ -218,10 +221,6 @@ namespace AdaBot.Dialogs
                 {
                     if (result.CompositeEntities[i].ParentType == "IntervalDate")
                     {
-                        EntityRecognizer recog = new EntityRecognizer();
-                        DateTime? date1 = null;
-                        DateTime? date2 = null;
-
                         foreach (var entity in result.Entities)
                         {
                             if (entity.Type == "builtin.datetime.date")
@@ -239,131 +238,65 @@ namespace AdaBot.Dialogs
                                 else
                                 {
                                     date2 = date;
+                                    if (date2 < date1 && date2 != null)
+                                    {
+                                        DateTime? tmpDate = date1;
+                                        date1 = date2;
+                                        date2 = tmpDate;
+                                    }
                                     dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le" + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
                                 }
                             }
                         }
-                        if (date2 < date1 && date2 != null)
-                        {
-                            DateTime? tmpDate = date1;
-                            date1 = date2;
-                            date2 = tmpDate;
-                        }
-
-                        //Get visits by date
-                        allvisits = await client.GetVisitsByDate(date1, date2);
-                        tmp = allvisits.ToList();
-                        visitsReturn = tmp.ToList();
                     }
-                    else
-                    {
-                        //Get visits for today
-                        allvisits = await client.GetVisitsToday();
-                        tmp = allvisits.ToList();
-                        visitsReturn = tmp.ToList();
-                    }
-                }
-            }
-            else
-            {
-                //Get visits for today
-                allvisits = await client.GetVisitsToday();
-                tmp = allvisits.ToList();
-                visitsReturn = tmp.ToList();
-            }
-
-            //CompositeEntities
-            if (result.CompositeEntities != null)
-            {
-                nbEntities = result.CompositeEntities.Count();
-                for (int i = 0; i < nbEntities; i++)
-                {
                     //Process of ages
                     if (result.CompositeEntities[i].ParentType == "SingleAge")
                     {
-                        nbVisits = visitsReturn.Count();
-                        tmp = visitsReturn.ToList();
-                        visitsReturn.Clear();
-
-                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        ageReturn = " de " + age + " ans";
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson == age)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
-                        }
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        ageReturn = "de " + age1;
                     }
                     else if (result.CompositeEntities[i].ParentType == "IntervalAge")
                     {
-                        nbVisits = visitsReturn.Count();
-                        tmp = visitsReturn.ToList();
-                        visitsReturn.Clear();
-
-                        int age = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        int age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
-                        if (age2 < age && age2 != -1)
+                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                        age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                        if (age2 < age1 && age2 != -1)
                         {
-                            int ageTmp = age;
-                            age = age2;
+                            int? ageTmp = age1;
+                            age1 = age2;
                             age2 = ageTmp;
                         }
-                        ageReturn = " entre " + age + " et " + age2 + " ans";
-                        for (int y = 0; y < nbVisits; y++)
-                        {
-                            agePerson = DateTime.Today.Year - tmp[y].PersonVisit.Age;
-                            if (agePerson >= age && agePerson <= age2)
-                            {
-                                visitsReturn.Add(tmp[y]);
-                            }
-                        }
+                        ageReturn = "entre " + age1 + " et " + age2 + " ans";
                     }
                 }
             }
 
-            /* For the single entities, we can't do all the traitment into the same "for" because
-             * the emotions must be run at last.
-            */
-            //Gender
+            //Single entities
             nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
                 if (result.Entities[i].Type == "Gender")
                 {
-                    nbVisits = visitsReturn.Count();
-                    tmp = visitsReturn.ToList();
-                    visitsReturn.Clear();
-
                     string value = result.Entities[i].Entity;
-                    visitsReturn = treatment.getVisitsByGender(value, tmp, visitsReturn, nbVisits);
+                    gender = treatment.getVisitsByGender(value);
 
-                    if (visitsReturn.Count() != 0)
+                    if (gender == GenderValues.Male)
                     {
-                        if (visitsReturn[0].PersonVisit.Gender == GenderValues.Male)
-                        {
-                            genderReturn = "homme(s)";
-                        }
-                        else
-                        {
-                            genderReturn = "femme(s)";
-                        }
+                        genderReturn = "homme(s)";
                     }
-
+                    else
+                    {
+                        genderReturn = "femme(s)";
+                    }
                 }
             }
 
-            //Emotion
+            tmp = await client.GetVisitsForStats(date1, date2, gender, age1, age2);
+
             nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
                 if (result.Entities[i].Type == "Emotion")
                 {
-                    nbVisits = visitsReturn.Count();
-                    tmp = visitsReturn.ToList();
-                    visitsReturn.Clear();
-                    emotion = result.Entities[i].Entity;
                     //Pour le moment, on gère avec code (à modifier une fois Dico OK)
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
@@ -410,13 +343,9 @@ namespace AdaBot.Dialogs
 
             //NbPersonForReal
             nbVisits = visitsReturn.Count();
-            tmp = visitsReturn.ToList();
-            visitsReturn.Clear();
-            visitsReturn = tmp.ToList();
             int nbPerson = 0;
             nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
-
-
+            
             //Return results
             if (nbPerson != 0)
             {
@@ -462,9 +391,7 @@ namespace AdaBot.Dialogs
                     {
                         Title = firstname,
                         Text = messageDate + " (" + Convert.ToString(visit.Date.ToString("dd/MM/yyyy")) + ")",
-                        //Subtitle = 
                         Images = cardImages
-                        //Buttons = cardButtons
                     };
 
                     Attachment plAttachment = plCard.ToAttachment();
@@ -476,26 +403,67 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        [LuisIntent("GetVisitsPersonByFirstname")]
-        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
+    [LuisIntent("GetVisitsPersonByFirstname")]
+    public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
+    {
+        Activity replyToConversation = null;
+        AdaClient client = new AdaClient();
+
+        int nbVisit = 10;
+
+        var splitResult = result.Query.Split(':');
+
+        if (splitResult[0] == "ChoosePersonId ")
         {
-            Activity replyToConversation = null;
-            AdaClient client = new AdaClient();
 
-            int nbVisit = 10;
+            int idPerson = Convert.ToInt32(splitResult[1]);
 
-            var splitResult = result.Query.Split(':');
+            nbVisit = Convert.ToInt32(splitResult[3]);
 
-            if (splitResult[0] == "ChoosePersonId ")
+            List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
+
+            string reply = "Je l'ai vu(e) à ces dates : ";
+            reply += Environment.NewLine;
+
+            foreach (var visit in visitsById)
             {
+                reply += "     -" + Convert.ToString(visit.Date.AddHours(1));
+            }
 
-                int idPerson = Convert.ToInt32(splitResult[1]);
+            replyToConversation = ((Activity)context.Activity).CreateReply(reply);
+        }
+        else
+        {
+            string firstname = null;
 
-                nbVisit = Convert.ToInt32(splitResult[3]);
+            int nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
+            {
+                if (result.Entities[i].Type == "Firstname")
+                {
+                    firstname = result.Entities[i].Entity;
+                }
+                if (result.Entities[i].Type == "Number")
+                {
+                    nbVisit = Convert.ToInt32(result.Entities[i].Entity);
+                }
+            }
 
-                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
+            List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
-                string reply = "Je l'ai vu(e) à ces dates : ";
+            if (visits.Count == 0)
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else if (visits.Count == 1)
+            {
+                int id = visits[0].PersonVisit.PersonId;
+
+                List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
+
+                string reply = "J'ai vu " + firstname + " à ces dates : ";
                 reply += Environment.NewLine;
 
                 foreach (var visit in visitsById)
@@ -507,165 +475,124 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                string firstname = null;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+                replyToConversation.AttachmentLayout = "carousel";
+                replyToConversation.Attachments = new List<Attachment>();
 
-                int nbEntities = result.Entities.Count();
-                for (int i = 0; i < nbEntities; i++)
+                foreach (var visit in visits)
                 {
-                    if (result.Entities[i].Type == "Firstname")
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+
+                    List<CardAction> cardButtons = new List<CardAction>();
+
+                    CardAction plButtonChoice = new CardAction()
                     {
-                        firstname = result.Entities[i].Entity;
-                    }
-                    if (result.Entities[i].Type == "Number")
+
+                        Value = "ChoosePersonId :" + visit.PersonVisit.PersonId + " : nbVisit :" + nbVisit,
+                        Type = "postBack",
+                        Title = "Le voilà !"
+                    };
+                    cardButtons.Add(plButtonChoice);
+
+                    HeroCard plCard = new HeroCard()
                     {
-                        nbVisit = Convert.ToInt32(result.Entities[i].Entity);
-                    }
-                }
+                        Title = visit.PersonVisit.FirstName,
+                        Images = cardImages,
+                        Buttons = cardButtons
+                    };
 
-                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
-
-                if (visits.Count == 0)
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                }
-                else if (visits.Count == 1)
-                {
-                    int id = visits[0].PersonVisit.PersonId;
-
-                    List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
-
-                    string reply = "J'ai vu " + firstname + " à ces dates : ";
-                    reply += Environment.NewLine;
-
-                    foreach (var visit in visitsById)
-                    {
-                        reply += "     -" + Convert.ToString(visit.Date.AddHours(1));
-                    }
-
-                    replyToConversation = ((Activity)context.Activity).CreateReply(reply);
-                }
-                else
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.AttachmentLayout = "carousel";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-                    foreach (var visit in visits)
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
-
-                        List<CardAction> cardButtons = new List<CardAction>();
-
-                        CardAction plButtonChoice = new CardAction()
-                        {
-
-                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId + " : nbVisit :" + nbVisit,
-                            Type = "postBack",
-                            Title = "Le voilà !"
-                        };
-                        cardButtons.Add(plButtonChoice);
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Images = cardImages,
-                            Buttons = cardButtons
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                    }
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
                 }
             }
-
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
         }
 
-        [LuisIntent("GetAverageVisits")]
-        public async Task GetAverageVisits(IDialogContext context, LuisResult result)
+        await context.PostAsync(replyToConversation);
+        context.Wait(MessageReceived);
+    }
+
+    [LuisIntent("GetAverageVisits")]
+    public async Task GetAverageVisits(IDialogContext context, LuisResult result)
+    {
+        AdaClient client = new AdaClient();
+
+        GenderValues? gender;
+        int? age1 = null;
+        string ageReturn1 = "null";
+        int? age2 = null;
+        string ageReturn2 = "null";
+        string ageReturn = "";
+        string genderReturn = "null";
+
+        int nbEntities = result.Entities.Count();
+        for (int i = 0; i < nbEntities; i++)
         {
-            AdaClient client = new AdaClient();
+            if (result.Entities[i].Type == "Gender")
+            {
+                string value = result.Entities[i].Entity;
 
-            GenderValues? gender;
-            int? age1 = null;
-            string ageReturn1 = "null";
-            int? age2 = null;
-            string ageReturn2 = "null";
-            string ageReturn = "";
-            string genderReturn = "null";
+                gender = GenderValues.Male;
+                if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                {
+                    gender = GenderValues.Female;
+                }
+                genderReturn = Convert.ToString(gender.Value);
 
-            int nbEntities = result.Entities.Count();
+            }
+        }
+
+        if (result.CompositeEntities != null)
+        {
+            nbEntities = result.CompositeEntities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
-                if (result.Entities[i].Type == "Gender")
+                //Process of ages
+                if (result.CompositeEntities[i].ParentType == "SingleAge")
                 {
-                    string value = result.Entities[i].Entity;
-
-                    gender = GenderValues.Male;
-                    if (value == "femme" || value == "femmes" || value == "fille" || value == "filles")
+                    age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    ageReturn1 = Convert.ToString(age1);
+                    ageReturn = " de " + age1 + " ans";
+                }
+                else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                {
+                    age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                    age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                    if (age2 < age1 && age2 != -1)
                     {
-                        gender = GenderValues.Female;
+                        int? ageTmp = age1;
+                        age1 = age2;
+                        age2 = ageTmp;
                     }
-                    genderReturn = Convert.ToString(gender.Value);
+                    ageReturn1 = Convert.ToString(age1);
+                    ageReturn2 = Convert.ToString(age2);
 
+                    ageReturn = " entre " + age1 + " et " + age2 + " ans";
                 }
             }
 
-            if (result.CompositeEntities != null)
-            {
-                nbEntities = result.CompositeEntities.Count();
-                for (int i = 0; i < nbEntities; i++)
-                {
-                    //Process of ages
-                    if (result.CompositeEntities[i].ParentType == "SingleAge")
-                    {
-                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        ageReturn1 = Convert.ToString(age1);
-                        ageReturn = " de " + age1 + " ans";
-                    }
-                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
-                    {
-                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
-                        if (age2 < age1 && age2 != -1)
-                        {
-                            int? ageTmp = age1;
-                            age1 = age2;
-                            age2 = ageTmp;
-                        }
-                        ageReturn1 = Convert.ToString(age1);
-                        ageReturn2 = Convert.ToString(age2);
-
-                        ageReturn = " entre " + age1 + " et " + age2 + " ans";
-                    }
-                }
-
-            }
-             
-            int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
-
-            if (genderReturn == "null")
-            {
-                genderReturn = "personne(s)";
-            } 
-            else if(genderReturn == Convert.ToString(GenderValues.Female))
-            {
-                genderReturn = "femme(s)";
-            }
-            else
-            {
-                genderReturn = "homme(s)";
-            }
-
-            string message = "Je vois en moyenne : " + nbVisits + " " + genderReturn + " " + ageReturn + " par jour.";
-            await context.PostAsync(message);
-            context.Wait(MessageReceived);
         }
+
+        int nbVisits = await client.GetNbVisits(genderReturn, ageReturn1, ageReturn2);
+
+        if (genderReturn == "null")
+        {
+            genderReturn = "personne(s)";
+        }
+        else if (genderReturn == Convert.ToString(GenderValues.Female))
+        {
+            genderReturn = "femme(s)";
+        }
+        else
+        {
+            genderReturn = "homme(s)";
+        }
+
+        string message = "Je vois en moyenne : " + nbVisits + " " + genderReturn + " " + ageReturn + " par jour.";
+        await context.PostAsync(message);
+        context.Wait(MessageReceived);
     }
+}
 }

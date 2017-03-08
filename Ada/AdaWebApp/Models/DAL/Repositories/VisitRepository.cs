@@ -40,6 +40,181 @@ namespace AdaWebApp.Models.DAL.Repositories
             }
         }
 
+        public List<Visit> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
+        {
+            DateTime today = DateTime.Today;
+            if (age1 != null && age2 == null)
+            {
+                age1 = DateTime.Today.Year - age1;
+            }
+            else if (age1 != null && age2 != null)
+            {
+                age1 = DateTime.Today.Year - age1;
+                age2 = DateTime.Today.Year - age2;
+            }
+            
+            if (date1 != null && date2 == null )
+            {
+                if (gender != null)
+                {
+                    if (age1 != null)
+                    {
+                        if (age2 != null)
+                        {
+                            var test = Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year <= age1
+                                && v.Person.DateOfBirth.Year >= age2).ToList();
+                            return test;
+                        }
+                        else
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year == age1).ToList();
+                        }
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                        v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)
+                        && v.Person.Gender == gender).ToList();
+                    }
+                }
+                else if (gender == null)
+                {
+                    if (age2 != null)
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)
+                            && v.Person.DateOfBirth.Year <= age1
+                            && v.Person.DateOfBirth.Year >= age2).ToList();
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)
+                            && v.Person.DateOfBirth.Year == age1).ToList();
+                    }
+                }
+                else
+                {
+                    return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date1)).ToList();
+                }
+            }
+            else if (date1 != null && date2 != null)
+            {
+                if (gender != null)
+                {
+                    if (age1 != null)
+                    {
+                        if (age2 != null)
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year <= age1
+                                && v.Person.DateOfBirth.Year >= age2).ToList();
+                        }
+                        else
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year == age1).ToList();
+                        }
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                        v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                        && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                        && v.Person.Gender == gender).ToList();
+                    }
+                }
+                else if (gender == null)
+                {
+                    if (age2 != null)
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                            && v.Person.DateOfBirth.Year <= age1
+                            && v.Person.DateOfBirth.Year >= age2).ToList();
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                            && v.Person.DateOfBirth.Year == age1).ToList();
+                    }
+                }
+                else
+                {
+                    return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)).ToList();
+                }
+            }
+            else
+            {
+                if (gender != null)
+                {
+                    if (age1 != null)
+                    {
+                        if (age2 != null)
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(today)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year <= age1
+                                && v.Person.DateOfBirth.Year >= age2).ToList();
+                        }
+                        else
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(today)
+                                && v.Person.Gender == gender
+                                && v.Person.DateOfBirth.Year == age1).ToList();
+                        }
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                        v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(today)
+                        && v.Person.Gender == gender).ToList();
+                    }
+                }
+                else
+                {
+                    if (age1 != null)
+                    {
+                        if (age2 != null)
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(today)
+                                && v.Person.DateOfBirth.Year <= age1
+                                && v.Person.DateOfBirth.Year >= age2).ToList();
+                        }
+                        else
+                        {
+                            return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                                v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(today)
+                                && v.Person.DateOfBirth.Year == age1).ToList();
+                        }
+                    }
+                }
+                return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                    v => v.Date >= today).ToList();
+            }
+        }
+
         public List<Visit> GetLastVisitForAPersonByFirstname(string firstname)
         {
             //Compare the first time of the last visit of a day (v.Date) and the last visit of the person (DateOfBirth).

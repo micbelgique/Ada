@@ -14,23 +14,14 @@ namespace AdaBot.Dialogs
 
         }
 
-        public List<VisitDto> getVisitsByGender(string valueGender, List<VisitDto> tmp, List<VisitDto> visitsReturn, int nbVisits)
+        public GenderValues getVisitsByGender(string valueGender)
         {
-            GenderValues gender = GenderValues.Male;
             if (valueGender == "femme" || valueGender == "femmes" || valueGender == "fille" || valueGender == "filles")
             {
-                gender = GenderValues.Female;
+                return GenderValues.Female;
             }
 
-            for (int y = 0; y < nbVisits; y++)
-            {
-                if (tmp[y].PersonVisit.Gender == gender)
-                {
-                    visitsReturn.Add(tmp[y]);
-                }
-            }
-
-            return visitsReturn;
+            else return GenderValues.Male;
         }
 
         public int getNbPerson(List<VisitDto> visitsReturn, int nbPerson)
