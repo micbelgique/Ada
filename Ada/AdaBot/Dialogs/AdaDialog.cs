@@ -344,7 +344,7 @@ namespace AdaBot.Dialogs
             //NbPersonForReal
             nbVisits = visitsReturn.Count();
             int nbPerson = 0;
-            nbPerson = treatment.getNbPerson(visitsReturn, nbPerson);
+            nbPerson = treatment.getNbPerson(visitsReturn, nbPerson); 
             
             //Return results
             if (nbPerson != 0)
