@@ -290,13 +290,16 @@ namespace AdaBot.Dialogs
                 }
             }
 
-            tmp = await client.GetVisitsForStats(date1, date2, gender, age1, age2);
+            visitsReturn = await client.GetVisitsForStats(date1, date2, gender, age1, age2);
+            nbVisits = visitsReturn.Count();
 
             nbEntities = result.Entities.Count();
             for (int i = 0; i < nbEntities; i++)
             {
                 if (result.Entities[i].Type == "Emotion")
                 {
+                    tmp = visitsReturn.ToList();
+                    visitsReturn.Clear();
                     //Pour le moment, on gère avec code (à modifier une fois Dico OK)
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
