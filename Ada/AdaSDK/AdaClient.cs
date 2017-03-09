@@ -56,10 +56,10 @@ namespace AdaSDK
                     if (date2 != null)
                     {
                         //Convertion date2
-                        tmp2 = Convert.ToString(date1).Split(' ');
+                        tmp2 = Convert.ToString(date2).Split(' ');
                         tmp2[0] = tmp2[0].Replace('/', '-');
-                        date1 = Convert.ToDateTime(tmp2[0]);
-                        tmp2[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                        date2 = Convert.ToDateTime(tmp2[0]);
+                        tmp2[0] = Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
                     }
                 }
                 if (tmp[0] == null)

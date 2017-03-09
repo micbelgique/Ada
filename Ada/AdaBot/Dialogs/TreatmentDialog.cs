@@ -27,11 +27,13 @@ namespace AdaBot.Dialogs
         public int getNbPerson(List<VisitDto> visitsReturn, int nbPerson)
         {
             List<int> listID = new List<int>();
+            List<int> listIDVisit = new List<int>();
             foreach (var visit in visitsReturn)
             {
-                if (!listID.Contains(visit.ID))
+                if (!listID.Contains(visit.PersonVisit.PersonId) && !listIDVisit.Contains(visit.ID))
                 {
-                    listID.Add(visit.ID);
+                    listID.Add(visit.PersonVisit.PersonId);
+                    listIDVisit.Add(visit.ID);
                     nbPerson += 1;
                 }
             }

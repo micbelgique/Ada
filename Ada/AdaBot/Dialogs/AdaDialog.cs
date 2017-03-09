@@ -235,7 +235,7 @@ namespace AdaBot.Dialogs
                                     date1 = date;
                                     dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
                                 }
-                                else
+                                else if (date1 != null)
                                 {
                                     date2 = date;
                                     if (date2 < date1 && date2 != null)
