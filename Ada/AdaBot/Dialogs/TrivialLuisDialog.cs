@@ -10,9 +10,9 @@ using System.Web;
 
 namespace AdaBot.Dialogs
 {
-    public class TrivialCommunication : LuisDialog<object>
+    public class TrivialLuisDialog : LuisDialog<object>
     {
-        public TrivialCommunication(params ILuisService[] services) : base(services)
+        public TrivialLuisDialog(params ILuisService[] services) : base(services)
         {
 
         }
@@ -28,7 +28,7 @@ namespace AdaBot.Dialogs
         {
             string message = $"Ce n'est pas gentil";
             await context.PostAsync(message);
-            context.Wait(MessageReceived);
+            context.Done<object>(null);
         }
     }
 }

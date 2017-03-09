@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Configuration;
 using AdaSDK.Models;
 using AdaBot.BotFrameworkHelpers;
+using System.Threading;
 
 namespace AdaBot.Dialogs
 {
@@ -32,15 +33,19 @@ namespace AdaBot.Dialogs
         [LuisIntent("")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            new TrivialCommunication(
-                    new LuisService(new LuisModelAttribute(
-                    ConfigurationManager.AppSettings["ModelIdTrivial"],
-                    ConfigurationManager.AppSettings["SubscriptionKeyTrivial"])));
-
-            context.Wait(MessageReceived);
+            await context.Forward(new TrivialLuisDialog(new LuisService(new LuisModelAttribute(
+                           ConfigurationManager.AppSettings["ModelIdTrivial"],
+                           ConfigurationManager.AppSettings["SubscriptionKeyTrivial"]))),
+                   BasicCallback, context.Activity as Activity, CancellationToken.None); 
         }
 
-        [LuisIntent("SayHello")]
+
+        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Wait(this.MessageReceived);
+        }
+
+    [LuisIntent("SayHello")]
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
