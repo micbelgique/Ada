@@ -19,8 +19,11 @@ namespace AdaBot.Dialogs
             string message;
 
             var diffDate = DateTime.Now - dateVisit;
-
-            if(diffDate.TotalMinutes < 60)
+            if(diffDate.TotalMinutes < 1)
+            {
+                message = "Je vois " + firstname + " en ce moment. :)";
+            }
+            else if(diffDate.TotalMinutes < 60)
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Minutes) + " minute(s)";
             }
