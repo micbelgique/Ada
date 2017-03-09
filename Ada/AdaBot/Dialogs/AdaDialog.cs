@@ -592,7 +592,7 @@ namespace AdaBot.Dialogs
                     replyToConversation.AttachmentLayout = "carousel";
                     replyToConversation.Attachments = new List<Attachment>();
 
-                    //Affichage
+                    //Affichage 
                     int compteurCarrousel = 1;
                     foreach (var visit in visitsById)
                     {
