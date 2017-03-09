@@ -31,7 +31,7 @@ namespace AdaBot.Dialogs
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
             var message = (Activity)await item;
-            await base.MessageReceived(context, item);
+            await base.MessageReceived(context, item); 
         }
 
         [LuisIntent("")]
