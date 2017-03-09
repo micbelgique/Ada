@@ -32,7 +32,7 @@ namespace AdaBot.Dialogs
             {
                 if (!listID.Contains(visit.PersonVisit.PersonId) && !listIDVisit.Contains(visit.ID))
                 {
-                    listID.Add(visit.PersonVisit.PersonId);
+                    listID.Add(visit.PersonVisit.PersonId); 
                     listIDVisit.Add(visit.ID);
                     nbPerson += 1;
                 }
