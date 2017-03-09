@@ -147,12 +147,18 @@ namespace AdaWebApp.Models.DAL.Repositories
                             && v.Person.DateOfBirth.Year <= age1
                             && v.Person.DateOfBirth.Year >= age2).ToList();
                     }
-                    else
+                    else if (age1 != null)
                     {
                         return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
                             v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
                             && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
                             && v.Person.DateOfBirth.Year == age1).ToList();
+                    }
+                    else
+                    {
+                        return Table.Include(picture => picture.ProfilePictures).Include(v => v.Person).Where(
+                            v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)).ToList();
                     }
                 }
                 else
