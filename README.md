@@ -1,5 +1,11 @@
 # Ada
 
+Ada is an OpenSource project by the Microsoft Innovation Center designed to demonstrate how users can interact in a human way with machines. This is a Windows 10 application that uses the Vision API's of the Microsoft Cognitive Services to recognize, understand and talk to our visitors.
+
+https://www.microsoft.com/cognitive-services/en-us/apis
+
+Have fun !
+
 [![](/doc/assets/ada hello.jpg)]()
 
 ## Deployment
