@@ -40,6 +40,56 @@ namespace AdaBot.Dialogs
                    BasicCallback, context.Activity as Activity, CancellationToken.None); 
         }
 
+        [LuisIntent("GetHelp")]
+        public async Task GetHelp(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply("En quoi puis-je t'aider? :)");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+
+            List<string> pictures = new List<string>();
+            pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1");
+            pictures.Add("http://i.imgur.com/2TsS2aq.png");
+            pictures.Add("http://i.imgur.com/gjQkeXr.png");
+
+            List<string> btnAction = new List<string>();
+            btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
+
+            List<string> btnString = new List<string>();
+            btnString.Add("Notre Facebook");
+            btnString.Add("Notre chaîne Youtube");
+            btnString.Add("Notre Meetup");
+                        
+            for (int i=0; i<btnAction.Count(); i++)
+            {
+                List<CardAction> cardsAction = new List<CardAction>();
+                CardAction action = new CardAction()
+                {
+                    Value = btnAction[i].ToString(),
+                    Type = "openUrl",
+                    Title = btnString[i]
+                };
+                cardsAction.Add(action);
+                List<CardImage> cardsImage = new List<CardImage>();
+                CardImage img = new CardImage(url: pictures[i]);
+                cardsImage.Add(img);
+
+                HeroCard tmp = new HeroCard()
+                {
+                    Images = cardsImage,
+                    Buttons = cardsAction
+                };
+                Attachment plAttachment = tmp.ToAttachment();
+                replyToConversation.Attachments.Add(plAttachment);
+            }
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
 
         private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
         {
@@ -103,7 +153,7 @@ namespace AdaBot.Dialogs
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = visit.PersonVisit.FirstName,
+                            Title = firstname,
                             Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
                             //Subtitle = 
                             Images = cardImages
@@ -245,7 +295,6 @@ namespace AdaBot.Dialogs
             bool askingEmotion = false;
 
             int nbEntities;
-            int agePerson;
             int nbVisits = 0;
             string genderReturn = "personne(s)";
             string ageReturn = "";
