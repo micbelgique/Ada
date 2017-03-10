@@ -161,7 +161,7 @@
     <value>[Je n'ai encore vu personne aujourd'hui :'(|Personne n'est venu me dire bonjour...|Je n'ai vu personne aujourd'hui.]</value>
   </data>
   <data name="NobodyStats" xml:space="preserve">
-    <value>[Je n'ai croisé personne correspondant à ta description|Il n'y a personne qui correspond à tes désire|Malheureusement je n'ai personne correspondant à ta demande]</value>
+    <value>[Je n'ai croisé personne correspondant à ta description|Malheureusement je n'ai personne correspondant à ta demande]</value>
   </data>
   <data name="None" xml:space="preserve">
     <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Késako ?|Je ne comprends pas :)]</value>

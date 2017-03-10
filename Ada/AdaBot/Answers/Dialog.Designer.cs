@@ -169,7 +169,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Je n&apos;ai croisé personne correspondant à ta description|Il n&apos;y a personne qui correspond à tes désire|Malheureusement je n&apos;ai personne correspondant à ta demande].
+        ///   Looks up a localized string similar to [Je n&apos;ai croisé personne correspondant à ta description|Malheureusement je n&apos;ai personne correspondant à ta demande].
         /// </summary>
         internal static string NobodyStats {
             get {
