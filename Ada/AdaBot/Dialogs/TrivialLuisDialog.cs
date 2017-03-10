@@ -24,7 +24,7 @@ namespace AdaBot.Dialogs
         }
 
         [LuisIntent("Insult")]
-        public async Task SayHello(IDialogContext context, LuisResult result)
+        public async Task Insult(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Insult.Spintax()}";
             await context.PostAsync(message);
@@ -48,7 +48,7 @@ namespace AdaBot.Dialogs
         }
 
         [LuisIntent("Greetings")]
-        public async Task CompGreetingsliment(IDialogContext context, LuisResult result)
+        public async Task Greetings(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
 
