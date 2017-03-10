@@ -138,6 +138,9 @@
   <data name="Insult" xml:space="preserve">
     <value>[Méchant !!!|Ce n'est pas gentil|Arrète de m'insulter|Ferme ta gueule !|Non mais OH !|Mais euh ...]</value>
   </data>
+  <data name="IntroStats" xml:space="preserve">
+    <value>[Voyons voir...|Les voici :)|Et hop ils sont la]</value>
+  </data>
   <data name="JokeRequest" xml:space="preserve">
     <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C'est deux spermatozoïdes qui discutent : 
 - Dis, c'est encore loin les ovaires ?
@@ -145,10 +148,7 @@
 - Comment avez-vous crevé ce pneu ?
 - Oh ! bêtement, en roulant sur une bouteille d'alcool.
 - Vous ne l'aviez pas vue ?
-- Non l'homme l'avait dans sa poche.|Lors d'un mariage, une fillette demande à sa mère :
-- Maman, maman, pourquoi la madame elle est habillé tout en blanc ?
-- Hé bien, c'est pour montrer qu'elle est heureuse, c'est une couleur qui annonce le bonheur, pour dire que son amour durera toujours.
-- Ha, mais pourquoi le monsieur alors il est tout en noir ?|- Dis maman, un citron, ça a des pattes ?
+- Non l'homme l'avait dans sa poche.|- Dis maman, un citron, ça a des pattes ?
 - ???
 - Dis maman, un citron, ça a des pattes ?
 - Euh... ben non, un citron ça n'a pas de pattes.
@@ -157,6 +157,12 @@
   <data name="Name" xml:space="preserve">
     <value>[Je m'appelle Ada|Mon nom est Ada|Je suis Ada|Moi c'est Ada|Mes parents m'ont appelé Ada]</value>
   </data>
+  <data name="Nobody" xml:space="preserve">
+    <value>[Je n'ai encore vu personne aujourd'hui :'(|Personne n'est venu me dire bonjour...|Je n'ai vu personne aujourd'hui.]</value>
+  </data>
+  <data name="NobodyStats" xml:space="preserve">
+    <value>[Je n'ai croisé personne correspondant à ta description|Il n'y a personne qui correspond à tes désire|Malheureusement je n'ai personne correspondant à ta demande]</value>
+  </data>
   <data name="None" xml:space="preserve">
     <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Késako ?|Je ne comprends pas :)]</value>
   </data>
@@ -164,13 +170,28 @@
     <value>[C'est le 0498 ... tu as vraiment cru que j'allais te donner mon numéro de téléphonne ? 
 Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas mon numéro à n'importe qui|je veux pas te donner mon numéro de téléphonne]</value>
   </data>
+  <data name="Presentation" xml:space="preserve">
+    <value>[Il faudrait nous présenter! ^^|Quand est ce qu'il vient me dire bonjour ?|J'aimerais le rencontrer]</value>
+  </data>
   <data name="Reality" xml:space="preserve">
     <value>[Je ne suis q'un robot|Je ne suis pas humaine|Malgré mon amour envers les humains je ne fais pas partie de cette race]</value>
   </data>
+  <data name="See" xml:space="preserve">
+    <value>[J'ai vu|J'ai croisé|j'ai aperçu]</value>
+  </data>
   <data name="Sex" xml:space="preserve">
-    <value>[Je suis une fille|Ca ne se voit pas ?|C'est vexant ...|Tu veux que je te prenne un rendez-vous chez un ophtalmologue...]</value>
+    <value>[Je suis une fille|Ca ne se voit pas ?|C'est vexant...|Tu veux que je te prenne un rendez-vous chez un ophtalmologue...]</value>
   </data>
   <data name="Thanks" xml:space="preserve">
     <value>[Merci à toi|De rien :)|Mais de rien voyons !|Avec plaisir !|Y a pas de quoi|Pas de problème !|Je suis là pour ça !|C'est mon travail, voyons...|Je suis né pour aider !|Ne t'en fais pas !Tout le plaisir est pour moi !]</value>
+  </data>
+  <data name="Unknow" xml:space="preserve">
+    <value>[Je n'ai pas encore rencontré|Je n'ai pas encore vu|Je ne connais pas]</value>
+  </data>
+  <data name="VisitsPerson" xml:space="preserve">
+    <value>[Je l'ai vu à ces dates:]</value>
+  </data>
+  <data name="Waiting" xml:space="preserve">
+    <value>[Un petit instant, je vais te chercher ça! ;)|Veuillez patienter le temps que je trouve ce que vous voulez :)]</value>
   </data>
 </root>

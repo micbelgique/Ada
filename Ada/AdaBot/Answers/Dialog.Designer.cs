@@ -124,15 +124,25 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Voyons voir...|Les voici :)|Et hop ils sont la].
+        /// </summary>
+        internal static string IntroStats {
+            get {
+                return ResourceManager.GetString("IntroStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [C&apos;est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C&apos;est deux spermatozoïdes qui discutent : 
         ///- Dis, c&apos;est encore loin les ovaires ?
         ///- Tu parles, on n&apos;est qu&apos;aux amydales.|Le garagiste demande :
         ///- Comment avez-vous crevé ce pneu ?
         ///- Oh ! bêtement, en roulant sur une bouteille d&apos;alcool.
         ///- Vous ne l&apos;aviez pas vue ?
-        ///- Non l&apos;homme l&apos;avait dans sa poche.|Lors d&apos;un mariage, une fillette demande à sa mère :
-        ///- Maman, maman, pourquoi la madame elle est habillé tout en blanc ?
-        ///- Hé bien, c&apos;est [rest of string was truncated]&quot;;.
+        ///- Non l&apos;homme l&apos;avait dans sa poche.|- Dis maman, un citron, ça a des pattes ?
+        ///- ???
+        ///- Dis maman, un citron, ça a des pattes ?
+        ///- Euh... ben non, un citron ça n&apos;a pas de pat [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
@@ -146,6 +156,24 @@ namespace AdaBot.Answers {
         internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je n&apos;ai encore vu personne aujourd&apos;hui :&apos;(|Personne n&apos;est venu me dire bonjour...|Je n&apos;ai vu personne aujourd&apos;hui.].
+        /// </summary>
+        internal static string Nobody {
+            get {
+                return ResourceManager.GetString("Nobody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je n&apos;ai croisé personne correspondant à ta description|Il n&apos;y a personne qui correspond à tes désire|Malheureusement je n&apos;ai personne correspondant à ta demande].
+        /// </summary>
+        internal static string NobodyStats {
+            get {
+                return ResourceManager.GetString("NobodyStats", resourceCulture);
             }
         }
         
@@ -169,6 +197,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Il faudrait nous présenter! ^^|Quand est ce qu&apos;il vient me dire bonjour ?|J&apos;aimerais le rencontrer].
+        /// </summary>
+        internal static string Presentation {
+            get {
+                return ResourceManager.GetString("Presentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Je ne suis q&apos;un robot|Je ne suis pas humaine|Malgré mon amour envers les humains je ne fais pas partie de cette race].
         /// </summary>
         internal static string Reality {
@@ -178,7 +215,16 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Je suis une fille|Ca ne se voit pas ?|C&apos;est vexant ...|Tu veux que je te prenne un rendez-vous chez un ophtalmologue...].
+        ///   Looks up a localized string similar to [J&apos;ai vu|J&apos;ai croisé|j&apos;ai aperçu].
+        /// </summary>
+        internal static string See {
+            get {
+                return ResourceManager.GetString("See", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je suis une fille|Ca ne se voit pas ?|C&apos;est vexant...|Tu veux que je te prenne un rendez-vous chez un ophtalmologue...].
         /// </summary>
         internal static string Sex {
             get {
@@ -192,6 +238,33 @@ namespace AdaBot.Answers {
         internal static string Thanks {
             get {
                 return ResourceManager.GetString("Thanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je n&apos;ai pas encore rencontré|Je n&apos;ai pas encore vu|Je ne connais pas].
+        /// </summary>
+        internal static string Unknow {
+            get {
+                return ResourceManager.GetString("Unknow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je l&apos;ai vu à ces dates:].
+        /// </summary>
+        internal static string VisitsPerson {
+            get {
+                return ResourceManager.GetString("VisitsPerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Un petit instant, je vais te chercher ça! ;)|Veuillez patienter le temps que je trouve ce que vous voulez :)].
+        /// </summary>
+        internal static string Waiting {
+            get {
+                return ResourceManager.GetString("Waiting", resourceCulture);
             }
         }
     }

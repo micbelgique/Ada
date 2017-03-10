@@ -14,6 +14,8 @@ using AdaSDK.Models;
 using AdaBot.BotFrameworkHelpers;
 using System.Threading;
 using System.Drawing;
+using AdaBot.Answers;
+using AdaBot.Bot.Utils;
 
 namespace AdaBot.Dialogs
 {
@@ -50,7 +52,7 @@ namespace AdaBot.Dialogs
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync("Un petit instant, je vais te chercher ça! ;)");
+            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
 
             AdaClient client = new AdaClient();
             List<VisitDto> visits = await client.GetVisitsToday();
@@ -59,13 +61,13 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai encore vu personne aujourd'hui... :'(");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Nobody.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + visits.Count + " personnes aujourd'hui! :D");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.See.Spintax()} " + visits.Count + $" personnes aujourd'hui! :D");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
@@ -154,13 +156,13 @@ namespace AdaBot.Dialogs
 
             if (visits.Count == 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Voyons voir...");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.IntroStats.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
@@ -231,7 +233,7 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync("Un petit instant, je vais te chercher ça! ;)");
+            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
 
             AdaClient client = new AdaClient();
             Activity replyToConversation;
@@ -405,7 +407,7 @@ namespace AdaBot.Dialogs
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai croisé personne correspondant à ta description " + dateReturn + "... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyStats.Spintax()} " + dateReturn + "... :/");
             }
 
             if (visitsReturn.Count() != 0)
@@ -500,7 +502,7 @@ namespace AdaBot.Dialogs
 
                 List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
 
-                replyToConversation = ((Activity)context.Activity).CreateReply("Je l'ai vu à ces dates:");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.VisitsPerson.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
@@ -576,7 +578,7 @@ namespace AdaBot.Dialogs
 
                 if (visits.Count == 0)
                 {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je n'ai pas encore rencontré " + firstname + " :/ Il faudrait nous présenter! ^^");
+                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
                     replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Type = "message";
                 }
@@ -586,7 +588,7 @@ namespace AdaBot.Dialogs
 
                     List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
 
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je l'ai vu à ces dates:");
+                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.VisitsPerson.Spintax()}");
                     replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Type = "message";
                     replyToConversation.AttachmentLayout = "carousel";
