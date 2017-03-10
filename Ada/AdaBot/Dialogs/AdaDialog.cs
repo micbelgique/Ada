@@ -50,7 +50,7 @@ namespace AdaBot.Dialogs
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
 
-            List<string> pictures = new List<string>();
+            List<string> pictures = new List<string>(); 
             pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1");
             pictures.Add("http://i.imgur.com/2TsS2aq.png");
             pictures.Add("http://i.imgur.com/gjQkeXr.png");
