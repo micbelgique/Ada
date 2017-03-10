@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.Bot.Connector;
 using System;
+using AdaBot.Answers;
+using AdaBot.Bot.Utils;
 
 namespace AdaBot.Dialogs
 {
@@ -24,7 +26,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Insult")]
         public async Task SayHello(IDialogContext context, LuisResult result)
         {
-            string message = $"Ce n'est pas gentil";
+            string message = $"{Dialog.Insult.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         } 
@@ -32,7 +34,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Age")]
         public async Task Age(IDialogContext context, LuisResult result)
         {
-            string message = $"Je n'ai pas d'age";
+            string message = $"{Dialog.Age.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -40,7 +42,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Compliment")]
         public async Task Compliment(IDialogContext context, LuisResult result)
         {
-            string message = $"Un grand merci :)";
+            string message = $"{Dialog.Compliment.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -49,8 +51,9 @@ namespace AdaBot.Dialogs
         public async Task CompGreetingsliment(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
+
             string[] firstNameUser = nameUser.Split(' ');
-            string message = $"Bonjour {firstNameUser[0]}";
+            string message = $"{Dialog.Greeting.Spintax()} {firstNameUser[0]}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -58,7 +61,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Feelings")]
         public async Task Feelings(IDialogContext context, LuisResult result)
         {
-            string message = $"Je n'ai pas d'humeur";
+            string message = $"{Dialog.Feelings.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -66,7 +69,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Home")]
         public async Task Home(IDialogContext context, LuisResult result)
         {
-            string message = $"Je n'ai pas de maison";
+            string message = $"{Dialog.Home.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -74,7 +77,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("InfoRequest")]
         public async Task InfoRequest(IDialogContext context, LuisResult result)
         {
-            string message = $"Je suis l'assistante virtuelle du MIC";
+            string message = $"{Dialog.InfoRequest.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -82,7 +85,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("JokeRequest")]
         public async Task JokeRequest(IDialogContext context, LuisResult result)
         {
-            string message = $"C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !";
+            string message = $"{Dialog.JokeRequest.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -90,7 +93,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Name")]
         public async Task Name(IDialogContext context, LuisResult result)
         {
-            string message = $"Je m'appelle Ada";
+            string message = $"{Dialog.Name.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -98,9 +101,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Phone")]
         public async Task Phone(IDialogContext context, LuisResult result)
         {
-            string message = $"C'est le 0498 ... tu as vraiment cru que j'allais te donner mon numéro de téléphonne ?";
-            await context.PostAsync(message);
-            message = $"Je ne suis pas une fille facile, MOI ...";
+            string message = $"{Dialog.Phone.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -108,7 +109,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Reality")]
         public async Task Reality(IDialogContext context, LuisResult result)
         {
-            string message = $"Je ne suis un robot";
+            string message = $"{Dialog.Reality.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -116,7 +117,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Sex")]
         public async Task Sex(IDialogContext context, LuisResult result)
         {
-            string message = $"Je suis une fille :) <3";
+            string message = $"{Dialog.Sex.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -124,7 +125,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("Thanks")]
         public async Task Thanks(IDialogContext context, LuisResult result)
         {
-            string message = $"Il n'y a pas de quoi :)";
+            string message = $"{Dialog.Thanks.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
@@ -141,7 +142,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"Je n'ai pas compris";
+            string message = $"{Dialog.None.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
