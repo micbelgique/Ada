@@ -1,14 +1,21 @@
-﻿using AdaSDK;
+﻿using AdaBot.Models.EventsLoaderServices;
+using AdaSDK;
 using AdaSDK.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AdaBot.Dialogs
 {
     public class TreatmentDialog
     {
+        // Services
+        public IEventsLoaderService EventsMeetupLoaderService { get; set; }
+
+        // Properties
+        private List<MeetupEvent> _eventList = new List<MeetupEvent>();
+
         public TreatmentDialog()
         {
 
@@ -32,13 +39,23 @@ namespace AdaBot.Dialogs
             {
                 if (!listID.Contains(visit.PersonVisit.PersonId) && !listIDVisit.Contains(visit.ID))
                 {
-                    listID.Add(visit.PersonVisit.PersonId); 
+                    listID.Add(visit.PersonVisit.PersonId);
                     listIDVisit.Add(visit.ID);
                     nbPerson += 1;
                 }
             }
 
             return nbPerson;
+        }
+
+        public async Task<List<MeetupEvent>> getEvents()
+        {
+            EventsMeetupLoaderService = new EventsLoaderService();
+            await RunTaskAsync(async () =>
+            {
+                _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
+            });
+            return _eventList;
         }
     }
 }

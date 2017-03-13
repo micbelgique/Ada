@@ -123,6 +123,9 @@
   <data name="Compliment" xml:space="preserve">
     <value>[Merci| Oh c'est gentil :)|Personne ne m'avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)]</value>
   </data>
+  <data name="Farewell" xml:space="preserve">
+    <value>[A bientôt|On se revoit bientôt j'espère|A plus|Au revoir|Au plaisir|A plus dans l'bus|A demain dans l'train|A bientôt dans l'métro|Tu vas me manquer|A la prochaine]</value>
+  </data>
   <data name="Feelings" xml:space="preserve">
     <value>[Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)]</value>
   </data>
@@ -136,10 +139,10 @@
     <value>[Je suis l'assistante virtuelle du MIC|Je suis la pour t'aider|Le MIC Mons est la meilleur entreprise du monde]</value>
   </data>
   <data name="Insult" xml:space="preserve">
-    <value>[Méchant !!!|Ce n'est pas gentil|Arrète de m'insulter|Ferme ta gueule !|Non mais OH !|Mais euh ...]</value>
+    <value>[Méchant !!!|Ce n'est pas gentil|Arrète de m'insulter|Non mais OH !|Mais euh...|Ca va aller oui?!|On ne parle pas comme ça à une dame!]</value>
   </data>
   <data name="IntroStats" xml:space="preserve">
-    <value>[Voyons voir...|Les voici :)|Et hop ils sont la]</value>
+    <value>[Voyons voir...|Et hop ils sont la]</value>
   </data>
   <data name="JokeRequest" xml:space="preserve">
     <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C'est deux spermatozoïdes qui discutent : 
@@ -192,6 +195,6 @@ Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas 
     <value>[Je l'ai vu à ces dates:]</value>
   </data>
   <data name="Waiting" xml:space="preserve">
-    <value>[Un petit instant, je vais te chercher ça! ;)|Veuillez patienter le temps que je trouve ce que vous voulez :)]</value>
+    <value>[Un petit instant, je vais te chercher ça! ;)|Patiente le temps que je te trouve ce que tu veux :)]</value>
   </data>
 </root>

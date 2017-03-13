@@ -79,6 +79,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [A bientôt|On se revoit bientôt j&apos;espère|A plus|Au revoir|Au plaisir|A plus dans l&apos;bus|A demain dans l&apos;train|A bientôt dans l&apos;métro|Tu vas me manquer|A la prochaine].
+        /// </summary>
+        internal static string Farewell {
+            get {
+                return ResourceManager.GetString("Farewell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)].
         /// </summary>
         internal static string Feelings {
@@ -115,7 +124,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Méchant !!!|Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Ferme ta gueule !|Non mais OH !|Mais euh ...].
+        ///   Looks up a localized string similar to [Méchant !!!|Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Non mais OH !|Mais euh...|Ca va aller oui?!|On ne parle pas comme ça à une dame!].
         /// </summary>
         internal static string Insult {
             get {
@@ -124,7 +133,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Voyons voir...|Les voici :)|Et hop ils sont la].
+        ///   Looks up a localized string similar to [Voyons voir...|Et hop ils sont la].
         /// </summary>
         internal static string IntroStats {
             get {
@@ -142,7 +151,8 @@ namespace AdaBot.Answers {
         ///- Non l&apos;homme l&apos;avait dans sa poche.|- Dis maman, un citron, ça a des pattes ?
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
-        ///- Euh... ben non, un citron ça n&apos;a pas de pat [rest of string was truncated]&quot;;.
+        ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
+        ///- Ah [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
@@ -260,7 +270,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Un petit instant, je vais te chercher ça! ;)|Veuillez patienter le temps que je trouve ce que vous voulez :)].
+        ///   Looks up a localized string similar to [Un petit instant, je vais te chercher ça! ;)|Patiente le temps que je te trouve ce que tu veux :)].
         /// </summary>
         internal static string Waiting {
             get {

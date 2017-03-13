@@ -58,6 +58,17 @@ namespace AdaBot.Dialogs
             context.Done<object>(null);
         }
 
+        [LuisIntent("Farewell")]
+        public async Task Farewell(IDialogContext context, LuisResult result)
+        {
+            string nameUser = context.Activity.From.Name;
+
+            string[] firstNameUser = nameUser.Split(' ');
+            string message = $"{Dialog.Farewell.Spintax()} {firstNameUser[0]}";
+            await context.PostAsync(message);
+            context.Done<object>(null);
+        }
+
         [LuisIntent("Feelings")]
         public async Task Feelings(IDialogContext context, LuisResult result)
         {

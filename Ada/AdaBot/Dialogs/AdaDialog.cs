@@ -16,6 +16,7 @@ using System.Threading;
 using System.Drawing;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using AdaBot.Models.EventsLoaderServices;
 
 namespace AdaBot.Dialogs
 {
@@ -30,7 +31,7 @@ namespace AdaBot.Dialogs
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
             var message = (Activity)await item;
-            await base.MessageReceived(context, item); 
+            await base.MessageReceived(context, item);
         }
 
         [LuisIntent("")]
@@ -39,7 +40,16 @@ namespace AdaBot.Dialogs
             await context.Forward(new TrivialLuisDialog(new LuisService(new LuisModelAttribute(
                            ConfigurationManager.AppSettings["ModelIdTrivial"],
                            ConfigurationManager.AppSettings["SubscriptionKeyTrivial"]))),
-                   BasicCallback, context.Activity as Activity, CancellationToken.None); 
+                   BasicCallback, context.Activity as Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("What'sUp")]
+        public async Task Event(IDialogContext context, LuisResult result)
+        {
+            List<MeetupEvent> _eventList = new List<MeetupEvent>();
+            TreatmentDialog treatment = new TreatmentDialog();
+            _eventList = treatment.getEvents();
+
         }
 
         [LuisIntent("GetHelp")]
@@ -52,8 +62,8 @@ namespace AdaBot.Dialogs
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
 
-            List<string> pictures = new List<string>(); 
-            pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1"); 
+            List<string> pictures = new List<string>();
+            pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1");
             pictures.Add("http://i.imgur.com/2TsS2aq.png");
             pictures.Add("http://i.imgur.com/gjQkeXr.png");
 
@@ -66,8 +76,8 @@ namespace AdaBot.Dialogs
             btnString.Add("Notre Facebook");
             btnString.Add("Notre chaîne Youtube");
             btnString.Add("Notre Meetup");
-                        
-            for (int i=0; i<btnAction.Count(); i++)
+
+            for (int i = 0; i < btnAction.Count(); i++)
             {
                 List<CardAction> cardsAction = new List<CardAction>();
                 CardAction action = new CardAction()
@@ -565,7 +575,7 @@ namespace AdaBot.Dialogs
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-                        
+
                         var customDialog = new CreateDialog();
                         var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
 
