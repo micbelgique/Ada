@@ -16,6 +16,7 @@ namespace AdaWebApp.Models.DAL
         public DbSet<Unavailability> Unavailabilities { get; set; }
         public DbSet<StaffMember> StaffMembers { get; set; }
         public DbSet<RecognitionItem> QueueItems { get; set; }
+        public DbSet<UserIndentified> UserIndentifieds { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdaSDK
@@ -15,6 +17,45 @@ namespace AdaSDK
         {
             HttpClient = new HttpClient();
             HttpClient.MaxResponseContentBufferSize = 256000;
+        }
+
+        public async Task<string> CheckIdFacebook(string idfacebook)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/CheckIdFacebook/"+idfacebook));
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return "true";
+            }
+        }
+
+        public async Task<HttpResponseMessage> AddNewUserIndentified(UserIndentifiedDto userIndentified)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(userIndentified);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var client = new HttpClient();
+
+                var result = await HttpClient.PostAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/AddUserIndentified"), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+               return result.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return null;
+            }
         }
 
         public async Task<List<VisitDto>> GetVisitsToday()
