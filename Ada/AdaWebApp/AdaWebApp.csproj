@@ -328,6 +328,7 @@
     <Compile Include="Models\Entities\RecognitionItem.cs" />
     <Compile Include="Models\Entities\StaffMember.cs" />
     <Compile Include="Models\Entities\Unavailability.cs" />
+    <Compile Include="Models\Entities\UserIndentified.cs" />
     <Compile Include="Models\Entities\Visit.cs" />
     <Compile Include="Models\Entities\Person.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\RecognitionItemExtension.cs" />
