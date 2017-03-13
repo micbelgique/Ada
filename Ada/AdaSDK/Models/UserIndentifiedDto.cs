@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AdaWebApp.Models.Entities
+namespace AdaSDK.Models
 {
-    public class UserIndentified
+    public class UserIndentifiedDto
     {
-        [Key]
-        public int IdUserIndentified { get; set; }
-
         public string Firtsname { get; set; }
 
         public string LastName { get; set; }

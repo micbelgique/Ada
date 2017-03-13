@@ -11,6 +11,9 @@ using Microsoft.Bot.Builder.Dialogs;
 using AdaBot.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using System.Configuration;
+using AdaSDK;
+using AdaSDK.Models;
+using Newtonsoft.Json.Linq;
 
 namespace AdaBot
 {
@@ -23,6 +26,31 @@ namespace AdaBot
         /// </summary> 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+            AdaClient client = new AdaClient();
+            var idUser = activity.From.Id;
+            var accessAllow = await client.CheckIdFacebook(idUser);
+
+            if(Convert.ToString(accessAllow) == "false")
+            {
+                UserIndentifiedDto userIndentified = new UserIndentifiedDto();
+                string nameUser = activity.From.Name + " ";
+                string[] nameUserSplit;
+                nameUserSplit  = nameUser.Split(' ');
+
+                userIndentified.IdFacebook = idUser;
+                userIndentified.Firtsname = nameUserSplit[0];
+                var nbNameSplit = nameUserSplit.Count();
+                string lastName ="";
+                for(int i = 1; i < nbNameSplit ; i++)
+                {
+                    lastName +=nameUserSplit[i]+ " ";
+                }
+                userIndentified.LastName = lastName;
+                userIndentified.authorization = false;
+
+                var respond = await client.AddNewUserIndentified(userIndentified);
+            }
+
             if (activity.Type == ActivityTypes.Message)
             {
                 await Conversation.SendAsync(activity, () => new AdaDialog(

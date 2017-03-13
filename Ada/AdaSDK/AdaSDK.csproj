@@ -42,6 +42,7 @@
     <Compile Include="Models\PersonsFormat.cs" />
     <Compile Include="Models\PersonUpdateDto.cs" />
     <Compile Include="Models\ProfilePictureDto.cs" />
+    <Compile Include="Models\UserIndentifiedDto.cs" />
     <Compile Include="Models\VisitDto.cs" />
     <Compile Include="Models\WebServiceError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

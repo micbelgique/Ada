@@ -295,6 +295,7 @@
     <Compile Include="Areas\Admin\ViewModels\UnavailabilityViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\API\PersonController.cs" />
+    <Compile Include="Controllers\API\UserIndentifiedController.cs" />
     <Compile Include="Controllers\API\VisitsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -309,12 +310,17 @@
     <Compile Include="Migrations\201702161500286_Initial.Designer.cs">
       <DependentUpon>201702161500286_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703130924125_AddUserIndentified.cs" />
+    <Compile Include="Migrations\201703130924125_AddUserIndentified.Designer.cs">
+      <DependentUpon>201703130924125_AddUserIndentified.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
     <Compile Include="Models\DAL\Repositories\ProfilePictureRepository.cs" />
     <Compile Include="Models\DAL\Repositories\RecognitionItemRepository.cs" />
     <Compile Include="Models\DAL\Repositories\StatRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\UserIndentifiedRepository.cs" />
     <Compile Include="Models\DAL\Repositories\VisitRepository.cs" />
     <Compile Include="Models\Entities\ApplicationUser.cs" />
     <Compile Include="Models\DAL\ApplicationDbContext.cs" />
@@ -379,6 +385,7 @@
     <Content Include="Areas\Admin\Views\Settings\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Edit.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ConnectionString.config" />
     <None Include="Properties\PublishProfiles\AdaWebApp - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -435,15 +442,18 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702161500286_Initial.resx">
-      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\AdaSDK\AdaSDK.csproj">
       <Project>{5b83b8a9-2a06-4407-8774-ecad7106c760}</Project>
       <Name>AdaSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201702161500286_Initial.resx">
+      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703130924125_AddUserIndentified.resx">
+      <DependentUpon>201703130924125_AddUserIndentified.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
