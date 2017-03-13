@@ -48,7 +48,7 @@ namespace AdaBot.Dialogs
         {
             List<MeetupEvent> _eventList = new List<MeetupEvent>();
             TreatmentDialog treatment = new TreatmentDialog();
-            _eventList = treatment.getEvents();
+            _eventList = await treatment.getEvents();
 
         }
 
