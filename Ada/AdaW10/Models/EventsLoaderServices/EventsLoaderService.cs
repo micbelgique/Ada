@@ -21,7 +21,7 @@ namespace AdaW10.Models.EventsLoaderServices
         /// </summary>
         public async Task<List<MeetupEvent>> GetEventsJsonAsync(int page)
         {
-            var resp = await _httpClient.GetStringAsync($"https://api.meetup.com/2/events?&sign=true&photo-host=public&group_urlname=micbelgique&page=10");
+            var resp = await _httpClient.GetStringAsync($"https://api.meetup.com/micbelgique/events?&sign=true&photo-host=public&page={page}");
             var events = JsonConvert.DeserializeObject<List<MeetupEvent>>(resp);
             return events;
         }

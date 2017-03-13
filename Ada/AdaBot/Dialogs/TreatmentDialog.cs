@@ -51,7 +51,7 @@ namespace AdaBot.Dialogs
         public async Task<List<MeetupEvent>> getEvents()
         {
             EventsMeetupLoaderService = new EventsLoaderService();
-                _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
+            _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
             return _eventList;
         }
     }
