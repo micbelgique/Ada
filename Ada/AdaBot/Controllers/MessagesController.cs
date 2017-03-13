@@ -25,7 +25,7 @@ namespace AdaBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                activity.Text = activity.Text.Replace("?","");
+                activity.Text = activity.Text.Replace("?",""); 
 
                 await Conversation.SendAsync(activity, () => new AdaDialog(
                     new LuisService(new LuisModelAttribute(
