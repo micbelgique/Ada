@@ -55,7 +55,7 @@ namespace AdaBot.Dialogs
             {
                 _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
             });
-            return _eventList;n
+            return _eventList;
         }
     }
 }
