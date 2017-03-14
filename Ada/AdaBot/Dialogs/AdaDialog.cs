@@ -43,9 +43,11 @@ namespace AdaBot.Dialogs
                 ConfigurationManager.AppSettings["SubscriptionKey"]))),
                 BasicCallback, context.Activity as Activity, CancellationToken.None);
             }
-
-            var message = (Activity)await item;
-            await base.MessageReceived(context, item);           
+            else
+            {
+                var message = (Activity)await item;
+                await base.MessageReceived(context, item);
+            }     
         }
 
         [LuisIntent("")]
