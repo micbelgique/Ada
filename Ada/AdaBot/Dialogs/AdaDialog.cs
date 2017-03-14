@@ -47,7 +47,7 @@ namespace AdaBot.Dialogs
             {
                 var message = (Activity)await item;
                 await base.MessageReceived(context, item);
-            }     
+            }
         }
 
         [LuisIntent("")]
@@ -161,7 +161,7 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result) 
+        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
         {
             context.Wait(this.MessageReceived);
         }
@@ -177,7 +177,7 @@ namespace AdaBot.Dialogs
             OurPossibilities.Add("- des informations concernant ma maison, le MIC");
 
             await context.PostAsync("Je suis capable de te renseigner sur pas mal de chose! :D Tu peux me demander:");
-            foreach(string tmp in OurPossibilities)
+            foreach (string tmp in OurPossibilities)
             {
                 await context.PostAsync(tmp);
             }
@@ -252,13 +252,26 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(""));
+                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        cardImages.Add(img);
+
+                        List<CardAction> cardButtons = new List<CardAction>();
+
+                        CardAction plButtonChoice = new CardAction()
+                        {
+
+                            Value = "GetVisitsTodayMoreResult",
+                            Type = "postBack",
+                            Title = "J'en veux plus"
+                        };
+                        cardButtons.Add(plButtonChoice);
+
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = "Afficher plus (A venir)",
-                            Text = "", 
-                            Images = cardImages
+                            Title = "Afficher plus",
+                            Images = cardImages,
+                            Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -586,13 +599,26 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(""));
+                        CardImage img = new CardImage(url : $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        cardImages.Add(img);
+
+                        List<CardAction> cardButtons = new List<CardAction>();
+
+                        CardAction plButtonChoice = new CardAction()
+                        {
+
+                            Value = "",
+                            Type = "postBack",
+                            Title = "J'en veux plus"
+                        };
+                        cardButtons.Add(plButtonChoice);
+
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = "Afficher plus (A venir)",
-                            Text = "",
-                            Images = cardImages
+                            Title = "Afficher plus",
+                            Images = cardImages,
+                            Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -634,49 +660,23 @@ namespace AdaBot.Dialogs
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
 
-                //Affichage
-                int compteurCarrousel = 1;
                 foreach (var visit in visitsById)
                 {
-                    if (compteurCarrousel <= 9)
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                    var customDialog = new CreateDialog();
+                    var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
+
+                    HeroCard plCard = new HeroCard()
                     {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+                        Title = visit.PersonVisit.FirstName,
+                        Text = messageDate,
+                        Images = cardImages
+                    };
 
-                        var customDialog = new CreateDialog();
-                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Text = messageDate,
-                            Images = cardImages
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                        compteurCarrousel += 1;
-                    }
-                    else if (compteurCarrousel == 10)
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(""));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = "Afficher plus (A venir)",
-                            Text = "",
-                            Images = cardImages
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                        compteurCarrousel += 1;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
                 }
             }
             else
@@ -716,50 +716,26 @@ namespace AdaBot.Dialogs
                     replyToConversation.AttachmentLayout = "carousel";
                     replyToConversation.Attachments = new List<Attachment>();
 
-                    //Affichage 
-                    int compteurCarrousel = 1;
+
                     foreach (var visit in visitsById)
                     {
-                        if (compteurCarrousel <= 9)
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                        var customDialog = new CreateDialog();
+                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
+
+                        HeroCard plCard = new HeroCard()
                         {
-                            List<CardImage> cardImages = new List<CardImage>();
-                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+                            Title = visit.PersonVisit.FirstName,
+                            Text = messageDate,
+                            Images = cardImages
+                        };
 
-                            var customDialog = new CreateDialog();
-                            var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
-
-                            HeroCard plCard = new HeroCard()
-                            {
-                                Title = visit.PersonVisit.FirstName,
-                                Text = messageDate,
-                                Images = cardImages
-                            };
-
-                            Attachment plAttachment = plCard.ToAttachment();
-                            replyToConversation.Attachments.Add(plAttachment);
-                            compteurCarrousel += 1;
-                        }
-                        else if (compteurCarrousel == 10)
-                        {
-                            List<CardImage> cardImages = new List<CardImage>();
-                            cardImages.Add(new CardImage(""));
-
-                            HeroCard plCard = new HeroCard()
-                            {
-                                Title = "Afficher plus (A venir)",
-                                Text = "",
-                                Images = cardImages
-                            };
-
-                            Attachment plAttachment = plCard.ToAttachment();
-                            replyToConversation.Attachments.Add(plAttachment);
-                            compteurCarrousel += 1;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
                     }
+
                 }
                 else
                 {
