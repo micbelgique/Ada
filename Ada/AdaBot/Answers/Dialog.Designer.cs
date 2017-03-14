@@ -133,7 +133,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Méchant !!!|Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Non mais OH !|Mais euh...|Ca va aller oui?!|On ne parle pas comme ça à une dame!].
+        ///   Looks up a localized string similar to [Ce n&apos;est pas gentil|Non mais...|Mais euh...|On ne parle pas comme ça à une dame!].
         /// </summary>
         internal static string Insult {
             get {
@@ -160,8 +160,7 @@ namespace AdaBot.Answers {
         ///- Non l&apos;homme l&apos;avait dans sa poche.|- Dis maman, un citron, ça a des pattes ?
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
-        ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
-        ///- Ah [rest of string was truncated]&quot;;.
+        ///- Euh... ben non, un citron ça n&apos;a pas de pat [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {

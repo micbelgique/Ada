@@ -142,7 +142,7 @@
     <value>[Je suis l'assistante virtuelle du MIC|Je suis la pour t'aider|Le MIC Mons est la meilleur entreprise du monde]</value>
   </data>
   <data name="Insult" xml:space="preserve">
-    <value>[Méchant !!!|Ce n'est pas gentil|Arrète de m'insulter|Non mais OH !|Mais euh...|Ca va aller oui?!|On ne parle pas comme ça à une dame!]</value>
+    <value>[Ce n'est pas gentil|Non mais...|Mais euh...|On ne parle pas comme ça à une dame!]</value>
   </data>
   <data name="IntroStats" xml:space="preserve">
     <value>[Voyons voir...|Et hop ils sont la]</value>

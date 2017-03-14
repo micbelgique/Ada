@@ -172,6 +172,15 @@ namespace AdaBot.Dialogs
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("BestFriend")]
+        public async Task BestFriend(IDialogContext context, LuisResult result)
+        {
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
