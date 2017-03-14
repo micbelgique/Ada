@@ -187,7 +187,7 @@ namespace AdaBot.Dialogs
         public async Task BestFriend(IDialogContext context, LuisResult result)
         {
             AdaClient client = new AdaClient();
-            VisitDto bestFriend = await client.GetBestFriend();
+            VisitDto bestFriend = await client.GetBestFriend(); 
             Activity replyToConversation;
             if (bestFriend != null)
             {
