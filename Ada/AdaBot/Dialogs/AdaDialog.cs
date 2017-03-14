@@ -16,6 +16,8 @@ using System.Threading;
 using System.Drawing;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using AdaBot.Models.EventsLoaderServices;
+using System.Text.RegularExpressions;
 
 namespace AdaBot.Dialogs
 {
@@ -30,7 +32,7 @@ namespace AdaBot.Dialogs
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
             var message = (Activity)await item;
-            await base.MessageReceived(context, item); 
+            await base.MessageReceived(context, item);
         }
 
         [LuisIntent("")]
@@ -39,7 +41,55 @@ namespace AdaBot.Dialogs
             await context.Forward(new TrivialLuisDialog(new LuisService(new LuisModelAttribute(
                            ConfigurationManager.AppSettings["ModelIdTrivial"],
                            ConfigurationManager.AppSettings["SubscriptionKeyTrivial"]))),
-                   BasicCallback, context.Activity as Activity, CancellationToken.None); 
+                   BasicCallback, context.Activity as Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("What'sUp")]
+        public async Task Event(IDialogContext context, LuisResult result)
+        {
+            List<MeetupEvent> _eventList = new List<MeetupEvent>();
+            TreatmentDialog treatment = new TreatmentDialog();
+            _eventList = await treatment.getEvents();
+
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply("Voici la liste des évènements à venir au MIC: ");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+
+            foreach (var meetup in _eventList)
+            {
+                List<CardImage> cardImages = new List<CardImage>();
+                cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+
+                List<CardAction> cardsAction = new List<CardAction>();
+                CardAction action = new CardAction()
+                {
+                    Value = meetup.Link,
+                    Type = "openUrl",
+                    Title = "Consulter"
+                };
+                cardsAction.Add(action);
+
+                DateTime date = new DateTime(1970, 1, 1).Add(TimeSpan.FromMilliseconds((meetup.Time))).AddHours(2);
+
+                HeroCard plCard = new HeroCard()
+                {
+                    Title = meetup.Name + " (" + date + ")",
+                    Text = "Lieux: " + meetup.Venue.Name + " " + meetup.Venue.City,
+                    //Subtitle = Regex.Replace(meetup.Description, @"<(.|\n)*?>", string.Empty),
+                    Subtitle = meetup.HowToFind,
+                    Images = cardImages,
+                    Buttons = cardsAction
+                };
+
+                Attachment plAttachment = plCard.ToAttachment();
+                replyToConversation.Attachments.Add(plAttachment);
+            }
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetHelp")]
@@ -52,22 +102,25 @@ namespace AdaBot.Dialogs
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
 
-            List<string> pictures = new List<string>(); 
-            pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1"); 
-            pictures.Add("http://i.imgur.com/2TsS2aq.png");
-            pictures.Add("http://i.imgur.com/gjQkeXr.png");
+            List<string> pictures = new List<string>();
+            pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["SiteMIC"]);
 
             List<string> btnString = new List<string>();
             btnString.Add("Notre Facebook");
             btnString.Add("Notre chaîne Youtube");
             btnString.Add("Notre Meetup");
-                        
-            for (int i=0; i<btnAction.Count(); i++)
+            btnString.Add("Notre Site");
+
+            for (int i = 0; i < btnAction.Count(); i++)
             {
                 List<CardAction> cardsAction = new List<CardAction>();
                 CardAction action = new CardAction()
@@ -157,9 +210,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = firstname,
                             Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -174,10 +225,8 @@ namespace AdaBot.Dialogs
                         HeroCard plCard = new HeroCard()
                         {
                             Title = "Afficher plus (A venir)",
-                            Text = "",
-                            //Subtitle = 
+                            Text = "", 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -241,9 +290,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = visit.PersonVisit.FirstName,
                             Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -513,9 +560,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = "Afficher plus (A venir)",
                             Text = "",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -565,7 +610,7 @@ namespace AdaBot.Dialogs
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-                        
+
                         var customDialog = new CreateDialog();
                         var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
 
@@ -573,9 +618,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = visit.PersonVisit.FirstName,
                             Text = messageDate,
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -591,9 +634,7 @@ namespace AdaBot.Dialogs
                         {
                             Title = "Afficher plus (A venir)",
                             Text = "",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -659,9 +700,7 @@ namespace AdaBot.Dialogs
                             {
                                 Title = visit.PersonVisit.FirstName,
                                 Text = messageDate,
-                                //Subtitle = 
                                 Images = cardImages
-                                //Buttons = cardButtons
                             };
 
                             Attachment plAttachment = plCard.ToAttachment();
@@ -677,9 +716,7 @@ namespace AdaBot.Dialogs
                             {
                                 Title = "Afficher plus (A venir)",
                                 Text = "",
-                                //Subtitle = 
                                 Images = cardImages
-                                //Buttons = cardButtons
                             };
 
                             Attachment plAttachment = plCard.ToAttachment();
