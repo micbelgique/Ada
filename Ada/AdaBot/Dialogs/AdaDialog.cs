@@ -189,7 +189,7 @@ namespace AdaBot.Dialogs
             AdaClient client = new AdaClient();
             VisitDto bestFriend = await client.GetBestFriend(); 
             Activity replyToConversation;
-            if (bestFriend != null)
+            if (bestFriend == null)
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"Ca fait un moment que plus personne n'est venu me voir :'(");
                 replyToConversation.Recipient = context.Activity.From;
@@ -214,10 +214,9 @@ namespace AdaBot.Dialogs
 
                 Attachment plAttachment = plCard.ToAttachment();
                 replyToConversation.Attachments.Add(plAttachment);
-
-                await context.PostAsync(replyToConversation);
-                context.Wait(MessageReceived);
             }
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetVisitsToday")]
