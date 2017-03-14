@@ -18,7 +18,7 @@ using Newtonsoft.Json.Linq;
 namespace AdaBot
 { 
     [BotAuthentication]
-    public class MessagesController : ApiController
+    public class MessagesController : ApiController 
     {
         /// <summary>
         /// POST: api/Messages
