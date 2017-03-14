@@ -132,6 +132,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AdaDialog.cs" />
+    <Compile Include="Dialogs\adaDialogNotAllowed.cs" />
     <Compile Include="Dialogs\CreateDialog.cs" />
     <Compile Include="Dialogs\TreatmentDialog.cs" />
     <Compile Include="Dialogs\TrivialLuisDialog.cs" />
