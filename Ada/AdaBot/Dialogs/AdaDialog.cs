@@ -27,8 +27,21 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
+            AdaClient client = new AdaClient();
+            var idUser = context.Activity.From.Id;
+
+            var accessAllow = await client.GetAuthorizationFacebook(idUser);
+            if (accessAllow == "false")
+            {
+                await context.Forward(new NotAllowedAdaDialog(
+                new LuisService(new LuisModelAttribute(
+                ConfigurationManager.AppSettings["ModelId"],
+                ConfigurationManager.AppSettings["SubscriptionKey"]))),
+                BasicCallback, context.Activity as Activity, CancellationToken.None);
+            }
+
             var message = (Activity)await item;
-            await base.MessageReceived(context, item); 
+            await base.MessageReceived(context, item);           
         }
 
         [LuisIntent("")]

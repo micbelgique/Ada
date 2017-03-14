@@ -159,6 +159,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Tu n&apos;as pas l&apos;autorisation d&apos;accéder à ces données.|Tu n&apos;as pas accès a ce genre d&apos;informations.|Je suis navré mais ces informations requièrent une autorisation.].
+        /// </summary>
+        internal static string NotAllowed {
+            get {
+                return ResourceManager.GetString("NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [C&apos;est le 0498 ... tu as vraiment cru que j&apos;allais te donner mon numéro de téléphonne ? 
         ///Je ne suis pas une fille facile, MOI ...|Je n&apos;ai pas de numéro|Je ne donne pas mon numéro à n&apos;importe qui|je veux pas te donner mon numéro de téléphonne].
         /// </summary>

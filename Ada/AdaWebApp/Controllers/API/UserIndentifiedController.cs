@@ -40,5 +40,12 @@ namespace AdaWebApp.Controllers.API
         {
            return _unit.UserIndentifiedRepository.CheckByIdFacebook(idFacebook);
         }
+
+        [HttpGet]
+        [Route("GetAuthorization/{idFacebook}")]
+        public bool GetAuthorizationByIdFacebook(string idFacebook)
+        {
+           return _unit.UserIndentifiedRepository.GetAuthorizationByIdFacebook(idFacebook);
+        }
     }
 }

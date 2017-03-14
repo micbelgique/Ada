@@ -14,21 +14,36 @@ using AdaSDK.Models;
 using AdaBot.BotFrameworkHelpers;
 using System.Threading;
 using System.Drawing;
+using AdaBot.Answers;
+using AdaBot.Bot.Utils;
 
 namespace AdaBot.Dialogs
 {
     [Serializable]
-    public class AdaDialogNotAllowed : LuisDialog<object>
+    public class NotAllowedAdaDialog : LuisDialog<object>
     {
-        public AdaDialogNotAllowed(params ILuisService[] services) : base(services)
+        public NotAllowedAdaDialog(params ILuisService[] services) : base(services)
         {
 
         }
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
+            AdaClient client = new AdaClient();
+            var idUser = context.Activity.From.Id;
+
+            var accessAllow = await client.GetAuthorizationFacebook(idUser);
+            if (accessAllow == "true")
+            {
+                await context.Forward(new AdaDialog(
+                new LuisService(new LuisModelAttribute(
+                ConfigurationManager.AppSettings["ModelId"],
+                ConfigurationManager.AppSettings["SubscriptionKey"]))),
+                BasicCallback, context.Activity as Activity, CancellationToken.None);
+            }
+
             var message = (Activity)await item;
-            await base.MessageReceived(context, item);
+            await base.MessageReceived(context, item);     
         }
 
         [LuisIntent("")]
@@ -99,26 +114,46 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetLastVisitPerson")]
         public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
-           
+            string message = $"{Dialog.NotAllowed.Spintax()}";
 
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetStatsVisits")]
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
-         
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("GetVisitsPersonByFirstname")]
+        public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
+        {
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetAverageVisits")]
         public async Task GetAverageVisits(IDialogContext context, LuisResult result)
         {
-           
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
         }
     }
 }

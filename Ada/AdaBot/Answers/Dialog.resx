@@ -160,6 +160,9 @@
   <data name="None" xml:space="preserve">
     <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Késako ?|Je ne comprends pas :)]</value>
   </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>[Tu n'as pas l'autorisation d'accéder à ces données.|Tu n'as pas accès a ce genre d'informations.|Je suis navré mais ces informations requièrent une autorisation.]</value>
+  </data>
   <data name="Phone" xml:space="preserve">
     <value>[C'est le 0498 ... tu as vraiment cru que j'allais te donner mon numéro de téléphonne ? 
 Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas mon numéro à n'importe qui|je veux pas te donner mon numéro de téléphonne]</value>

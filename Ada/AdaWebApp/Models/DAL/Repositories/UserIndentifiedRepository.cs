@@ -18,5 +18,10 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             return Table.Where(u => u.IdFacebook == idFacebook).Any();
         }
+
+        public bool GetAuthorizationByIdFacebook(string idFacebook)
+        {
+            return Table.Where(u => u.IdFacebook == idFacebook).Select(v => v.authorization).Single();
+        }
     }
 }
