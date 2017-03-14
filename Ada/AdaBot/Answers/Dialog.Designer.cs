@@ -115,7 +115,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Méchant !!!|Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Ferme ta gueule !|Non mais OH !|Mais euh ...].
+        ///   Looks up a localized string similar to [Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Non mais OH !|Mais euh ...].
         /// </summary>
         internal static string Insult {
             get {
@@ -124,7 +124,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Voyons voir...|Les voici :)|Et hop ils sont la].
+        ///   Looks up a localized string similar to [Voyons voir...|Et hop ils sont la].
         /// </summary>
         internal static string IntroStats {
             get {
@@ -178,7 +178,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Je n&apos;ai pas compris. Je suis encore en apprentissage|Désolé, je n&apos;ai pas compris.|Que veux-tu dire par là ?|Qu&apos;est-ce que tu veux dire ?|Késako ?|Je ne comprends pas :)].
+        ///   Looks up a localized string similar to [Je n&apos;ai pas compris. Je suis encore en apprentissage|Désolé, je n&apos;ai pas compris.|Que veux-tu dire par là ?|Qu&apos;est-ce que tu veux dire ?|Je ne comprends pas :)].
         /// </summary>
         internal static string None {
             get {

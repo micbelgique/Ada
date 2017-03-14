@@ -136,10 +136,10 @@
     <value>[Je suis l'assistante virtuelle du MIC|Je suis la pour t'aider|Le MIC Mons est la meilleur entreprise du monde]</value>
   </data>
   <data name="Insult" xml:space="preserve">
-    <value>[Méchant !!!|Ce n'est pas gentil|Arrète de m'insulter|Ferme ta gueule !|Non mais OH !|Mais euh ...]</value>
+    <value>[Ce n'est pas gentil|Arrète de m'insulter|Non mais OH !|Mais euh ...]</value>
   </data>
   <data name="IntroStats" xml:space="preserve">
-    <value>[Voyons voir...|Les voici :)|Et hop ils sont la]</value>
+    <value>[Voyons voir...|Et hop ils sont la]</value>
   </data>
   <data name="JokeRequest" xml:space="preserve">
     <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C'est deux spermatozoïdes qui discutent : 
@@ -164,7 +164,7 @@
     <value>[Je n'ai croisé personne correspondant à ta description|Malheureusement je n'ai personne correspondant à ta demande]</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Késako ?|Je ne comprends pas :)]</value>
+    <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Je ne comprends pas :)]</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>[C'est le 0498 ... tu as vraiment cru que j'allais te donner mon numéro de téléphonne ? 
