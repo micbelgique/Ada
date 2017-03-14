@@ -120,6 +120,9 @@
   <data name="Age" xml:space="preserve">
     <value>[Je n'ai pas d'age|J'ai été créée en Février 2016|Probablement moins que toi! :P|On ne demande pas son âge à une femme!|Ca ne se dit pas !| On t'a jamais appris les bonnes manières ?!|Je te laisse deviner|Tu es trop jeune pour moi ...|Je ne suis pas interessé ... Désolé.|Je ne sais pas ça change chaque année ...|L'âge que j'avais hier à la même heure !|Wow, on se connait à peine et déjà tu abordes les questions intimes?]</value>
   </data>
+  <data name="Best" xml:space="preserve">
+    <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai :$ Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entends plutôt bien avec ]</value>
+  </data>
   <data name="Compliment" xml:space="preserve">
     <value>[Merci| Oh c'est gentil :)|Personne ne m'avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)]</value>
   </data>

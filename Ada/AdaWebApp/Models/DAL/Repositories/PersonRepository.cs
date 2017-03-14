@@ -36,7 +36,5 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             return Table.Where(p => candidateIds.Any(c => c.Equals(p.PersonApiId)));
         }
-
-        
     }
 }

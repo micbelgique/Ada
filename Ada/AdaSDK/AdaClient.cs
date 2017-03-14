@@ -89,6 +89,22 @@ namespace AdaSDK
             }
         }
 
+        public async Task<VisitDto> GetBestFriend()
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/BestFriend"));
+                var content = await response.Content.ReadAsStringAsync();
+                var visit = JsonConvert.DeserializeObject<VisitDto>(content);
+                return visit;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new VisitDto();
+            }
+        }
+
         public async Task<List<VisitDto>> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
         {
             try

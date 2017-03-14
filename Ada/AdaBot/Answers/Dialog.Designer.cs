@@ -70,6 +70,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Je m&apos;entends bien avec |J&apos;ai un petit préféré c&apos;est vrai :$ Je parle de |Mon meilleur ami, c&apos;est |Bien sûr, c&apos;est |On s&apos;entends plutôt bien avec ].
+        /// </summary>
+        internal static string Best {
+            get {
+                return ResourceManager.GetString("Best", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Merci| Oh c&apos;est gentil :)|Personne ne m&apos;avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)].
         /// </summary>
         internal static string Compliment {
@@ -124,7 +133,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Non mais OH !|Mais euh ...].
+        ///   Looks up a localized string similar to [Méchant !!!|Ce n&apos;est pas gentil|Arrète de m&apos;insulter|Non mais OH !|Mais euh...|Ca va aller oui?!|On ne parle pas comme ça à une dame!].
         /// </summary>
         internal static string Insult {
             get {

@@ -28,6 +28,14 @@ namespace AdaWebApp.Models.DAL.Repositories
             return Table.Include(v => v.Person).Where(v => v.Date >= date).ToList();
         }
 
+        public Visit GetBestFriend()
+        {
+            DateTime date2 = DateTime.Today;
+            DateTime date1 = date2.AddDays(-1);
+            int maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1) && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)).Max(v => v.NbPasses);
+            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1) && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)).First(v => v.NbPasses == maxPasses);
+        }
+
         public List<Visit> GetVisitsByDate(DateTime date1, DateTime? date2)
         {
             if (date2 == null)

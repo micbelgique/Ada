@@ -54,6 +54,19 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("BestFriend")]
+        // GET: get visits of the day
+        public VisitDto BestFriend()
+        {
+            var visits = _unit.VisitsRepository.GetBestFriend();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.ToDto();
+        }
+
+        [HttpGet]
         [Route("VisitsByDate/{date1}/{date2}")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsByDate(DateTime date1, DateTime? date2)

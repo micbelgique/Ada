@@ -47,7 +47,7 @@ namespace AdaBot.Dialogs
             {
                 var message = (Activity)await item;
                 await base.MessageReceived(context, item);
-            }     
+            }
         }
 
         [LuisIntent("")]
@@ -161,7 +161,7 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result) 
+        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
         {
             context.Wait(this.MessageReceived);
         }
@@ -177,9 +177,46 @@ namespace AdaBot.Dialogs
             OurPossibilities.Add("- des informations concernant ma maison, le MIC");
 
             await context.PostAsync("Je suis capable de te renseigner sur pas mal de chose! :D Tu peux me demander:");
-            foreach(string tmp in OurPossibilities)
+            foreach (string tmp in OurPossibilities)
             {
                 await context.PostAsync(tmp);
+            }
+        }
+
+        [LuisIntent("BestFriend")]
+        public async Task BestFriend(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient();
+            VisitDto bestFriend = await client.GetBestFriend();
+            Activity replyToConversation;
+            if (bestFriend != null)
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply($"Ca fait un moment que plus personne n'est venu me voir :'(");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Best.Spintax()} " + bestFriend.PersonVisit.FirstName + "!");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+                replyToConversation.AttachmentLayout = "carousel";
+                replyToConversation.Attachments = new List<Attachment>();
+
+                List<CardImage> cardImages = new List<CardImage>();
+                cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(bestFriend.ProfilePicture.Last().Uri)}"));
+                
+                HeroCard plCard = new HeroCard()
+                {
+                    Title = bestFriend.PersonVisit.FirstName,
+                    Images = cardImages
+                };
+
+                Attachment plAttachment = plCard.ToAttachment();
+                replyToConversation.Attachments.Add(plAttachment);
+
+                await context.PostAsync(replyToConversation);
+                context.Wait(MessageReceived);
             }
         }
 
@@ -257,7 +294,7 @@ namespace AdaBot.Dialogs
                         HeroCard plCard = new HeroCard()
                         {
                             Title = "Afficher plus (A venir)",
-                            Text = "", 
+                            Text = "",
                             Images = cardImages
                         };
 
