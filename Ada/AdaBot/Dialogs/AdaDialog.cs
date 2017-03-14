@@ -159,7 +159,7 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
+        private async Task BasicCallback(IDialogContext context, IAwaitable<object> result) 
         {
             context.Wait(this.MessageReceived);
         }
