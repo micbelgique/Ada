@@ -6,16 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using AdaSDK;
 using System.Net.Http;
 using System.Configuration;
-using AdaSDK.Models;
-using AdaBot.BotFrameworkHelpers;
 using System.Threading;
-using System.Drawing;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using AdaBot.Models.EventsLoaderServices;
 
 namespace AdaBot.Dialogs
 {
@@ -41,9 +38,11 @@ namespace AdaBot.Dialogs
                 ConfigurationManager.AppSettings["SubscriptionKey"]))),
                 BasicCallback, context.Activity as Activity, CancellationToken.None);
             }
-
-            var message = (Activity)await item;
-            await base.MessageReceived(context, item);     
+            else
+            {
+                var message = (Activity)await item;
+                await base.MessageReceived(context, item);
+            }       
         }
 
         [LuisIntent("")]
@@ -53,6 +52,65 @@ namespace AdaBot.Dialogs
                            ConfigurationManager.AppSettings["ModelIdTrivial"],
                            ConfigurationManager.AppSettings["SubscriptionKeyTrivial"]))),
                    BasicCallback, context.Activity as Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("Possibilities")]
+        public async Task Possibilities(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Je suis capable de te renseigner sur pas mal de chose! :D Tu peux me demander:");
+            await context.PostAsync("- la liste des visites du jour");
+            await context.PostAsync("- des informations concernant les visiteurs du MIC (âge, sexe, ...)");
+            await context.PostAsync("- le nombre de visiteurs moyen du MIC");
+            await context.PostAsync("- la liste des évènements du MIC");
+            await context.PostAsync("- des informations concernant ma maison, le MIC");
+        }
+
+        [LuisIntent("What'sUp")]
+        public async Task Event(IDialogContext context, LuisResult result)
+        {
+            List<MeetupEvent> _eventList = new List<MeetupEvent>();
+            TreatmentDialog treatment = new TreatmentDialog();
+            _eventList = await treatment.getEvents();
+
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply("Voici la liste des évènements à venir au MIC: ");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+
+            foreach (var meetup in _eventList)
+            {
+                List<CardImage> cardImages = new List<CardImage>();
+                cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+
+                List<CardAction> cardsAction = new List<CardAction>();
+                CardAction action = new CardAction()
+                {
+                    Value = meetup.Link,
+                    Type = "openUrl",
+                    Title = "Consulter"
+                };
+                cardsAction.Add(action);
+
+                DateTime date = new DateTime(1970, 1, 1).Add(TimeSpan.FromMilliseconds((meetup.Time))).AddHours(2);
+
+                HeroCard plCard = new HeroCard()
+                {
+                    Title = meetup.Name + " (" + date + ")",
+                    Text = "Lieux: " + meetup.Venue.Name + " " + meetup.Venue.City,
+                    //Subtitle = Regex.Replace(meetup.Description, @"<(.|\n)*?>", string.Empty),
+                    Subtitle = meetup.HowToFind,
+                    Images = cardImages,
+                    Buttons = cardsAction
+                };
+
+                Attachment plAttachment = plCard.ToAttachment();
+                replyToConversation.Attachments.Add(plAttachment);
+            }
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetHelp")]
@@ -66,19 +124,22 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add("http://i.imgur.com/c8iWoTH.jpg?1");
-            pictures.Add("http://i.imgur.com/2TsS2aq.png");
-            pictures.Add("http://i.imgur.com/gjQkeXr.png");
+            pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["SiteMIC"]);
 
             List<string> btnString = new List<string>();
             btnString.Add("Notre Facebook");
             btnString.Add("Notre chaîne Youtube");
             btnString.Add("Notre Meetup");
+            btnString.Add("Notre Site");
 
             for (int i = 0; i < btnAction.Count(); i++)
             {
