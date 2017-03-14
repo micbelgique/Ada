@@ -211,7 +211,7 @@ namespace AdaBot.Dialogs
                 int compteurCarrousel = 1;
                 foreach (var visit in visits)
                 {
-                    if (compteurCarrousel <= 9)
+                    if (compteurCarrousel <= 9 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
@@ -249,7 +249,7 @@ namespace AdaBot.Dialogs
                         replyToConversation.Attachments.Add(plAttachment);
                         compteurCarrousel += 1;
                     }
-                    else if (compteurCarrousel == 10)
+                    else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
@@ -278,9 +278,43 @@ namespace AdaBot.Dialogs
                         replyToConversation.Attachments.Add(plAttachment);
                         compteurCarrousel += 1;
                     }
-                    else
+                    else if(result.Query == "GetVisitsTodayMoreResult")
                     {
-                        break;
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                        //Calcul la bonne année et la bonne heure.
+                        DateTime today = DateTime.Today;
+                        int yearVisit = visit.Date.Year;
+                        int wrongDate = visit.PersonVisit.DateVisit.Year;
+                        int goodDate = DateTime.Today.Year - wrongDate;
+                        string messageDate = "";
+                        string firstname;
+                        DateTime visitDate = visit.PersonVisit.DateVisit;
+
+                        //Recherche du prénom de la personne
+                        if (visit.PersonVisit.FirstName == null)
+                        {
+                            firstname = "une personne inconnue";
+                        }
+                        else
+                        {
+                            firstname = visit.PersonVisit.FirstName;
+                        }
+
+                        var customDialog = new CreateDialog();
+                        messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = firstname,
+                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                            Images = cardImages
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                        compteurCarrousel += 1;
                     }
                 }
             }
