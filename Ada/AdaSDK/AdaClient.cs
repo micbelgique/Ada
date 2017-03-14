@@ -30,7 +30,22 @@ namespace AdaSDK
             catch (Exception e)
             {
                 // TODO : Propagate exception to caller
-                return "true";
+                return "false";
+            }
+        }
+
+        public async Task<string> GetAuthorizationFacebook(string idfacebook)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/GetAuthorization/" + idfacebook));
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return "false";
             }
         }
 

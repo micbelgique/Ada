@@ -16,7 +16,7 @@ using AdaSDK.Models;
 using Newtonsoft.Json.Linq;
 
 namespace AdaBot
-{
+{ 
     [BotAuthentication]
     public class MessagesController : ApiController
     {
@@ -30,7 +30,7 @@ namespace AdaBot
             var idUser = activity.From.Id;
             var accessAllow = await client.CheckIdFacebook(idUser);
 
-            if(Convert.ToString(accessAllow) == "false")
+            if(accessAllow == "false")
             {
                 UserIndentifiedDto userIndentified = new UserIndentifiedDto();
                 string nameUser = activity.From.Name + " ";
@@ -53,12 +53,21 @@ namespace AdaBot
 
             if (activity.Type == ActivityTypes.Message)
             {
-                activity.Text = activity.Text.Replace("?",""); 
-
-                await Conversation.SendAsync(activity, () => new AdaDialog(
+                accessAllow = await client.GetAuthorizationFacebook(idUser);
+                if (accessAllow == "false")
+                {
+                    await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
                     new LuisService(new LuisModelAttribute(
-                        ConfigurationManager.AppSettings["ModelId"],
-                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    ConfigurationManager.AppSettings["ModelId"],
+                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                }
+                else
+                {
+                    await Conversation.SendAsync(activity, () => new AdaDialog(
+                    new LuisService(new LuisModelAttribute(
+                    ConfigurationManager.AppSettings["ModelId"],
+                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                }
             }
             else
             {
