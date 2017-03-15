@@ -3,6 +3,7 @@ using AdaSDK;
 using AdaSDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -90,6 +91,14 @@ namespace AdaBot.Dialogs
 
 
             return returnDate1 + ":" + returnDate2 + ":" + returnGender + ":" + returnAge1 + ":" + returnAge2;
+        }
+
+        public string getHtmlSourceCode(string url)
+        {
+            using (WebClient client = new WebClient())
+            {
+                return client.DownloadString(url);
+            }
         }
     }
 }
