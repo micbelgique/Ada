@@ -13,6 +13,8 @@ using System.Threading;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
 using AdaBot.Models.EventsLoaderServices;
+using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace AdaBot.Dialogs
 {
@@ -81,8 +83,41 @@ namespace AdaBot.Dialogs
 
             foreach (var meetup in _eventList)
             {
+                //Récupération du lien image
+                List<string> possiblePictures = new List<string>();
+
+                foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                {
+                    string src = m.Groups[1].Value;
+                    //string tmp = treatment.getHtmlSourceCode(src);
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(src);
+                    string tmp = "";
+                    try
+                    {
+                        tmp = treatment.getHtmlSourceCode(src);
+                    }
+                    catch (Exception e)
+                    {
+                        tmp = "";
+                    }
+
+                    foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                    {
+                        string src2 = m2.Groups[1].Value;
+                        possiblePictures.Add(src2);
+                    }
+                }
+
                 List<CardImage> cardImages = new List<CardImage>();
-                cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                if (possiblePictures.Count == 0)
+                {
+                    cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                }
+                else
+                {
+                    cardImages.Add(new CardImage(url: Convert.ToString(possiblePictures[0])));
+                }
 
                 List<CardAction> cardsAction = new List<CardAction>();
                 CardAction action = new CardAction()

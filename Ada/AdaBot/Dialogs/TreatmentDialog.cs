@@ -3,6 +3,7 @@ using AdaSDK;
 using AdaSDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,6 +54,14 @@ namespace AdaBot.Dialogs
             EventsMeetupLoaderService = new EventsLoaderService();
             _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
             return _eventList;
+        }
+
+        public string getHtmlSourceCode(string url)
+        {
+            using (WebClient client = new WebClient())
+            {
+                return client.DownloadString(url);
+            }
         }
     }
 }

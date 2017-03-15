@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AdaWebApp.Models.DAL;
 using AdaWebApp.Models.Entities;
-using AdaWebApp.Models.DAL.Repositories;
 using Common.Logging;
 using System.Threading.Tasks;
 using AdaSDK.Models;
