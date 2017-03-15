@@ -57,12 +57,15 @@ namespace AdaBot.Dialogs
         [LuisIntent("Possibilities")]
         public async Task Possibilities(IDialogContext context, LuisResult result)
         {
+            List<string> OurPossibilities = new List<string>();
+            OurPossibilities.Add("- la liste des évènements du MIC");
+            OurPossibilities.Add("- des informations concernant ma maison, le MIC");
+
             await context.PostAsync("Je suis capable de te renseigner sur pas mal de chose! :D Tu peux me demander:");
-            await context.PostAsync("- la liste des visites du jour");
-            await context.PostAsync("- des informations concernant les visiteurs du MIC (âge, sexe, ...)");
-            await context.PostAsync("- le nombre de visiteurs moyen du MIC");
-            await context.PostAsync("- la liste des évènements du MIC");
-            await context.PostAsync("- des informations concernant ma maison, le MIC");
+            foreach (string tmp in OurPossibilities)
+            {
+                await context.PostAsync(tmp);
+            }
         }
 
         [LuisIntent("What'sUp")]
