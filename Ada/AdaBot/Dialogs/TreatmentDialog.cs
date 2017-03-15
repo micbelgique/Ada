@@ -54,5 +54,42 @@ namespace AdaBot.Dialogs
             _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(10);
             return _eventList;
         }
+
+        public string GetValueButton(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
+        {
+            string returnDate1 = "null";
+            string returnDate2 = "null";
+            string returnGender = "null";
+            string returnAge1 = "null";
+            string returnAge2 = "null";
+
+            if(date1 != null)
+            {
+                DateTime date1bis = Convert.ToDateTime(date1);
+                returnDate1 = Convert.ToString(date1bis.ToString("yyyy/MM/dd"));
+
+                if(date2 != null)
+                {
+                    DateTime date2bis = Convert.ToDateTime(date2);
+                    returnDate2 = Convert.ToString(date2bis.ToString("yyyy/MM/dd"));
+                }
+            }
+            if(gender != null)
+            {
+                returnGender = Convert.ToString(gender.Value);
+            }
+            if(age1 != null)
+            {
+                returnAge1 = Convert.ToString(age1);
+
+                if(age2 != null)
+                {
+                    returnAge2 = Convert.ToString(age2);
+                }
+            }
+
+
+            return returnDate1 + ":" + returnDate2 + ":" + returnGender + ":" + returnAge1 + ":" + returnAge2;
+        }
     }
 }

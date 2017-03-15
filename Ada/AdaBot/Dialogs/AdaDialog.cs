@@ -436,79 +436,124 @@ namespace AdaBot.Dialogs
             int? age2 = null;
             GenderValues? gender = null;
 
-            //Composite Entities
-            if (result.CompositeEntities != null)
-            {
-                nbEntities = result.CompositeEntities.Count();
-                for (int i = 0; i < nbEntities; i++)
-                {
-                    if (result.CompositeEntities[i].ParentType == "IntervalDate")
-                    {
-                        foreach (var entity in result.Entities)
-                        {
-                            if (entity.Type == "builtin.datetime.date")
-                            {
-                                DateTime? date;
-                                List<EntityRecommendation> dates = new List<EntityRecommendation>();
-                                dates.Add(entity);
-                                recog.ParseDateTime(dates, out date);
 
-                                if (date1 == null)
-                                {
-                                    date1 = date;
-                                    dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
-                                }
-                                else if (date1 != null)
-                                {
-                                    date2 = date;
-                                    if (date2 < date1 && date2 != null)
-                                    {
-                                        DateTime? tmpDate = date1;
-                                        date1 = date2;
-                                        date2 = tmpDate;
-                                    }
-                                    dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
-                                }
-                            }
-                        }
-                    }
-                    //Process of ages
-                    if (result.CompositeEntities[i].ParentType == "SingleAge")
+            var splitResult = result.Query.Split(':');
+
+            if (splitResult[0] == "MoreGetStatsVisits")
+            {
+                if (splitResult[1] != "null")
+                {
+                   date1 = Convert.ToDateTime(splitResult[1]);
+
+                    dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+
+                    if (splitResult[2] != "null")
                     {
-                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        ageReturn = "de " + age1;
+                        date2 = Convert.ToDateTime(splitResult[2]);
+                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
                     }
-                    else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                }
+                if (splitResult[3] != "null")
+                {
+                    if (splitResult[3] == Convert.ToString(GenderValues.Female))
                     {
-                        age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
-                        age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
-                        if (age2 < age1 && age2 != -1)
-                        {
-                            int? ageTmp = age1;
-                            age1 = age2;
-                            age2 = ageTmp;
-                        }
+                        gender = GenderValues.Female;
+                        genderReturn = "femme(s)";
+                    } 
+                    else if (splitResult[3] == Convert.ToString(GenderValues.Male))
+                    {
+                        gender = GenderValues.Male;
+                        genderReturn = "homme(s)";
+                    }
+                }
+                if (splitResult[4] != "null")
+                {
+                    age1 = Convert.ToInt32(splitResult[4]);
+                    ageReturn = "de " + age1;
+
+                    if (splitResult[5] != "null")
+                    {
+                        age2 = Convert.ToInt32(splitResult[5]);
                         ageReturn = "entre " + age1 + " et " + age2 + " ans";
                     }
                 }
             }
-
-            //Single entities
-            nbEntities = result.Entities.Count();
-            for (int i = 0; i < nbEntities; i++)
+            else
             {
-                if (result.Entities[i].Type == "Gender")
+                //Composite Entities
+                if (result.CompositeEntities != null)
                 {
-                    string value = result.Entities[i].Entity;
-                    gender = treatment.getVisitsByGender(value);
+                    nbEntities = result.CompositeEntities.Count();
+                    for (int i = 0; i < nbEntities; i++)
+                    {
+                        if (result.CompositeEntities[i].ParentType == "IntervalDate")
+                        {
+                            foreach (var entity in result.Entities)
+                            {
+                                if (entity.Type == "builtin.datetime.date")
+                                {
+                                    DateTime? date;
+                                    List<EntityRecommendation> dates = new List<EntityRecommendation>();
+                                    dates.Add(entity);
+                                    recog.ParseDateTime(dates, out date);
 
-                    if (gender == GenderValues.Male)
-                    {
-                        genderReturn = "homme(s)";
+                                    if (date1 == null)
+                                    {
+                                        date1 = date;
+                                        dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                                    }
+                                    else if (date1 != null)
+                                    {
+                                        date2 = date;
+                                        if (date2 < date1 && date2 != null)
+                                        {
+                                            DateTime? tmpDate = date1;
+                                            date1 = date2;
+                                            date2 = tmpDate;
+                                        }
+                                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                                    }
+                                }
+                            }
+                        }
+                        //Process of ages
+                        if (result.CompositeEntities[i].ParentType == "SingleAge")
+                        {
+                            age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                            ageReturn = "de " + age1;
+                        }
+                        else if (result.CompositeEntities[i].ParentType == "IntervalAge")
+                        {
+                            age1 = Convert.ToInt32(result.CompositeEntities[i].Children[0].Value);
+                            age2 = Convert.ToInt32(result.CompositeEntities[i].Children[1].Value);
+                            if (age2 < age1 && age2 != -1)
+                            {
+                                int? ageTmp = age1;
+                                age1 = age2;
+                                age2 = ageTmp;
+                            }
+                            ageReturn = "entre " + age1 + " et " + age2 + " ans";
+                        }
                     }
-                    else
+                }
+
+                //Single entities
+                nbEntities = result.Entities.Count();
+                for (int i = 0; i < nbEntities; i++)
+                {
+                    if (result.Entities[i].Type == "Gender")
                     {
-                        genderReturn = "femme(s)";
+                        string value = result.Entities[i].Entity;
+                        gender = treatment.getVisitsByGender(value);
+
+                        if (gender == GenderValues.Male)
+                        {
+                            genderReturn = "homme(s)";
+                        }
+                        else
+                        {
+                            genderReturn = "femme(s)";
+                        }
                     }
                 }
             }
@@ -594,7 +639,7 @@ namespace AdaBot.Dialogs
                 int compteurCarrousel = 1;
                 foreach (var visit in visitsReturn)
                 {
-                    if (compteurCarrousel <= 9)
+                    if (compteurCarrousel <= 9 && splitResult[0] != "MoreGetStatsVisits")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         if (!askingEmotion)
@@ -630,10 +675,12 @@ namespace AdaBot.Dialogs
                         compteur++;
                         compteurCarrousel++;
                     }
-                    else if (compteurCarrousel == 10)
+                    else if (compteurCarrousel == 10 && splitResult[0] != "MoreGetStatsVisits")
                     {
+                        string buttonValue = treatment.GetValueButton(date1, date2, gender, age1, age2);
+
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url : $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -641,7 +688,7 @@ namespace AdaBot.Dialogs
                         CardAction plButtonChoice = new CardAction()
                         {
 
-                            Value = "",
+                            Value = "MoreGetStatsVisits:" + buttonValue,
                             Type = "postBack",
                             Title = "J'en veux plus"
                         };
@@ -650,7 +697,6 @@ namespace AdaBot.Dialogs
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = "Afficher plus",
                             Images = cardImages,
                             Buttons = cardButtons
                         };
@@ -659,9 +705,40 @@ namespace AdaBot.Dialogs
                         replyToConversation.Attachments.Add(plAttachment);
                         compteurCarrousel += 1;
                     }
-                    else
+                    else if (splitResult[0] == "MoreGetStatsVisits")
                     {
-                        break;
+                        List<CardImage> cardImages = new List<CardImage>();
+                        if (!askingEmotion)
+                        {
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+                        }
+                        else
+                        {
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(EmotionPicture[compteur].Uri)}")); // a mettre dans le SDK
+                        }
+                        string messageDate = "";
+                        string firstname = "";
+
+                        if (visit.PersonVisit.FirstName == null)
+                        {
+                            firstname = "une personne inconnue";
+                        }
+                        else
+                        {
+                            firstname = visit.PersonVisit.FirstName;
+                        }
+                        messageDate = customDialog.GetVisitsMessage(firstname, visit.Date);
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = firstname,
+                            Text = messageDate + " (" + Convert.ToString(visit.Date.ToString("dd/MM/yyyy")) + ")",
+                            Images = cardImages
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                        compteur++;
                     }
                 }
             }
