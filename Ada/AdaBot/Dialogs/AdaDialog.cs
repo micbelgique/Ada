@@ -102,7 +102,6 @@ namespace AdaBot.Dialogs
                         possiblePictures.Add(src2);
                     }
                 }
-
                 List<CardImage> cardImages = new List<CardImage>();
                 if (possiblePictures.Count == 0)
                 {
