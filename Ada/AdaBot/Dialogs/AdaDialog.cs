@@ -648,6 +648,8 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
+            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
+
             Activity replyToConversation = null;
             AdaClient client = new AdaClient();
 
