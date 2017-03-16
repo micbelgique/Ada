@@ -78,9 +78,6 @@ namespace AdaBot.Dialogs
 
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
-
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetHelp")]

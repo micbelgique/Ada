@@ -48,11 +48,19 @@ namespace AdaBot.Dialogs
             btnAction.Add("Qui est ton meilleur ami?");
 
             List<string> btnString = new List<string>();
-            btnString.Add("La liste des visites du jour");
-            btnString.Add("Le nombre de visiteurs moyen du MIC");
-            btnString.Add("La liste des évènements du MIC");
-            btnString.Add("Des informations concernant ma maison, le MIC");
-            btnString.Add("Mon meilleur ami");
+            btnString.Add("Visite du jour");
+            btnString.Add("Moyenne de fréquentation");
+            btnString.Add("Evénements");
+            btnString.Add("Information sur le MIC");
+            btnString.Add("Meilleur ami");
+
+            List<string> titleString = new List<string>();
+            titleString.Add("La liste des visites du jour");
+            titleString.Add("La moyenne de fréquentation du MIC");
+            titleString.Add("Nos événements");
+            titleString.Add("Quelque information");
+            titleString.Add("Mon meilleur ami");
+
 
             for (int i = 0; i < btnAction.Count(); i++)
             {
@@ -71,6 +79,7 @@ namespace AdaBot.Dialogs
                 HeroCard tmp = new HeroCard()
                 {
                     Images = cardsImage,
+                    Title = titleString[i],
                     Buttons = cardsAction
                 };
                 Attachment plAttachment = tmp.ToAttachment();
@@ -104,6 +113,10 @@ namespace AdaBot.Dialogs
             btnString.Add("La liste des évènements du MIC");
             btnString.Add("Des informations concernant ma maison, le MIC");
 
+            List<string> titleString = new List<string>();
+            btnString.Add("Nos événements");
+            btnString.Add("Quelque information");
+
             for (int i = 0; i < btnAction.Count(); i++)
             {
                 List<CardAction> cardsAction = new List<CardAction>();
@@ -121,6 +134,7 @@ namespace AdaBot.Dialogs
                 HeroCard tmp = new HeroCard()
                 {
                     Images = cardsImage,
+                    Title = btnString[i],
                     Buttons = cardsAction
                 };
                 Attachment plAttachment = tmp.ToAttachment();
@@ -174,6 +188,7 @@ namespace AdaBot.Dialogs
                 HeroCard tmp = new HeroCard()
                 {
                     Images = cardsImage,
+                    Text = btnString[i],
                     Buttons = cardsAction
                 };
                 Attachment plAttachment = tmp.ToAttachment();
