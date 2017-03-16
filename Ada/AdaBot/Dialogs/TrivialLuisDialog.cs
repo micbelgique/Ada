@@ -69,7 +69,7 @@ namespace AdaBot.Dialogs
             context.Done<object>(null);
         }
 
-        [LuisIntent("LifeSignification")]
+        [LuisIntent("LifeSignification")] 
         public async Task LifeSignification(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Sens.Spintax()}";
