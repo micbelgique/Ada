@@ -7,6 +7,8 @@ using Microsoft.Bot.Connector;
 using System;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using Windows.Media.Protection.PlayReady;
+using AdaSDK;
 
 namespace AdaBot.Dialogs
 {
@@ -51,10 +53,28 @@ namespace AdaBot.Dialogs
         public async Task Greetings(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
+            AdaClient client = new AdaClient();
+            Activity replyToConversation;
 
             string[] firstNameUser = nameUser.Split(' ');
             string message = $"{Dialog.Greeting.Spintax()} {firstNameUser[0]}";
             await context.PostAsync(message);
+
+            CreateDialog createCarousel = new CreateDialog();
+            var idUser = context.Activity.From.Id;
+            var accessAllow = await client.GetAuthorizationFacebook(idUser);
+
+            if (accessAllow == "true")
+            {
+                replyToConversation = createCarousel.CarouselPossibilities(context);
+            }
+            else
+            {
+                replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
+            }
+
+            await context.PostAsync(replyToConversation);
+
             context.Done<object>(null);
         }
 

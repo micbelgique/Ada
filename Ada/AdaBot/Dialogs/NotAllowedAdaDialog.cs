@@ -59,93 +59,25 @@ namespace AdaBot.Dialogs
         [LuisIntent("Possibilities")]
         public async Task Possibilities(IDialogContext context, LuisResult result)
         {
-            List<string> OurPossibilities = new List<string>();
-            OurPossibilities.Add("- la liste des évènements du MIC");
-            OurPossibilities.Add("- des informations concernant ma maison, le MIC");
+            CreateDialog createCarousel = new CreateDialog();
 
-            await context.PostAsync("Je suis capable de te renseigner sur pas mal de chose! :D Tu peux me demander:");
-            foreach (string tmp in OurPossibilities)
-            {
-                await context.PostAsync(tmp);
-            }
+            Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
+
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("What'sUp")]
         public async Task Event(IDialogContext context, LuisResult result)
         {
-            List<MeetupEvent> _eventList = new List<MeetupEvent>();
-            TreatmentDialog treatment = new TreatmentDialog();
-            _eventList = await treatment.getEvents();
+            CreateDialog createCarousel = new CreateDialog();
 
-            Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply("Voici la liste des évènements à venir au MIC: ");
-            replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Type = "message";
-            replyToConversation.AttachmentLayout = "carousel";
-            replyToConversation.Attachments = new List<Attachment>();
+            Activity replyToConversation = await createCarousel.GetEvent(context);
 
-            foreach (var meetup in _eventList)
-            {
-                //Récupération du lien image
-                List<string> possiblePictures = new List<string>();
 
-                foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
-                {
-                    string src = m.Groups[1].Value;
-                    //string tmp = treatment.getHtmlSourceCode(src);
-                    HtmlDocument doc = new HtmlDocument();
-                    doc.LoadHtml(src);
-                    string tmp = "";
-                    try
-                    {
-                        tmp = treatment.getHtmlSourceCode(src);
-                    }
-                    catch (Exception e)
-                    {
-                        tmp = "";
-                    }
-
-                    foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
-                    {
-                        string src2 = m2.Groups[1].Value;
-                        possiblePictures.Add(src2);
-                    }
-                }
-
-                List<CardImage> cardImages = new List<CardImage>();
-                if (possiblePictures.Count == 0)
-                {
-                    cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
-                }
-                else
-                {
-                    cardImages.Add(new CardImage(url: Convert.ToString(possiblePictures[0])));
-                }
-
-                List<CardAction> cardsAction = new List<CardAction>();
-                CardAction action = new CardAction()
-                {
-                    Value = meetup.Link,
-                    Type = "openUrl",
-                    Title = "Consulter"
-                };
-                cardsAction.Add(action);
-
-                DateTime date = new DateTime(1970, 1, 1).Add(TimeSpan.FromMilliseconds((meetup.Time))).AddHours(2);
-
-                HeroCard plCard = new HeroCard()
-                {
-                    Title = meetup.Name + " (" + date + ")",
-                    Text = "Lieux: " + meetup.Venue.Name + " " + meetup.Venue.City,
-                    //Subtitle = Regex.Replace(meetup.Description, @"<(.|\n)*?>", string.Empty),
-                    Subtitle = meetup.HowToFind,
-                    Images = cardImages,
-                    Buttons = cardsAction
-                };
-
-                Attachment plAttachment = plCard.ToAttachment();
-                replyToConversation.Attachments.Add(plAttachment);
-            }
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
 
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -154,53 +86,11 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetHelp")]
         public async Task GetHelp(IDialogContext context, LuisResult result)
         {
-            Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply("En quoi puis-je t'aider? :)");
-            replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Type = "message";
-            replyToConversation.AttachmentLayout = "carousel";
-            replyToConversation.Attachments = new List<Attachment>();
+            CreateDialog createCarousel = new CreateDialog();
 
-            List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            Activity replyToConversation = createCarousel.GetHelp(context);
 
-            List<string> btnAction = new List<string>();
-            btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["SiteMIC"]);
 
-            List<string> btnString = new List<string>();
-            btnString.Add("Notre Facebook");
-            btnString.Add("Notre chaîne Youtube");
-            btnString.Add("Notre Meetup");
-            btnString.Add("Notre Site");
-
-            for (int i = 0; i < btnAction.Count(); i++)
-            {
-                List<CardAction> cardsAction = new List<CardAction>();
-                CardAction action = new CardAction()
-                {
-                    Value = btnAction[i].ToString(),
-                    Type = "openUrl",
-                    Title = btnString[i]
-                };
-                cardsAction.Add(action);
-                List<CardImage> cardsImage = new List<CardImage>();
-                CardImage img = new CardImage(url: pictures[i]);
-                cardsImage.Add(img);
-
-                HeroCard tmp = new HeroCard()
-                {
-                    Images = cardsImage,
-                    Buttons = cardsAction
-                };
-                Attachment plAttachment = tmp.ToAttachment();
-                replyToConversation.Attachments.Add(plAttachment);
-            }
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
