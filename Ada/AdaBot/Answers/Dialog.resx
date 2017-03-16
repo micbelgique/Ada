@@ -123,6 +123,9 @@
   <data name="Best" xml:space="preserve">
     <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai :$ Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entends plutôt bien avec ]</value>
   </data>
+  <data name="Bye" xml:space="preserve">
+    <value>[A bientôt |On se revoit vite j'espère |Bonne journée à toi |Passe une bonne journée |Aurevoir |Tu me manques déjà |A la prochaine ]</value>
+  </data>
   <data name="Compliment" xml:space="preserve">
     <value>[Merci| Oh c'est gentil :)|Personne ne m'avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)]</value>
   </data>
@@ -187,6 +190,9 @@ Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas 
   </data>
   <data name="See" xml:space="preserve">
     <value>[J'ai vu|J'ai croisé|j'ai aperçu]</value>
+  </data>
+  <data name="Sens" xml:space="preserve">
+    <value>[La réponse au sens de la vie est... ... 42!|Je vais réfléchir à cela... Repassez dans... Sept millions et demi d'années...|42!|Je peux te proposer un très bon ouvrage sur le sujet: "Le guide du Voyageur intergalactique"]</value>
   </data>
   <data name="Sex" xml:space="preserve">
     <value>[Je suis une fille|Ca ne se voit pas ?|C'est vexant...|Tu veux que je te prenne un rendez-vous chez un ophtalmologue...]</value>

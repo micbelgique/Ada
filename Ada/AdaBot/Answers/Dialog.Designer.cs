@@ -79,6 +79,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [A bientôt |On se revoit vite j&apos;espère |Bonne journée à toi |Passe une bonne journée |Aurevoir |Tu me manques déjà |A la prochaine ].
+        /// </summary>
+        internal static string Bye {
+            get {
+                return ResourceManager.GetString("Bye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Merci| Oh c&apos;est gentil :)|Personne ne m&apos;avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)].
         /// </summary>
         internal static string Compliment {
@@ -160,7 +169,8 @@ namespace AdaBot.Answers {
         ///- Non l&apos;homme l&apos;avait dans sa poche.|- Dis maman, un citron, ça a des pattes ?
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
-        ///- Euh... ben non, un citron ça n&apos;a pas de pat [rest of string was truncated]&quot;;.
+        ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
+        ///- Ah [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
@@ -247,6 +257,15 @@ namespace AdaBot.Answers {
         internal static string See {
             get {
                 return ResourceManager.GetString("See", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [La réponse au sens de la vie est... ... 42!|Je vais réfléchir à cela... Repassez dans... Sept millions et demi d&apos;années...|42!|Je peux te proposer un très bon ouvrage sur le sujet: &quot;Le guide du Voyageur intergalactique&quot;].
+        /// </summary>
+        internal static string Sens {
+            get {
+                return ResourceManager.GetString("Sens", resourceCulture);
             }
         }
         
