@@ -84,7 +84,15 @@ namespace AdaBot.Dialogs
             string nameUser = context.Activity.From.Name;
 
             string[] firstNameUser = nameUser.Split(' ');
-            string message = $"{Dialog.Farewell.Spintax()} {firstNameUser[0]}";
+            string message = $"{Dialog.Bye.Spintax()}{firstNameUser[0]}";
+            await context.PostAsync(message);
+            context.Done<object>(null);
+        }
+
+        [LuisIntent("LifeSignification")] 
+        public async Task LifeSignification(IDialogContext context, LuisResult result)
+        {
+            string message = $"{Dialog.Sens.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }
