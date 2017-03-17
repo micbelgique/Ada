@@ -306,13 +306,9 @@
     <Compile Include="Helpers\FaceHelper.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Helpers\UrlHelpers.cs" />
-    <Compile Include="Migrations\201702161500286_Initial.cs" />
-    <Compile Include="Migrations\201702161500286_Initial.Designer.cs">
-      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703130924125_AddUserIndentified.cs" />
-    <Compile Include="Migrations\201703130924125_AddUserIndentified.Designer.cs">
-      <DependentUpon>201703130924125_AddUserIndentified.cs</DependentUpon>
+    <Compile Include="Migrations\201703171121367_ProfilePictureModified.cs" />
+    <Compile Include="Migrations\201703171121367_ProfilePictureModified.Designer.cs">
+      <DependentUpon>201703171121367_ProfilePictureModified.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
@@ -448,11 +444,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702161500286_Initial.resx">
-      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703130924125_AddUserIndentified.resx">
-      <DependentUpon>201703130924125_AddUserIndentified.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201703171121367_ProfilePictureModified.resx">
+      <DependentUpon>201703171121367_ProfilePictureModified.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

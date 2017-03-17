@@ -70,7 +70,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Je m&apos;entends bien avec |J&apos;ai un petit préféré c&apos;est vrai :$ Je parle de |Mon meilleur ami, c&apos;est |Bien sûr, c&apos;est |On s&apos;entends plutôt bien avec ].
+        ///   Looks up a localized string similar to [Je m&apos;entends bien avec |J&apos;ai un petit préféré c&apos;est vrai :$ Je parle de |Mon meilleur ami, c&apos;est |Bien sûr, c&apos;est |On s&apos;entend plutôt bien avec ].
         /// </summary>
         internal static string Best {
             get {
@@ -142,7 +142,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Ce n&apos;est pas gentil|Non mais...|Mais euh...|On ne parle pas comme ça à une dame!].
+        ///   Looks up a localized string similar to [Ce n&apos;est pas gentil.|Mais euh...|On ne parle pas comme ça à une dame!].
         /// </summary>
         internal static string Insult {
             get {
@@ -160,9 +160,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [C&apos;est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C&apos;est deux spermatozoïdes qui discutent : 
-        ///- Dis, c&apos;est encore loin les ovaires ?
-        ///- Tu parles, on n&apos;est qu&apos;aux amydales.|Le garagiste demande :
+        ///   Looks up a localized string similar to [C&apos;est un schtroumpf qui court, qui tombe et qui se fait un bleu !|Le garagiste demande :
         ///- Comment avez-vous crevé ce pneu ?
         ///- Oh ! bêtement, en roulant sur une bouteille d&apos;alcool.
         ///- Vous ne l&apos;aviez pas vue ?
@@ -170,7 +168,7 @@ namespace AdaBot.Answers {
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
         ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
-        ///- Ah [rest of string was truncated]&quot;;.
+        ///- Ah ben c&apos;est un poussin que j&apos;ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
@@ -220,6 +218,15 @@ namespace AdaBot.Answers {
         internal static string NotAllowed {
             get {
                 return ResourceManager.GetString("NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je n&apos;ai pas bien compris ce que tu m&apos;as dis].
+        /// </summary>
+        internal static string NotSureInsult {
+            get {
+                return ResourceManager.GetString("NotSureInsult", resourceCulture);
             }
         }
         
