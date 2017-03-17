@@ -42,12 +42,14 @@ namespace AdaWebApp.Models.DAL
             // Mapping face attributes from face complex type
             modelBuilder.ComplexType<FaceAttributes>().Property(fa => fa.Age).HasColumnName("Age");
             modelBuilder.ComplexType<FaceAttributes>().Property(fa => fa.Gender).HasColumnName("Gender");
-            modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Moustache).HasColumnName("Moustache");
-            modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Beard).HasColumnName("Beard");
-            modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Sideburns).HasColumnName("Sideburns");
-            modelBuilder.ComplexType<FaceAttributes>().Property(fa => fa.Glasses).HasColumnName("Glasses");
+            //modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Moustache).HasColumnName("Moustache");
+            //modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Beard).HasColumnName("Beard");
+            //modelBuilder.ComplexType<FacialHair>().Property(fa => fa.Sideburns).HasColumnName("Sideburns");
+            //modelBuilder.ComplexType<FaceAttributes>().Property(fa => fa.Glasses).HasColumnName("Glasses");
 
             // Ignoring properties
+            modelBuilder.ComplexType<FaceAttributes>().Ignore(fa => fa.FacialHair);
+            modelBuilder.ComplexType<FaceAttributes>().Ignore(fa => fa.Glasses);
             modelBuilder.ComplexType<FaceAttributes>().Ignore(fa => fa.HeadPose);
             modelBuilder.ComplexType<FaceAttributes>().Ignore(fa => fa.Smile);
 

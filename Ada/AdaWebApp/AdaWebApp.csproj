@@ -310,6 +310,18 @@
     <Compile Include="Migrations\201703171121367_ProfilePictureModified.Designer.cs">
       <DependentUpon>201703171121367_ProfilePictureModified.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703171146235_PictureOK.cs" />
+    <Compile Include="Migrations\201703171146235_PictureOK.Designer.cs">
+      <DependentUpon>201703171146235_PictureOK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171225488_Glasses.cs" />
+    <Compile Include="Migrations\201703171225488_Glasses.Designer.cs">
+      <DependentUpon>201703171225488_Glasses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703171237109_Beard.cs" />
+    <Compile Include="Migrations\201703171237109_Beard.Designer.cs">
+      <DependentUpon>201703171237109_Beard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
@@ -446,6 +458,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703171121367_ProfilePictureModified.resx">
       <DependentUpon>201703171121367_ProfilePictureModified.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171146235_PictureOK.resx">
+      <DependentUpon>201703171146235_PictureOK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171225488_Glasses.resx">
+      <DependentUpon>201703171225488_Glasses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703171237109_Beard.resx">
+      <DependentUpon>201703171237109_Beard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
