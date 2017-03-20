@@ -22,10 +22,12 @@
                             {
                                 <li>@Html.ActionLink("Admin", "Index", "Person", new { area = "Admin" }, null)</li>
                             }
+                            <li>@Html.ActionLink("Conditions d'utilisation", "Index", "CGU")</li>
                             <li>@Html.ActionLink("Log out", "Logout", "Account")</li>
                         }
                         else
                         {
+                            <li>@Html.ActionLink("Conditions d'utilisation", "Index", "CGU")</li>
                             <li>@Html.ActionLink("Log in", "Login", "Account")</li>
                         }
                     }

@@ -297,6 +297,7 @@
     <Compile Include="Controllers\API\PersonController.cs" />
     <Compile Include="Controllers\API\UserIndentifiedController.cs" />
     <Compile Include="Controllers\API\VisitsController.cs" />
+    <Compile Include="Controllers\CGUController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -426,6 +427,7 @@
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
+    <Content Include="Views\CGU\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
