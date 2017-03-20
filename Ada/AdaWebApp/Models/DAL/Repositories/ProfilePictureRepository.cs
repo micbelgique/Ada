@@ -19,7 +19,7 @@ namespace AdaWebApp.Models.DAL.Repositories
             ImageHelpers.CreateImageWithRectangleFace(MapPath(imagePath), MapPath(newPath), face.FaceRectangle);
 
             // Adds a new profile picture for this person 
-            ProfilePicture newPicture =  new ProfilePicture
+            ProfilePicture newPicture = new ProfilePicture
             {
                 Confidence = confidence,
                 Gender = GenderValuesHelper.Parse(face.FaceAttributes.Gender),
