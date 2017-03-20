@@ -28,7 +28,7 @@ namespace AdaWebApp.Models.Entities
 
         public double Sideburns { get; set; }
 
-        public string Glasses { get; set; }
+        public Glasses Glasses { get; set; }
 
         // Foreign key
         public virtual EmotionScores EmotionScores { get; set; }

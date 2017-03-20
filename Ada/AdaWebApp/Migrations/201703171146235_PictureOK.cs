@@ -13,12 +13,12 @@ namespace AdaWebApp.Migrations
             DropColumn("dbo.WorkList", "Glasses");
         }
         
-        public override void Down()
-        {
-            AddColumn("dbo.WorkList", "Glasses", c => c.Int(nullable: false));
-            AddColumn("dbo.WorkList", "Sideburns", c => c.Double(nullable: false));
-            AddColumn("dbo.WorkList", "Beard", c => c.Double(nullable: false));
-            AddColumn("dbo.WorkList", "Moustache", c => c.Double(nullable: false));
-        }
+        //public override void Down()
+        //{
+        //    AddColumn("dbo.WorkList", "Glasses", c => c.Int(nullable: false));
+        //    AddColumn("dbo.WorkList", "Sideburns", c => c.Double(nullable: false));
+        //    AddColumn("dbo.WorkList", "Beard", c => c.Double(nullable: false));
+        //    AddColumn("dbo.WorkList", "Moustache", c => c.Double(nullable: false));
+        //}
     }
 }

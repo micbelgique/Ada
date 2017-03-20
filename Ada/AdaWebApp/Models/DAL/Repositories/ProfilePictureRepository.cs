@@ -25,7 +25,7 @@ namespace AdaWebApp.Models.DAL.Repositories
                 Gender = GenderValuesHelper.Parse(face.FaceAttributes.Gender),
                 FaceRectangle = face.FaceRectangle,
                 Uri = newPath,
-                Glasses = Convert.ToString(face.FaceAttributes.Glasses)
+                Glasses = face.FaceAttributes.Glasses
                 //Moustache = face.FaceAttributes.FacialHair.Moustache,
                 //Beard = face.FaceAttributes.FacialHair.Beard,
                 //Sideburns = face.FaceAttributes.FacialHair.Sideburns
