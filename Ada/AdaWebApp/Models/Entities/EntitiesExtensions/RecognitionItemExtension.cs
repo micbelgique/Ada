@@ -45,7 +45,7 @@ namespace AdaWebApp.Models.Entities
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
                 //ProfilePicture = visit.ProfilePictures.Last().ToDto(),
-                ProfilePicture = tmp.ToDto(),
+                ProfilePicture = tmp.Last().ToDto(),
                 PersonVisit = visit.Person.ToDto()
             };
         }
@@ -60,6 +60,18 @@ namespace AdaWebApp.Models.Entities
                 Gender = person.Gender,
                 Age = person.DateOfBirth.Year
             };
+        }
+
+        public static List<ProfilePictureDto> ToDto(this ProfilePicture picture)
+        {
+            List<ProfilePictureDto> listReturn = new List<ProfilePictureDto>();
+
+            listReturn.Add(new ProfilePictureDto()
+            {
+                Uri = picture.Uri,
+                EmotionScore = null
+            });
+            return listReturn;
         }
 
         public static List<ProfilePictureDto> ToDto(this List<ProfilePicture> picture)

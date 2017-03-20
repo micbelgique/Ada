@@ -25,7 +25,14 @@ namespace AdaWebApp.Models.DAL.Repositories
         public List<Visit> GetVisitsToday()
         {
             DateTime date = DateTime.Today;
-            return Table.Include(v => v.Person).Where(v => v.Date >= date).ToList();
+            //return Table.Include(v => v.Person)
+            //    .Where(v => v.Date >= date)
+            //    .ToList();
+
+            var test = Table.Include(v => v.Person).Where(v => v.Date >= date)  
+                .ToList(); 
+
+            return test;
         }
 
         public Visit GetBestFriend()
