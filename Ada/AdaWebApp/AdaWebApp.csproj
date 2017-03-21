@@ -307,6 +307,10 @@
     <Compile Include="Helpers\FaceHelper.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Helpers\UrlHelpers.cs" />
+    <Compile Include="Migrations\201703201549329_Glasses.cs" />
+    <Compile Include="Migrations\201703201549329_Glasses.Designer.cs">
+      <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
@@ -440,6 +444,11 @@
       <Project>{5b83b8a9-2a06-4407-8774-ecad7106c760}</Project>
       <Name>AdaSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703201549329_Glasses.resx">
+      <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
