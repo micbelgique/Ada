@@ -61,7 +61,7 @@ namespace AdaWebApp.Models.Services.PersonService
         {
             // Makes face detection
             Face[] faces = await _faceServiceClient.DetectAsync(UrlHelpers.Content(Global.Host, imagePath),
-                returnFaceAttributes: new[] { FaceAttributeType.Age, FaceAttributeType.Gender });
+                returnFaceAttributes: new[] { FaceAttributeType.Age, FaceAttributeType.Gender, FaceAttributeType.Glasses });
 
             // If there aren't at least one face in picture
             if (!faces.Any())
