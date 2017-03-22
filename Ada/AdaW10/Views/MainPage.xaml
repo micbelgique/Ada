@@ -41,8 +41,7 @@
 
             <!--   <TextBlock Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="Red"
                 Text="Vous pouvez soliciter ADA en disant : Bonjour ADA ou Hello ADA." /> -->
-            <Button Command="{Binding GoBackToSwitchPageCommand}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="" FontSize="18" Foreground="White"  Background="Transparent"></Button>
-
+            
             <!--      <Button Content="Exécuter en mode passif" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Command="{Binding SelectModeCommand}">
                 <Button.CommandParameter>
                     <vm:ModeValues>Actif</vm:ModeValues>
