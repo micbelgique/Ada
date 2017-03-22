@@ -101,7 +101,7 @@ namespace AdaW10.ViewModels
         {
             await RunTaskAsync(async () =>
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 Messenger.Default.Unregister(this);
                 NavigationService.NavigateTo(ViewModelLocator.EventPage, CurrentPerson);
             });
@@ -111,7 +111,7 @@ namespace AdaW10.ViewModels
         { 
             await RunTaskAsync(async () =>
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 await VoiceInterface.SayNotAvailableService();
                 await VoiceInterface.ListeningWhatToDo();
             });
@@ -121,7 +121,7 @@ namespace AdaW10.ViewModels
         {
             await RunTaskAsync(async () => 
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 await VoiceInterface.SayNotAvailableService();
                 await VoiceInterface.ListeningWhatToDo();
             });
@@ -131,7 +131,7 @@ namespace AdaW10.ViewModels
         {
             await RunTaskAsync(async () =>
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 await VoiceInterface.SayGoodBye();
                 Messenger.Default.Unregister(this);
 
@@ -144,7 +144,7 @@ namespace AdaW10.ViewModels
         {
             await RunTaskAsync(async () =>
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 await VoiceInterface.SayDescriptionOfSomeone(CurrentPerson);
                 await VoiceInterface.ListeningWhatToDo();
             });
@@ -154,7 +154,7 @@ namespace AdaW10.ViewModels
         {
             await RunTaskAsync(async () =>
             {
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
                 await VoiceInterface.SayNotAvailableService();
                 await VoiceInterface.ListeningWhatToDo();
             });

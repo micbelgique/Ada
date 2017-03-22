@@ -124,7 +124,7 @@ namespace AdaW10.ViewModels
             {
                 // Arrêt de l'écoute continue, sinon le programme plante lors de l'écoute du nom ou de la raison
                 await WebcamService.StopFaceDetectionAsync();
-                await VoiceInterface.StopLinstening();
+                await VoiceInterface.StopListening();
 
                 var person = (await MakeRecognition())?.FirstOrDefault();
 
@@ -218,7 +218,7 @@ namespace AdaW10.ViewModels
         public async Task GoToMenuPage(PersonDto person)
         {
             // Clean up services and messenger
-            await VoiceInterface.StopLinstening();
+            await VoiceInterface.StopListening();
             await WebcamService.CleanUpAsync();
             Messenger.Default.Unregister(this);
 
