@@ -75,3 +75,85 @@ namespace AdaW10
     }
 }
 ```
+
+### Bot
+
+The first step to deploy the bot is to import the 2 different Luis in your Luis account.
+[![](/doc/assets/ImportLuis.PNG)]()
+
+And deploy the 2 Luis in azure : 
+[![](/doc/assets/LuisAddKey.PNG)]()
+[![](/doc/assets/LuisBuyAzure.PNG)]()
+
+Now you need to deploy the bot on azur. For that you need to creat a new web app and publish the bot on this web app.
+
+You need to register your bot in the bot framework website : https://dev.botframework.com.
+[![](/doc/assets/RegisterBot.PNG)]()
+
+After that you need to add a file a file AppSettings.config 
+
+```
+<?xml version="1.0"?>
+
+<appSettings>
+  
+	<!-- Keys for BotFramework -->
+  
+	<add key="BotId" value="" />
+  
+	<add key="MicrosoftAppId" value="" />
+  
+	<add key="MicrosoftAppPassword" value="" />
+
+ 
+
+	<!-- Keys for LUIS Ada-->
+  
+	<add key="ModelId" value=""/>
+  
+	<add key="SubscriptionKey" value=""/>
+
+  
+
+	<!-- Keys for LUIS trivial-->
+  
+	<add key="ModelIdTrivial" value=""/>
+  
+	<add key="SubscriptionKeyTrivial" value=""/>
+
+  
+
+	<!-- URI for bot -->
+  
+	<add key="WebAppUrl" value="" /> <!--Use for the picture-->
+ 
+  
+	<add key="FaceBookMIC" value="" /> <!--Link to the Facebook page-->
+  
+	<add key="YoutubeMIC" value="" /> <!--Link to the youtube page-->
+  
+	<add key="MeetupMIC" value="" /> <!--Link to the meetup page-->
+  
+	<add key="SiteMIC" value="" /> <!--Link to the website-->
+  
+	<add key="IMGYoutube" value="" /> <!--Link to an image for youtube-->
+  
+	<add key="IMGMIC" value="" /> <!--Link to an image for the society-->
+  
+	<add key="IMGFacebook" value="" /> <!--Link to an image for Facebook-->
+  
+	<add key="IMGMeetup" value="" /> <!--Link to an image for the meetup-->
+  
+	<add key="IMGMore" value=""/> <!--Link to an image for the button more-->
+
+</appSettings>
+```
+
+[![](/doc/assets/AddFileConfig.PNG)]()
+[![](/doc/assets/FileConfig.PNG)]()
+[![](/doc/assets/IdLuis.PNG)]()
+[![](/doc/assets/MicrosoftAppId.PNG)]()
+
+If you want to use the bot in facebook messenger or an other application allow by the bot framework. You just need to login to
+the bot framework's website and follow the different step to add the bot in the application.
+[![](/doc/assets/Application.PNG)]()
