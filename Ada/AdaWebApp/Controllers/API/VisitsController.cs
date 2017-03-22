@@ -75,11 +75,11 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
-        [Route("VisitsForStats/{date1}/{date2}/{gender}/{age1}/{age2}")]
+        [Route("VisitsForStats/{date1}/{date2}/{gender}/{age1}/{age2}/{glasses}")]
         // GET: get visits of the day
-        public List<VisitDto> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
+        public List<VisitDto> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2, bool glasses)
         {
-            var visits = _unit.VisitsRepository.GetVisitsForStats(date1, date2, gender, age1, age2);
+            var visits = _unit.VisitsRepository.GetVisitsForStats(date1, date2, gender, age1, age2, glasses);
             if (visits == null)
             {
                 return null;

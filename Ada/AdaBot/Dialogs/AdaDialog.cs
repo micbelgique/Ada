@@ -383,13 +383,14 @@ namespace AdaBot.Dialogs
             string emotionReturn = "";
             string emotion = "";
             string dateReturn = "aujourd'hui";
+            string glassesReturn = "";
 
             DateTime? date1 = null;
             DateTime? date2 = null;
             int? age1 = null;
             int? age2 = null;
             GenderValues? gender = null;
-
+            bool glasses = false;
 
             var splitResult = result.Query.Split(':');
 
@@ -509,10 +510,16 @@ namespace AdaBot.Dialogs
                             genderReturn = "femme(s)";
                         }
                     }
+
+                    if (result.Entities[i].Type == "Glasses")
+                    {
+                        glasses = true;
+                        glassesReturn = " avec des " + result.Entities[i].Entity.ToString();
+                    }
                 }
             }
 
-            visitsReturn = await client.GetVisitsForStats(date1, date2, gender, age1, age2);
+            visitsReturn = await client.GetVisitsForStats(date1, date2, gender, age1, age2, glasses);
             nbVisits = visitsReturn.Count();
 
             nbEntities = result.Entities.Count();
