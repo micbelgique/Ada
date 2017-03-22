@@ -1,6 +1,6 @@
 # Ada
 
-[![](/doc/assets/ada hello.jpg)]()
+[![](/doc/assets/AdaHello.jpg)]()
 
 ## Deployment
 ### Microsoft Cognitive Services
@@ -78,17 +78,30 @@ namespace AdaW10
 
 ### Bot
 
+# Step 1
+
 The first step to deploy the bot is to import the 2 different Luis in your Luis account.
+
 [![](/doc/assets/ImportLuis.PNG)]()
 
+
 And deploy the 2 Luis in azure : 
+
 [![](/doc/assets/LuisAddKey.PNG)]()
 [![](/doc/assets/LuisBuyAzure.PNG)]()
 
-Now you need to deploy the bot on azur. For that you need to creat a new web app and publish the bot on this web app.
 
-You need to register your bot in the bot framework website : https://dev.botframework.com.
+# Step 2
+
+Now you need to deploy the bot on azur. For that you need to create a new web app and publish the bot on this web app.
+
+# Step 3
+
+You need to register your bot on the bot framework website : https://dev.botframework.com.
+
 [![](/doc/assets/RegisterBot.PNG)]()
+
+# Step 4
 
 After that you need to add a file a file AppSettings.config 
 
@@ -149,11 +162,14 @@ After that you need to add a file a file AppSettings.config
 </appSettings>
 ```
 
+
 [![](/doc/assets/AddFileConfig.PNG)]()
 [![](/doc/assets/FileConfig.PNG)]()
 [![](/doc/assets/IdLuis.PNG)]()
 [![](/doc/assets/MicrosoftAppId.PNG)]()
 
-If you want to use the bot in facebook messenger or an other application allow by the bot framework. You just need to login to
+# Step 5
+
+If you want to use the bot on facebook messenger or an other application allow by the bot framework. You just need to login to
 the bot framework's website and follow the different step to add the bot in the application.
 [![](/doc/assets/Application.PNG)]()
