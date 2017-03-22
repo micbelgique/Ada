@@ -164,6 +164,8 @@
     <Content Include="Images\mic-banner_ada.png" />
     <Content Include="Images\music.mp4" />
     <Content Include="Images\music.png" />
+    <Content Include="Images\screenstart.png" />
+    <Content Include="Images\screenvideo.png" />
     <Content Include="Images\speaking.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
