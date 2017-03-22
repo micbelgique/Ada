@@ -61,7 +61,7 @@ The class is used for the URL and the login to the web application.
 
 The class must be like : 
 
-```
+```csharp
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
