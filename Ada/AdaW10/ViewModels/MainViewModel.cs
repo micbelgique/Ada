@@ -118,7 +118,7 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
-            LogHelper.Log("Solicitation... wait please...");
+            LogHelper.Log("Je suis à toi dans un instant...");
 
             await RunTaskAsync(async () =>
             {
