@@ -105,7 +105,7 @@ namespace AdaSDK
             }
         }
 
-        public async Task<List<VisitDto>> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
+        public async Task<List<VisitDto>> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2, bool glasses, bool beard, bool mustache)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace AdaSDK
                     a2 = age2.ToString();
                 }
 
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2));
+                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2 + "/" + glasses + "/" + beard + "/" + mustache));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
