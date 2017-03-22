@@ -6,7 +6,7 @@ https://www.microsoft.com/cognitive-services/en-us/apis
 
 Have fun !
 
-[![](/doc/assets/ada hello.jpg)]()
+[![](/doc/assets/ada%20hello.jpg)]()
 
 ## Deployment
 ### Microsoft Cognitive Services
