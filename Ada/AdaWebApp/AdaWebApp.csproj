@@ -315,6 +315,10 @@
     <Compile Include="Migrations\201703201549329_Glasses.Designer.cs">
       <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703211120455_Beard.cs" />
+    <Compile Include="Migrations\201703211120455_Beard.Designer.cs">
+      <DependentUpon>201703211120455_Beard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
@@ -452,6 +456,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703201549329_Glasses.resx">
       <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703211120455_Beard.resx">
+      <DependentUpon>201703211120455_Beard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
