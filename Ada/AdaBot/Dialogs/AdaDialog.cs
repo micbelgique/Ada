@@ -384,6 +384,8 @@ namespace AdaBot.Dialogs
             string emotion = "";
             string dateReturn = "aujourd'hui";
             string glassesReturn = "";
+            string beardReturn = "";
+            string mustacheReturn = "";
 
             DateTime? date1 = null;
             DateTime? date2 = null;
@@ -391,6 +393,8 @@ namespace AdaBot.Dialogs
             int? age2 = null;
             GenderValues? gender = null;
             bool glasses = false;
+            bool beard = false;
+            bool mustache = false;
 
             var splitResult = result.Query.Split(':');
 
@@ -516,10 +520,27 @@ namespace AdaBot.Dialogs
                         glasses = true;
                         glassesReturn = " avec des " + result.Entities[i].Entity.ToString();
                     }
+                    if (result.Entities[i].Type == "FacialHair")
+                    {
+                        string hair = result.Entities[i].Entity.ToString();
+                        if (hair == "barbu" || hair == "barbus" || hair == "barbe")
+                        {
+                            beard = true;
+                            beardReturn = "avec une barbe";
+                        }
+                        if (hair == "moustachu" || hair == "moustachus" || hair == "moustache")
+                        {
+                            mustache = true;
+                            if (beardReturn != "")
+                            {
+                                mustacheReturn = "et une moustache";
+                            }
+                        }
+                    }
                 }
             }
 
-            visitsReturn = await client.GetVisitsForStats(date1, date2, gender, age1, age2, glasses);
+            visitsReturn = await client.GetVisitsForStats(date1, date2, gender, age1, age2, glasses, beard, mustache);
             nbVisits = visitsReturn.Count();
 
             nbEntities = result.Entities.Count();
@@ -582,7 +603,7 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + " " + dateReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + " " + beardReturn + " " + mustacheReturn + " " + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
