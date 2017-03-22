@@ -68,6 +68,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LinqKit, Version=1.1.8.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.8.0\lib\net452\LinqKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -295,7 +299,9 @@
     <Compile Include="Areas\Admin\ViewModels\UnavailabilityViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\API\PersonController.cs" />
+    <Compile Include="Controllers\API\UserIndentifiedController.cs" />
     <Compile Include="Controllers\API\VisitsController.cs" />
+    <Compile Include="Controllers\CGUController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -305,9 +311,13 @@
     <Compile Include="Helpers\FaceHelper.cs" />
     <Compile Include="Helpers\ImageHelpers.cs" />
     <Compile Include="Helpers\UrlHelpers.cs" />
-    <Compile Include="Migrations\201702161500286_Initial.cs" />
-    <Compile Include="Migrations\201702161500286_Initial.Designer.cs">
-      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201703201549329_Glasses.cs" />
+    <Compile Include="Migrations\201703201549329_Glasses.Designer.cs">
+      <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703211120455_Beard.cs" />
+    <Compile Include="Migrations\201703211120455_Beard.Designer.cs">
+      <DependentUpon>201703211120455_Beard.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
@@ -315,6 +325,7 @@
     <Compile Include="Models\DAL\Repositories\ProfilePictureRepository.cs" />
     <Compile Include="Models\DAL\Repositories\RecognitionItemRepository.cs" />
     <Compile Include="Models\DAL\Repositories\StatRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\UserIndentifiedRepository.cs" />
     <Compile Include="Models\DAL\Repositories\VisitRepository.cs" />
     <Compile Include="Models\Entities\ApplicationUser.cs" />
     <Compile Include="Models\DAL\ApplicationDbContext.cs" />
@@ -328,6 +339,7 @@
     <Compile Include="Models\Entities\RecognitionItem.cs" />
     <Compile Include="Models\Entities\StaffMember.cs" />
     <Compile Include="Models\Entities\Unavailability.cs" />
+    <Compile Include="Models\Entities\UserIndentified.cs" />
     <Compile Include="Models\Entities\Visit.cs" />
     <Compile Include="Models\Entities\Person.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\RecognitionItemExtension.cs" />
@@ -379,24 +391,8 @@
     <Content Include="Areas\Admin\Views\Person\Edit.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="ConnectionString.config" />
-    <None Include="Properties\PublishProfiles\AdaProd - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %283%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %284%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %285%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %286%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %287%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - FTP %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\AdaWebApp - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %283%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %284%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %285%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %286%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %287%29.pubxml" />
-    <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy %288%29.pubxml" />
     <None Include="Properties\PublishProfiles\AdaWebApp - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\martine-o-bot-dev - Web Deploy %282%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
     <Content Include="Scripts\customutctodate.js" />
@@ -435,6 +431,7 @@
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
+    <Content Include="Views\CGU\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
@@ -451,15 +448,18 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702161500286_Initial.resx">
-      <DependentUpon>201702161500286_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\AdaSDK\AdaSDK.csproj">
       <Project>{5b83b8a9-2a06-4407-8774-ecad7106c760}</Project>
       <Name>AdaSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703201549329_Glasses.resx">
+      <DependentUpon>201703201549329_Glasses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703211120455_Beard.resx">
+      <DependentUpon>201703211120455_Beard.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

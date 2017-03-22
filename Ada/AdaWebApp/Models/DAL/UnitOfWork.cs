@@ -26,13 +26,17 @@ namespace AdaWebApp.Models.DAL
         private readonly Lazy<VisitRepository> _visitsRepository;
         public VisitRepository VisitsRepository => _visitsRepository.Value;
 
-        // Repository for Visit entity
+        // Repository for Unavailability entity
         private readonly Lazy<BaseRepository<Unavailability>> _unavRepository;
         public BaseRepository<Unavailability> UnavailabilitieRepository => _unavRepository.Value;
 
         // Repository for EmotionScores
         private readonly Lazy<BaseRepository<EmotionScores>> _emotionScores;
         public BaseRepository<EmotionScores> EmotionScoresRepository => _emotionScores.Value;
+
+        // Repository for UserIndentified entity
+        private readonly Lazy<UserIndentifiedRepository> _userIndentifiedRepository;
+        public UserIndentifiedRepository UserIndentifiedRepository => _userIndentifiedRepository.Value;
 
         private readonly Lazy<RecognitionItemRepository> _recognitionItemsRepository;
         public RecognitionItemRepository RecognitionItemsRepository => _recognitionItemsRepository.Value;
@@ -52,6 +56,7 @@ namespace AdaWebApp.Models.DAL
             _emotionScores = new Lazy<BaseRepository<EmotionScores>>(() =>new BaseRepository<EmotionScores>(context));
             _recognitionItemsRepository = new Lazy<RecognitionItemRepository>(() => new RecognitionItemRepository(context));
             _statRepository = new Lazy<StatRepository>(() => new StatRepository(context));
+            _userIndentifiedRepository = new Lazy<UserIndentifiedRepository>(() => new UserIndentifiedRepository(context));
         }
 
         public async Task SaveAsync(){

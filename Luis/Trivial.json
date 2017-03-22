@@ -1,0 +1,5012 @@
+{
+  "luis_schema_version": "2.0.0",
+  "versionId": "0.1",
+  "name": "MIC-Common",
+  "desc": "",
+  "culture": "fr-fr",
+  "intents": [
+    {
+      "name": "Age"
+    },
+    {
+      "name": "Compliment"
+    },
+    {
+      "name": "Farewell"
+    },
+    {
+      "name": "Feelings"
+    },
+    {
+      "name": "Greetings"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "Home"
+    },
+    {
+      "name": "InfoRequest"
+    },
+    {
+      "name": "Insult"
+    },
+    {
+      "name": "JokeRequest"
+    },
+    {
+      "name": "LifeSignification"
+    },
+    {
+      "name": "Name"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Phone"
+    },
+    {
+      "name": "Reality"
+    },
+    {
+      "name": "Sex"
+    },
+    {
+      "name": "Thanks"
+    },
+    {
+      "name": "Time"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [],
+  "actions": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "zekjze fez jobfejnefz ezfo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "oijigsrgr jkjersgrbjbrsegjpgeh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pojernfn evpeoznfpen",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hijo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "donne moi des recettes",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "l\"é'kékléklkkl'\"éké",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ok",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rfpvfnd kl,fv",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dffgbnimelfdk,msxw",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "é\"e\"é\"éé\"\"é'",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "&é\"&é\"&\"&\"&\"",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "commander",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "azrfevdcfeagrvfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "u",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "efreprm",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "al",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hihzbfzernsfe vejt erjg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "mopioiugyuftezygfsdv",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "kjgiufgd uie rfgg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "khkho oih",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rhsrb hstrfhs h",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "regihsergr bgsràhesrsrbt",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "etezprhe reosjre egrsger",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "iuzefb efbfezbfz efzbu$",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "sertg rgçqrehg!erghre",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":lobe:",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hio",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rieyiuhofje ergerg'",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":nerd_face:",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":nerd:",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":d",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "-_-",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":(",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":87,\"name\":\"dr vandenbussche maye\",\"address\":\"avenue gustave latinis 64, 01030 schaarbeek\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":98,\"id_ubicentrex\":24405667,\"name\":\"dr nguyen tuong-vi\",\"address\":\"avenue léon tombu 4, 01200 woluwe-saint-lambert\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pourrais-tu me lister les événements à venir ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "préviens moi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "x",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/deleteuserdata",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pourrais-tu me prévenir des événements du organisés par le chr ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je ne souhaite pas recevoir des informations concernant les évenements organisés par le chr.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zaeaz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "généraliste",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rdv",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je voudrais un rendez-vous",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zedz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je souhaiterai recevoir des informations concernant les évenements organisés par le chr.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/deleteuser",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "oui",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "\"\\/date(1490955600000)\\/\"",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je voudrais un rdv pour le 11/11/2017 à 14h avec le docteur nguyen",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/deletedata",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "azeaeaz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "c",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "user_defined_payload",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je voudrais un rdv",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":)",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je test",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":'(",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "de quoi tu parles",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "non",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "az",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rip luis common",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "sa",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je voudrais un rdv le 11/11/2017 à 14h avec le docteur nguyen",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ";)",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "d",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/deleteuserprofile",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qsdqsd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "c4est",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "démarer",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "serrg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "campagnes",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "se désabonner",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quit",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bronze",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/delepteprofile",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "cancel",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":71,\"name\":\"orl\",\"description\":\"otorhinolaryngologie : spécialiste du nez, de la bouche et des oreilles\",\"doctors\":[{\"id\":99,\"id_ubicentrex\":7706454,\"name\":\"dr demo robert\",\"address\":\"rue leon tombu 4, 01200 woluwe-saint-lambert\"}]}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":72,\"name\":\"psychiatrie\",\"description\":\"spécialiste des troubles mentaux.\",\"doctors\":[{\"id\":100,\"id_ubicentrex\":14732706,\"name\":\"dr test xavier\",\"address\":null}]}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "efz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pojj",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "set_appointment_payload",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je veux faire un don",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-3-",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "-3",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/contact",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{ \"type\": 1, \"value\": 1 }",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "vite que tu apprennes à commander les mains artificielles <3",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "vite que tu apprennes à commander les mains artificielles <3",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "donne moi le nom de la denière personne qui est passée",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "donne moi le nom de la denière personne qui est passée",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":3,\"name\":\"campagne 1 - 2\",\"datedebut\":\"\\/date(1487839945803)\\/\",\"urlimage\":\"https://donminoapi.blob.core.windows.net/images/40055db4-c8d1-418a-9b8b-45654ac7a093.jpg\",\"theme\":{\"id\":2,\"name\":\"création artistique / musicale \",\"urlimage\":null}}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":11,\"name\":\"handicap \"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui as tu vu en dernier ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "getstarted",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "sdfghjklm",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je retire ce que j'ai dit elle me saoule déjà xd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "est ce que clara baise?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":96,\"id_ubicentrex\":7706532,\"name\":\"dr lallemand severine\",\"address\":\"avenue léon tombu, 4, 1200 woluwe-saint-lambert\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":55,\"name\":\"pauvreté chez nous\",\"urlimage\":null}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui est passé en dernier ,",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "concurrent à ada :",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je voudrais accéder aux services",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{ \"type\": 1, \"value\": 0 }",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "<!-- keys for luis trivial--> <add key=\"modelidtrivial\" value=\"20b7d4cf-17fb-4631-813b-c8a40b1e5b4f\"/> <add key=\"subscriptionkeytrivial\" value=\"82316d1d00474c8d9f6b3db71e6b47c5\"/>",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "faudra vraiment accélérer ça !",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je veux pas celle là!",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "louis a bossé?!",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "lol",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "c kan ke ta vu clara ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "https://www.facebook.com/microsoftinnovationcenters/",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":1,\"action\":\"supprimer\",\"name\":\"coopération au développement / aide humanitaire\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "comment?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "liste",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "yep xd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"id\":2,\"name\":\"création artistique / musicale \",\"urlimage\":null}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "okki",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ah pardon ^^",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tu lui donnes du texte, et ça l'analyse pour te dire si la personne est ouverte, fâchée, ...",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "vous êtes intelligente",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "<https://www.ibm.com/watson/>",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui est passé en dernier ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j'suis déçu qu'elle n'est pas géré la première demande :slightly_smiling_face:",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "combiens de personne triste as-tu vue ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hy",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "faire un don",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "paybill_payload",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "du biff",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "adrien donnay",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "mdr",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dmr",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et les designers, il savent créer des gif...",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "??",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "haaaaaaaaaaaaaaaaa",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et stéphane",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je me sens seul",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bon anniversaire!",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "stéphane",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dmrm",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "par perdu j'imagine que tu entends lâchement abandonné par ses immondes collègues de travail",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "9+-",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "💀",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "oups désolé sofia",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pk tu mignor le baute :'(",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "il travail à l'écriture des blagues",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "viens 1v1",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "oui, mais où est stèphane",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "stop me spam",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui sont tes créateurs ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quel bot ... il ne répond même pas ... bravo aux développeurs !!",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "de quoi es tu fait",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ada, ma belle ada, dis moi qui est la plus belle",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "non je connais pas l'histoire du petit xavier",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":o",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j'ai pas reçu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "manque de professionnalisme tout ça ! il doit sûrement y avoir une variable statique de compteur d'insulte...",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "saloe",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "t'es nul sérieux :l",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quels sont les évènements cette semaine ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et vous voyez mes messages ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j ai mal au ventre",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "que fait on cette semaine",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "raph",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ds",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the curls in your keyboard cord are losing electricity.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ubnc user brain not connected",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "proprietary information.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "disks spinning backwards - toggle the hemisphere jumper.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fsdsdf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "spam",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "somebody was calculating pi on the server",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "improperly oriented keyboard",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dew on the telephone lines.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je suis navré mais ces informations requièrent une autorisation.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i'm not sure. try calling the internet's head office -- it's in the book.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "efzqesgd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "preferences",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "moi non plus",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "we only support a 28000 bps connection.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "os swapped to disk",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/reboot",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "recursivity. call back if it happens again.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "backbone scoliosis",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "popper unable to process jumbo kernel",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "scsi's too wide.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/kill",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qsd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "user to computer ration too low.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the electrician didn't know what the yellow cable was so he yanked the ethernet out.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "write-only-memory subsystem too slow for this machine. contact your local dealer.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "doppler effect",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "$ffgh*ghfg*hf*ghfhf*",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "it has intel inside",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j'ai mal au ventre",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "clock speed",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j'ai une question à poser",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "d@d.c",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "electromagnetic radiation from satellite debris",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fghgh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pourquoi street figther s'appeller ainsi?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "mais pourquoi?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ezrdghf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "defunct processes",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tu veux toujours avoir le dernier moi heinn",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris's motorcycle has 4wd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "y a t il du soleil aujourd'hui",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rdv lallemand",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pose moi une question",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "few people can go down niagra falls in a barrel. only chuck norris can go up niagra falls in a cardboard box.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris has already been to mars; that's why there are no signs of life.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "static from plastic slide rules",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "c'est pas faux",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "root nameservers are out of sync",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "they once made a chuck norris toilet paper, but there was a problem: it wouldn't take shit from anybody.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "permission denied",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ups interrupted the server's power",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "too few computrons available.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "uygiuhoijpo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "cpu radiator broken",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zertthgfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "voilà, test terminé, tu as apprécié ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hey, calme hein",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "loop found in loop in redundant loopback",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "your mail is being routed through germany ... and they're censoring us.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui as les plus gros attributs",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "scsi chain overterminated",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "5",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dsf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "edtrfytguyh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bah quoi t'es végan?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rien à proposer ce soir?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ether leak",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can touch mc hammer",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je suis célibataire 😉",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris once ran a marathon backwards...just to see what second place looks like.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "we are currently trying a new concept of using a live mouse. unfortunately, one has yet to survive being hooked up to the computer.....please bear with us.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "big to little endian conversion error",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "user to computer ratio too high.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "we didn't pay the internet bill and it's been cut off.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dommage",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qsdfghlkmgluyuyt",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dtrfygh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "drtfygyuhiu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "because of network lag due to too many people playing deathmatch",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "git gud",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rpc_pmap_failure",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "relais pour la vie",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "decreasing electron flux",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "%¨%¨%%¨%¨%%¨%¨%",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dsfgyhu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fytugyihuo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hardware stress fractures",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "we're waiting for [the phone company] to fix that line",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "grand publique",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "some people wear superman pajamas. superman wears chuck norris pajamas.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "system consumed all the paper for paging",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j,hngbf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "edtrfygtuyhi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "don de sang",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"campaignbutton\":{\"id\":8,\"name\":\"resto du coeur\",\"datedebut\":\"\\/date(1488499200000)\\/\",\"urlimage\":\"43c999d5-f4b3-4f00-9d01-29a8af2e561d.png\",\"theme\":{\"id\":28,\"name\":\"pauvreté chez nous\",\"urlimage\":null}},\"action\":\"donner\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the router thinks its a printer.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris played russian roulette with a fully loaded gun and won.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fluorescent lights are generating negative ions. if turning them off doesn't work, take them out and put tin foil on the ends.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hgbfvd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "io",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jhngbfvd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "drtfygh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "short leg on process table",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "divide-by-zero error",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "you can tune a file system, but you can't tune a fish from most tunefs man pages",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can win a game of connect four in only three moves.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fat electrons in the lines",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hbijnop",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dtrfygvh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "l2p",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "some one needed the powerstrip, so they pulled the switch plug.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris will never have a heart attack. his heart isn't nearly foolish enough to attack him.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can squeeze apple juice out of a banana.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "vapors from evaporating sticky-note adhesives",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can cut through a hot knife with butter",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "magnetic interference from money/credit cards",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuuut",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "excessive collisions & not enough packet ambulances",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "non-redundant fan failure",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "network packets travelling uphill use a carrier pigeon",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "user was distributing pornography on server; system seized by fbi.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "que sofia est meilleur",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "communications satellite used by the military for star wars.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "10",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hgf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "power company having emp problems with their reactor",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris once kicked a horse in the chin. its decendants are known today as giraffes.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ouais ouais c'est ça",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "just pick up the phone and give modem connect sounds. \"well you said we should get more lines so we don't have voice lines.\"",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "est-ce que tu réponds parfois?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris once got bit by a rattle snake........ after three days of pain and agony ..................the rattle snake died",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jhgtf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "les framboises sont perchées sur le tabouret de mon grand-père.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "calut hada",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "regarde un peu cette vidéo qu'adrien donnay a posté sur son mur : https://www.facebook.com/adrien.donnay/posts/10210793368104731",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the rolling stones concert down the road caused a brown out",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "lk,jbhvgcfxdwsdxfcgvhbjnk,l;,kjnhbugyvftcdresrdtfyg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "death once had a near-chuck norris experience",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "yjthrge",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "100",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et comment je pourrais être autorisé ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "static buildup",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "backup tape overwritten with copy of system manager's favourite cd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "daemons loose in system.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "@, <, \\, ‘, “, $, %, &",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "drftghjjhlvboubfvbhklsv<mibhs<d",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fsdfsdsqdfdfffdgfdgdf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hdye",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "prendre",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et stephane",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "no \"any\" key on keyboard",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "but what?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zombie processes haunting the computer",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"campaignbutton\":{\"id\":7,\"name\":\"pauvreté en inde\",\"datedebut\":\"\\/date(1489363200000)\\/\",\"urlimage\":null,\"theme\":{\"id\":56,\"name\":\"tiers monde\",\"urlimage\":null},\"description\":null,\"organisation\":null},\"action\":\"donner\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "it's not plugged in.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qesdfgg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "excess surge protection",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "post-it note sludge leaked into the monitor.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris once stared at the sun for hours... the sun then blinked.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jan 9 16:41:27 huber su: 'su root' succeeded for .... on /dev/pts/1",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i'm sorry a pentium won't do, you need an sgi to connect with us.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "filesystem not big enough for jumbo kernel patch",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "did you pay the new support fee?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "electro-magnetic pulses from french above ground nuke testing.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "we just switched to fddi.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "just type 'mv * /dev/null'.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "global warming",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the mgs ran out of gas.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "some magicans can walk on water, chuck norris can swim through land.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "notice: alloc: /dev/null: filesystem full",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "root rot",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "rdtfytguyu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chut",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ne me friendzone pas",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "yfguhi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "endothermal recalibration",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "first saturday after first full moon in winter",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bnc brain not connected",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "mais si",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": ":p",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zertyfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "alz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "esrsdtfytgy",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jyhgfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fhgjhjk",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dertfygu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "et louis, tu l'as croisé ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "static from nylon underwear",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "spam spam",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"campaignbutton\":{\"id\":7,\"name\":\"pauvreté en inde\",\"datedebut\":\"\\/date(1489363200000)\\/\",\"urlimage\":null,\"theme\":{\"id\":56,\"name\":\"tiers monde\",\"urlimage\":null}},\"action\":\"donner\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hgdfs",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dxtfcyvgu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "zzz",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "when chuck norris does a pushup, he isn't lifting himself up, he's pushing the earth down.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "du coup je retire ce que j'ai dis, c'est pour les deux",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris has to use a stunt double when he does crying scenes.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "/pub/lunch",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the mainframe needs to rest. it's getting old, you know.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "\"the only thing we have to fear is chuck norris himself.\" - franklin d. roosevelt",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "fytgyhiu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can light a fire by rubbing two ice-cubes together.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "arcserve crashed the server again.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "of course it doesn't work. we've performed a software upgrade.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "je meurs",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "drop * from users;",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "spam spam spamspam spam",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "{\"themebutton\":{\"id\":55,\"name\":\"pauvreté chez nous\",\"urlimage\":null},\"action\":\"supprimer\"}",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tfytguhiu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jhgfbd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tdfghj",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the ups doesn't have a battery backup.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "most kids pee their name into snow... chuck norris pisses his in concreate...",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "flat tire on station wagon with tapes. \"never underestimate the bandwidth of a station wagon full of tapes hurling down the highway\" andrew s. tannenbaum",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dsq",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tdfghjb",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ftygvubhn",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ij",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "had to use hammer to free stuck disk drive heads.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the monitor is plugged into the serial port",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hj,jythyrtger",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "atilla the hub",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what office are you in? oh, that one. did you know that your building was built over the universities first nuclear research site? and wow, aren't you the lucky one, your office is right over where the core is buried!",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tu ne comprends pas grand chose hein",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "euh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dfs",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "omg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "louis",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris was in all 6 star wars movies............... as the force.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "quantum dynamics are affecting the transistors",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris once urinated in a semi truck's gas tank as a joke....that truck is now known as optimus prime.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "lbnc luser brain not connected",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the salesman drove over the cpu board.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tfygvuhb",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dfsb",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tyhgrf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tfgyhu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris ordered a big mac at burger king, and got one.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "chuck norris and superman once fought each other on a bet. the loser had to start wearing his underwear on the outside of his pants.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "high nuclear activity in your area.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "esrdtfyguhi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ryftugyhiu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "etdrfygvuhbjnk",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "tdfryguyhujio",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "erdtfygh",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ytuyiuo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "solar flares",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the real ttys became pseudo ttys and vice-versa.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ku,jyhhggfbdvf",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "erdxtcfgv",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dfgchbj",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dertyftguyhu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "azqesfdg",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "xtryctuygiuhi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dsfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "monitor vlf leakage",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "my pony-tail hit the on/off switch on the power strip.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pardon, je voulais dire christian est nul",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "essaye",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "trdytuvyiu",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hfd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ftguyhiuoi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "the air conditioning water supply pipe ruptured over the machine room",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "j'ai remarqué",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "qui est ton meilleurs pote ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "don ?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "salut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hello",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "slt",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "wesh",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "yo",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hep",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hey",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salut toi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hop",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "heya",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bien le bonjour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salutations",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "plop",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "heyy",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "yosh",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bien le bonjour cher ami",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjour, comment avs-tu",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hep là",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou petit bot",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "saaaalut monsieur le bot",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "wesh robot",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hola amigo",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hola :d",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "halo",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "comment qu'est ce que ca va bien",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hopla",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "shalom",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hop toi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hola senor",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "heyyyy",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hey là",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucoucoucoucou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucoucou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou toi :d",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hello bot",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bijour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bjour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "lu",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "ploppeur de ploppeur de plop",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "haydi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "slut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "s l t",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucouw",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "cc",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "lu ;)",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "saaaaaaaaaalut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hoy",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salut salut salut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou toi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonsoir",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonne apres midi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bien le bonsoir",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "belle journée",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salur",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "heyo",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hi!",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salut :d",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": ":robot:",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "salutsa",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "gettingstarted",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "hi",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bravo",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "koukou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salutedze",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjour!",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "@slackbot bonjour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "@ada3 hello !",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjour ada",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "saljut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salut ada !",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjour !",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "@ada3 hello",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "saluuut",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjouor",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "cocucou",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou ada, je vais juste faire un petit test de résistance au stress :p",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "😂",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bondour",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "salut ada",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "répond !",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "yaaaaaaaaaaa",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "ug",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "bonjourµ",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "coucou :p",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "démarrer",
+      "intent": "Greetings",
+      "entities": []
+    },
+    {
+      "text": "connard",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "fils de pute",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "pd",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "saloppe",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ordure",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "abruti",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "nique ta mère",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "va te faire enculer",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "andouille",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "va te faire foutre",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "bâtard",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "biatch",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "bicot",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es vraiment q'un abruti",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "espèce d'imbécile",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es casse couilles",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es un abruti",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "fdp",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "pauvre con",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "crétin va",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es vraiment débile",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ducon",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "enculé",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "gros enfoiré",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "quel emmerdeur",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es qu'un fdp de bot",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "gros moche",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es pas beau",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es bête comme un pied",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es trop gros",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "grosse merde tu sers a rien",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ahhh tu fonctionne pas",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "purée tu es trop con",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "con comme ses pieds ce bot",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "tu fais chier",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "pute",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ptite pute",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "petite pute",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "j'taime pas",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "je t'aime pas",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "je te deteste",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "fuck you",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "batard",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "gros connard",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "tg",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "encore des codeurs nul",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "tg connard arrete de me spammer",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "blaireau",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "toi qui est pas gentil",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "raph er nul mdr",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sale",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es nul",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "vilaine",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sal",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "méchant robot",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "salope",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ta gueule",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sale bite",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es moche !",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "tu m'insultes là?",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "are-you naked bitch?",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sale con",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "grosse salope",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "kestu va faire bête type",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "conasse",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es qu'est un porc francis",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es qu'un port francis",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "gros noob",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "tg salope",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "salut connard",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es qu'un porc francis",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "nique ta race pd",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sale bronze",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "\"en toute simplicité\" oui oui je te crois pd",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "jai dis puteuhhhhhhhh",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "bonjour salope",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "suce ma bite",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "connasse",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "conaçe",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ça va pd",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "normal t'es con",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "ada tu me casses les couilles",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "meurt",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "méchant !",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "sdf",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "faquin !",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "méchant",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "trop nul",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "t'es un peu répétitive ma grande",
+      "intent": "Insult",
+      "entities": []
+    },
+    {
+      "text": "comment vas-tu?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "tu vas bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment ça va",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "hep, tu vas bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "salut, comment est-ce que tu vas,",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ça roule?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment ça va?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ça va bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment te sens-tu?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "bien ou bien gros?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ça va?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment ça va bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "en ce momement, comment te sens-tu?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "bien la famille?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "salut toi! tu vas bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "tout vas bien?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ca va ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "bonjour tu vas bien ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ca va?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment tu vas?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ça va ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment vas-tu ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment ça va ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment tu va",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ca va",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ca ve",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment vas tu?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "comment tu vas",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "how are you today ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "ca va,",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "tu vas bien ?",
+      "intent": "Feelings",
+      "entities": []
+    },
+    {
+      "text": "où habites-tu?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou est ce que tu habites?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "tu vis où?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "t'es où là?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "où te trouves-tu?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou est ce que tu es",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "thabite ou",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "d'où est ce que tu viens",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "t'es dou?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "tu es d'ou?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "d'où proviens tu",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "quelle est ton adresse",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "où est ta maison?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ta maison es ou",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ta maison se trouve ou petit bot?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "elle est ou ta maison",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou es maison",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou est ce que tu habites",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "tu habites où?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou habites tu ?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou havite tu ?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou te trouve tu ?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "on commence par ou ?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "ou es tu ?",
+      "intent": "Home",
+      "entities": []
+    },
+    {
+      "text": "tu as quel âge?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age as tu?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'es vieux?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'es jeune?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'as quel age?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age t'as?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "depuis quand existe-tu?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "ta kel age",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'aq quelle age",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel âge as-tu?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "es tu majeur?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'es mineur?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "mineur ou majeur?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel âge est ce que tu as,",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age tu as",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "et tu as quel âge?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age est ce que tu as",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'as quel âge?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "tu as quel age? :)",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "tu as quelle age ?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "tu as quel age ?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age as-tu ?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age as tu",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "tu as quel gae",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'as quel age",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "tu as quel age",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'aq quel age",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "quel age t'as",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'as quel âge ?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "t'as quel age maintenant?",
+      "intent": "Age",
+      "entities": []
+    },
+    {
+      "text": "merci bien",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "hey merci beaucoup",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "j'tadore",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "super, merci",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "génial merci!!",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "trop coooool , merci",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "ahhh cool merci",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "tu comprends tout!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "merci chef!",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci :d",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "cool",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "super !",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "c'est pas mal",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "nice",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci bite",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "thx",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci @fred *_*",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci!",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci ada",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "bien bien",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "ha, super...",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "merci !",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "ah ben merci",
+      "intent": "Thanks",
+      "entities": []
+    },
+    {
+      "text": "de quel sexe es tu",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "a quel genre appartient tu",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "homme ou femme",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "tu es un homme ou une fille",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un garcon ou une femme",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un garcon?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'as une bite?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un homme?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un mec?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "est ce que t'es une meuf?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un mec ou une meuf?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un homme ou une meuf",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es un garcon ou une fille?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "tu t'identifies comment?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "es-tu une femme ?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "es tu un homme",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "es-tu un homme ou une femme ?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "es tu un homme ?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "tu as quel sexe ?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "tu es un homme?",
+      "intent": "Sex",
+      "entities": []
+    },
+    {
+      "text": "t'es beau",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es trop beau",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es gentil :d",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es sympa",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je te trouve sympa",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "c'est super gentil",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime bien",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime beaucoup",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je te trouve gentil",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es génial!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es méga cool",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "super cool",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es super",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'adore",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je te trouve beau",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "joli petit bot",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es un gentil bot!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "trop gentil!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "woaw tu comprends tout ce que jte dis!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es mignon",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "trop mignon ce bot",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu fonctionne bien",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es de beaux engrenages tu sais",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'as de beaux yeux tu sais",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'as de beaux rouages tu sais",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "joli circuits",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es trop cool monsieur roboc",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es le meilleur",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es un boss!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "awww t'es trop gentil",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "les développeurs de ce bot sont géniaux! (surtout romain",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es un génie",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "espèce de petit génie",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "hello gentil bot",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es belle",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es jolie",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "mais t'es mignonne dit donc",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es la plus belle",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es la plus forte",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es le plus fort",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es l'meilleur",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je rigole, tu es très gentil",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es belle!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "belle",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es gentilles",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": ":love:",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu gère",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "i love you",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "comment va tu",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "vous êtes belle",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "vous êtes belle",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime tu sais",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "le soir dans ma baignoire je pense à toi...",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "tu es plutôt beau gosse",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime ada",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime ada ❤!!!!!!!!!!!!!!!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je t'aime ada!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "t'es top ada!",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "ho que tu es belle ada <3",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "je rigole t'es le meilleur citabot",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "super",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "trop bien !",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "pauvre chou",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "très fort !",
+      "intent": "Compliment",
+      "entities": []
+    },
+    {
+      "text": "raconte moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "est ce que t'as une blague pour moi?",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "dit moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "est ce que tu sais me raconter une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "j'aime les blagues",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "quelle est ta blague preferee",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "raconte moi ta blague préférée",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "qu'est ce qui te fais rire?",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "fait moi rire",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "hahaha",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "hehehehe",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "hahahaha",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "raconte moi une blague stp?",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "raconte une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "xd",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "raco,nte moi une blague ?",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "donne moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "as tu une blague ?",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "affiche moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can slam a revolving door.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris counted to infinity - twice.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris died 20 years ago, death just hasn't built up the courage to tell him yet.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can bake a cake in the freezer",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "fear of spiders is aracnaphobia, fear of tight spaces is chlaustraphobia, fear of chuck norris is called logic",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "how many push-ups can chuck norris do? all of them.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "when the boogeyman goes to sleep every night, he checks his closet for chuck norris.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "there is no theory of evolution. just a list of animals chuck norris allows to live.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "racontes moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris can strangle you with a cordless phone.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "raconte-moi une blague",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "chuck norris made a happy meal cry.",
+      "intent": "JokeRequest",
+      "entities": []
+    },
+    {
+      "text": "qui es-tu?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "t'es qui?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "parle moi de toi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "décrit toi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "tu es quoi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "informations",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "infos",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "donne moi des infos sur toi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "dis moi tout sur toi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "tu es qui?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui es tu",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "dit moi tout sur toi",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui es tu?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui est tu?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "t ki",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "de quoi tu parles ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "tu fais quoi ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui suis-je?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "quelle est la dernière personne qui est passée ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui es tu ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "tu sais faire quoi?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "qui est ton meilleurs ami ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "tu connais quoi alors ?",
+      "intent": "InfoRequest",
+      "entities": []
+    },
+    {
+      "text": "t'es un robot!",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "sale robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "t'es qu'un robot apres tout",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "t'es un bot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "tu n'es qu'un robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "est ce que tu es un robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "je crois que t'es un robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "a mort les robots",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "vive les robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "tu sais que t'es un robot?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "beep boop bop bot t'es un robot",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "tu es réel?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "est ce que tu existe?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "est tu un humain",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "t'es un robot?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es-tu humaine ?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es-tu réel?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es tu humaine?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es tu humain",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es-tu humaine?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "est tu humaine ?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es-tu réelle,",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es tu humaine ?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es-tu réelle?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "es tu reel ?",
+      "intent": "Reality",
+      "entities": []
+    },
+    {
+      "text": "a l'aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "aide moi",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "j'ai besoins d'aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "comment faire",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "aide moi!!",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "aled",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "a l'aide stp",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "j'aurais besoins d'aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "un peu d'aide?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "pls aide moi",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "stp aide moi",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help, i need somebody",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "j'ai besoin d'aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "helpµ",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "@slackbot aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "@slackbot aide",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help_payload",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "a l'aide je suis entrain de mourir, ,aide moi monsieur le robot médecin",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "aide moi !",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "a l'aide!",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "tu t'apelles comment?",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "c'est quoi ton nom?",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "quel est ton nom",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "quel est ton nom ?",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "comment tu t'appelles",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "comment tu t'appel",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "comment tu t'appelles :)",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "t'es qui",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "comment tu t'appelles ?",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "comment tu t'appelles?",
+      "intent": "Name",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est il",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "il est quelle heure?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est-ce qu'il est",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "tu as l'heure?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "il est quel heure",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "tu aurais l'heure s'il te plait",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "t'as l'heure?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est ce qu'il est",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "il est quelle heure",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est-il?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "il est quelle heure ?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quel heure est-il ?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est-il",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quelle heure est-il ?",
+      "intent": "Time",
+      "entities": []
+    },
+    {
+      "text": "quel est ton numéro de téléphone ?",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "quel est ton numéro de téléphone",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "ton numéro de téléphone",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "donne moi ton numéro de téléphone",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "tu me donnes ton numéro?",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "donne-moi ton numéro de téléphone",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "donne moi ton numéro",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "ton numéro de téléphone?",
+      "intent": "Phone",
+      "entities": []
+    },
+    {
+      "text": "tchao",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bonne journée",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bonne soirée",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "adieu",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à plus tard",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à bientôt",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à demain",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bisous",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bye",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "au revoir",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "aurevoir",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bye bye",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "ciao",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à tout de suite",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à plus dans l'bus",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à la revoyure",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à la prochaine",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "ciao frère",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "tantôt",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à tantôt",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a tantôt",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "tchuss",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "allé salut",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "à taleur",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a taleur",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "je m'en vais",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a+",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "aurevoir ada",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a bientôt!",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a plus",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "a plus!",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "on se revoit vite",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "exit",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "bonne nuit ada !",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "/quit",
+      "intent": "Farewell",
+      "entities": []
+    },
+    {
+      "text": "tu as une réponse au sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "donne moi le sens de la vie",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "quelle est la réponse universelle?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "tu as la réponse universelle?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "connais tu la réponse au sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "connais tu le sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "connais tu la réponse à la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "c'est quoi la réponse au sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "pourquoi je vis?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "pourquoi vit-on?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "c'est quoi la réponse au sens de la ie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "donne moi le sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "c'est quoi le sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "quel est le sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    },
+    {
+      "text": "quel est la réponse au sens de la vie?",
+      "intent": "LifeSignification",
+      "entities": []
+    }
+  ]
+}
