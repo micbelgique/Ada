@@ -61,20 +61,20 @@ namespace AdaW10.Models.VoiceInterface
 
         #endregion
 
-        #region Linstening section
+        #region Listening section
 
         private SttService _continuousRecognitionSession;
 
         public async Task PrepareListening()
         {
             if (_continuousRecognitionSession != null){
-                await StopLinstening(); 
+                await StopListening(); 
             }
 
             _continuousRecognitionSession = new SttService();
         }
 
-        public async Task StopLinstening()
+        public async Task StopListening()
         {
             if (_continuousRecognitionSession != null)
             {

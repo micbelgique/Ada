@@ -88,7 +88,7 @@ namespace AdaW10.ViewModels
         private async Task GoBackToMainExecute()
         {
             // Cleans up services and messenger
-            await VoiceInterface.StopLinstening();
+            await VoiceInterface.StopListening();
             await VoiceInterface.SayGoodBye();
             Messenger.Default.Unregister(this);
 
@@ -97,7 +97,7 @@ namespace AdaW10.ViewModels
         private async Task GoBackToMenuExecute()
         {
             // Cleans up services and messenger
-            await VoiceInterface.StopLinstening();
+            await VoiceInterface.StopListening();
             Messenger.Default.Unregister(this);
             NavigationService.NavigateTo(ViewModelLocator.MenuPage, CurrentPerson);
         }
