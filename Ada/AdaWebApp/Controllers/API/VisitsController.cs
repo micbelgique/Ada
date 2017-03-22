@@ -84,7 +84,7 @@ namespace AdaWebApp.Controllers.API
             {
                 return null;
             }
-            return visits.Select(v => v.ToDto()).ToList();
+            return visits.Select(v => v.ToDtoListPicture()).ToList();
         }
 
         [HttpGet]
