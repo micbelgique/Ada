@@ -159,7 +159,7 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.See.Spintax()} " + visits.Count + $" personnes aujourd'hui! :D");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
+                replyToConversation.Type = "message"; 
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
 
