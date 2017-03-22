@@ -7,13 +7,13 @@ namespace AdaWebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class Beard : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Beard));
         
         string IMigrationMetadata.Id
         {
-            get { return "201702161500286_Initial"; }
+            get { return "201703211120455_Beard"; }
         }
         
         string IMigrationMetadata.Source

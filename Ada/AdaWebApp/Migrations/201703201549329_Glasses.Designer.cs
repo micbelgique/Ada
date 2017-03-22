@@ -7,18 +7,18 @@ namespace AdaWebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddUserIndentified : IMigrationMetadata
+    public sealed partial class Glasses : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddUserIndentified));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Glasses));
         
         string IMigrationMetadata.Id
         {
-            get { return "201703130924125_AddUserIndentified"; }
+            get { return "201703201549329_Glasses"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

@@ -121,7 +121,7 @@
     <value>[Je n'ai pas d'age|J'ai été créée en Février 2016|Probablement moins que toi! :P|On ne demande pas son âge à une femme!|Ca ne se dit pas !| On t'a jamais appris les bonnes manières ?!|Je te laisse deviner|Tu es trop jeune pour moi ...|Je ne suis pas interessé ... Désolé.|Je ne sais pas ça change chaque année ...|L'âge que j'avais hier à la même heure !|Wow, on se connait à peine et déjà tu abordes les questions intimes?]</value>
   </data>
   <data name="Best" xml:space="preserve">
-    <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai :$ Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entends plutôt bien avec ]</value>
+    <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai :$ Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entend plutôt bien avec ]</value>
   </data>
   <data name="Bye" xml:space="preserve">
     <value>[A bientôt |On se revoit vite j'espère |Bonne journée à toi |Passe une bonne journée |Aurevoir |Tu me manques déjà |A la prochaine ]</value>
@@ -145,15 +145,13 @@
     <value>[Je suis l'assistante virtuelle du MIC|Je suis la pour t'aider|Le MIC Mons est la meilleur entreprise du monde]</value>
   </data>
   <data name="Insult" xml:space="preserve">
-    <value>[Ce n'est pas gentil|Non mais...|Mais euh...|On ne parle pas comme ça à une dame!]</value>
+    <value>[Ce n'est pas gentil.|Mais euh...|On ne parle pas comme ça à une dame!]</value>
   </data>
   <data name="IntroStats" xml:space="preserve">
     <value>[Voyons voir...|Et hop ils sont la]</value>
   </data>
   <data name="JokeRequest" xml:space="preserve">
-    <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|C'est deux spermatozoïdes qui discutent : 
-- Dis, c'est encore loin les ovaires ?
-- Tu parles, on n'est qu'aux amydales.|Le garagiste demande :
+    <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|Le garagiste demande :
 - Comment avez-vous crevé ce pneu ?
 - Oh ! bêtement, en roulant sur une bouteille d'alcool.
 - Vous ne l'aviez pas vue ?
@@ -161,7 +159,7 @@
 - ???
 - Dis maman, un citron, ça a des pattes ?
 - Euh... ben non, un citron ça n'a pas de pattes.
-- Ah ben c'est un poussin que j'ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se souviennent quand même de Chuck Norris.|Chuck Norris peut applaudir d´une seule main.|Si Chuck Norris est en retard, le temps a intérêt à ralentir.|Chuck Norris a terminé l´histoire sans fin|C'est l'histoire d'un homme qui avait 5 pénis, et son slip lui allait comme un gant! Un gant! Il en avait 5! T'as compris?! :D]</value>
+- Ah ben c'est un poussin que j'ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se souviennent quand même de Chuck Norris.|Chuck Norris peut applaudir d´une seule main.|Si Chuck Norris est en retard, le temps a intérêt à ralentir.|Chuck Norris a terminé l´histoire sans fin.]</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>[Je m'appelle Ada|Mon nom est Ada|Je suis Ada|Moi c'est Ada|Mes parents m'ont appelé Ada]</value>
@@ -177,6 +175,9 @@
   </data>
   <data name="NotAllowed" xml:space="preserve">
     <value>[Tu n'as pas l'autorisation d'accéder à ces données.|Tu n'as pas accès a ce genre d'informations.|Je suis navré mais ces informations requièrent une autorisation.]</value>
+  </data>
+  <data name="NotSureInsult" xml:space="preserve">
+    <value>[Je n'ai pas bien compris ce que tu m'as dis]</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>[C'est le 0498 ... tu as vraiment cru que j'allais te donner mon numéro de téléphonne ? 

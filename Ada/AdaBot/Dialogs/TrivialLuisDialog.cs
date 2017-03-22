@@ -28,7 +28,17 @@ namespace AdaBot.Dialogs
         [LuisIntent("Insult")]
         public async Task Insult(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.Insult.Spintax()}";
+            double? score = result.TopScoringIntent.Score;
+            string message;
+            if (score >= 0.85)
+            {
+                message = $"{Dialog.Insult.Spintax()}";
+            }
+            else
+            {
+                message = $"{Dialog.NotSureInsult.Spintax()}";
+            }
+            
             await context.PostAsync(message);
             context.Done<object>(null);
         } 
