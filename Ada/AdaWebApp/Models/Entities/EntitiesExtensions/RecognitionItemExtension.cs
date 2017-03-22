@@ -69,6 +69,9 @@ namespace AdaWebApp.Models.Entities
             listReturn.Add(new ProfilePictureDto()
             {
                 Uri = picture.Uri,
+                Glasses = picture.Glasses,
+                Beard = picture.Beard,
+                Mustache = picture.Moustache,
                 EmotionScore = null
             });
             return listReturn;
@@ -84,6 +87,9 @@ namespace AdaWebApp.Models.Entities
                     listReturn.Add(new ProfilePictureDto()
                     {
                         Uri = picture[i].Uri,
+                        Glasses = picture[i].Glasses,
+                        Beard = picture[i].Beard,
+                        Mustache = picture[i].Moustache,
                         EmotionScore = null
                     });
                 }
@@ -92,6 +98,9 @@ namespace AdaWebApp.Models.Entities
                     listReturn.Add(new ProfilePictureDto()
                     {
                         Uri = picture[i].Uri,
+                        Glasses = picture[i].Glasses,
+                        Beard = picture[i].Beard,
+                        Mustache = picture[i].Moustache,
                         EmotionScore = picture[i].EmotionScores.ToDto()
                     });
                 }

@@ -603,7 +603,7 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + ageReturn + " " + beardReturn + " " + mustacheReturn + " " + dateReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + glassesReturn + " " + ageReturn + " " + beardReturn + " " + mustacheReturn + " " + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
