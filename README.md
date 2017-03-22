@@ -1,6 +1,12 @@
 # Ada
 
-[![](/doc/assets/AdaHello.jpg)]()
+Ada is an OpenSource project by the Microsoft Innovation Center designed to demonstrate how users can interact in a human way with machines. This is a Windows 10 application that uses the Vision API's of the Microsoft Cognitive Services to recognize, understand and talk to our visitors.
+
+https://www.microsoft.com/cognitive-services/en-us/apis
+
+Have fun !
+
+[![](/doc/assets/ada%20hello.jpg)]()
 
 ## Deployment
 ### Microsoft Cognitive Services
@@ -55,7 +61,7 @@ The class is used for the URL and the login to the web application.
 
 The class must be like : 
 
-```
+```csharp
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

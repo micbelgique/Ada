@@ -131,7 +131,6 @@
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
-    <Compile Include="ViewModels\SwitchViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DialogService.cs" />
     <Compile Include="Models\DataService.cs" />
@@ -150,9 +149,6 @@
       <DependentUpon>MenuPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NavigationService.cs" />
-    <Compile Include="Views\SwitchPage.xaml.cs">
-      <DependentUpon>SwitchPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -164,6 +160,8 @@
     <Content Include="Images\mic-banner_ada.png" />
     <Content Include="Images\music.mp4" />
     <Content Include="Images\music.png" />
+    <Content Include="Images\screenstart.png" />
+    <Content Include="Images\screenvideo.png" />
     <Content Include="Images\speaking.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -205,10 +203,6 @@
     <Page Include="Views\MenuPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SwitchPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
