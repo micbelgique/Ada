@@ -110,7 +110,7 @@ namespace AdaW10.ViewModels
             WebcamService.CaptureElement = CaptureElement;
             await WebcamService.StartCameraPreviewAsync();
             
-            if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(400))
+            if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
                WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;        
             }
@@ -197,7 +197,7 @@ namespace AdaW10.ViewModels
                 try
                 {
                 //    LogHelper.Log("Je vois quelqu'un :-) Qui est-ce ?");
-                    PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead()); //todo
+                    PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     // Logs results on screen
                     if (persons != null) LogHelper.LogPersons(persons);
                     if (persons == null) LogHelper.Log("Ho, j'ai cru voir quelqu'un :'(");
