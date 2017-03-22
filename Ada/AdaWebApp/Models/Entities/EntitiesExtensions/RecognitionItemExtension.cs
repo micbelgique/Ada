@@ -44,8 +44,19 @@ namespace AdaWebApp.Models.Entities
                 ID = visit.Id,
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
-                //ProfilePicture = visit.ProfilePictures.Last().ToDto(),
                 ProfilePicture = tmp.Last().ToDto(),
+                PersonVisit = visit.Person.ToDto()
+            };
+        }
+        public static VisitDto ToDtoListPicture(this Visit visit)
+        {
+            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
+            return new VisitDto()
+            {
+                ID = visit.Id,
+                Date = visit.Date,
+                NbPasses = visit.NbPasses,
+                ProfilePicture = visit.ProfilePictures.Last().ToDto(),               
                 PersonVisit = visit.Person.ToDto()
             };
         }
