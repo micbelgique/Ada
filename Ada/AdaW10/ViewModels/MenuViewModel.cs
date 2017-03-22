@@ -8,6 +8,7 @@ using Microsoft.Practices.ServiceLocation;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using AdaSDK;
+using AdaW10.Models;
 
 namespace AdaW10.ViewModels
 {
@@ -19,6 +20,7 @@ namespace AdaW10.ViewModels
             NavigationRegistering<PersonDto>();
 
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
+            WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
 
             GoToEventPageCommand = new RelayCommand(async () => await GoToEventPageExecute());
             GoToSandwichPageCommand = new RelayCommand(async () => await GoToSandwichPageExecute());
@@ -32,6 +34,7 @@ namespace AdaW10.ViewModels
 
         // Services
         public VoiceInterface VoiceInterface { get; }
+        public WebcamService WebcamService { get; }
 
         // Commands
         public RelayCommand GoToEventPageCommand { get; set; }
@@ -132,7 +135,7 @@ namespace AdaW10.ViewModels
                 await VoiceInterface.SayGoodBye();
                 Messenger.Default.Unregister(this);
 
-                NavigationService.NavigateTo(ViewModelLocator.MainPage, ModeValues.Passive);
+                NavigationService.NavigateTo(ViewModelLocator.MainPage);
             });
         }
 
