@@ -80,7 +80,7 @@ namespace AdaW10
 
 # Step 1
 
-The first step to deploy the bot is to import the 2 different Luis in your Luis account.
+The first step to deploy the bot is to import the 2 different Luis in your Luis account (they are in the folder Luis).
 
 [![](/doc/assets/ImportLuis.PNG)]()
 
