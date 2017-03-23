@@ -49,7 +49,7 @@ namespace AdaBot.Dialogs
             return nbPerson;
         }
 
-        public async Task<List<MeetupEvent>> getEvents()
+        public async Task<List<MeetupEvent>> getEvents() 
         {
             EventsMeetupLoaderService = new EventsLoaderService();
             _eventList = await EventsMeetupLoaderService.GetEventsJsonAsync(20);
