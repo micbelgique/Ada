@@ -56,7 +56,7 @@ namespace AdaWebApp.Models.Entities
                 ID = visit.Id,
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
-                ProfilePicture = visit.ProfilePictures.Last().ToDto(),               
+                ProfilePicture = tmp.ToDto(),
                 PersonVisit = visit.Person.ToDto()
             };
         }
