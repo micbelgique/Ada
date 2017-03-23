@@ -3,14 +3,18 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/bundle/css")
+    
+        <title>@ViewBag.Title </title>
+        @Styles.Render("~/bundle/css")
 </head>
 <body>
-
     @Html.Partial("_MainMenu")
+    <div class="FMOG" align=right>
+        <img src="~/Images/fork.png" height=200 />
+    </div>
 
     @* TODO Put Boostrap Wrapper *@
+    
     <div>
         @RenderBody()
     </div>
