@@ -203,6 +203,7 @@ namespace AdaBot.Dialogs
             List<MeetupEvent> _eventList = new List<MeetupEvent>();
             TreatmentDialog treatment = new TreatmentDialog();
             _eventList = await treatment.getEvents();
+            bool softLab = false;
 
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply("Voici la liste des évènements à venir au MIC: ");
@@ -213,65 +214,72 @@ namespace AdaBot.Dialogs
 
             foreach (var meetup in _eventList)
             {
-                //Récupération du lien image
-                List<string> possiblePictures = new List<string>();
-
-                foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                if ((meetup.Name == "SoftLab : OpenSpace" && softLab == false) || meetup.Name != "SoftLab : OpenSpace")
                 {
-                    string src = m.Groups[1].Value;
-                    //string tmp = treatment.getHtmlSourceCode(src);
-                    HtmlDocument doc = new HtmlDocument();
-                    doc.LoadHtml(src);
-                    string tmp = "";
-                    try
+                    if (meetup.Name == "SoftLab : OpenSpace")
                     {
-                        tmp = treatment.getHtmlSourceCode(src);
+                        softLab = true;
                     }
-                    catch (Exception e)
+                    //Récupération du lien image
+                    List<string> possiblePictures = new List<string>();
+
+                    foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
-                        tmp = "";
+                        string src = m.Groups[1].Value;
+                        //string tmp = treatment.getHtmlSourceCode(src);
+                        HtmlDocument doc = new HtmlDocument();
+                        doc.LoadHtml(src);
+                        string tmp = "";
+                        try
+                        {
+                            tmp = treatment.getHtmlSourceCode(src);
+                        }
+                        catch (Exception e)
+                        {
+                            tmp = "";
+                        }
+
+                        foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                        {
+                            string src2 = m2.Groups[1].Value;
+                            possiblePictures.Add(src2);
+                        }
                     }
 
-                    foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                    List<CardImage> cardImages = new List<CardImage>();
+                    if (possiblePictures.Count == 0)
                     {
-                        string src2 = m2.Groups[1].Value;
-                        possiblePictures.Add(src2);
+                        cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
                     }
+                    else
+                    {
+                        cardImages.Add(new CardImage(url: Convert.ToString(possiblePictures[0])));
+                    }
+
+                    List<CardAction> cardsAction = new List<CardAction>();
+                    CardAction action = new CardAction()
+                    {
+                        Value = meetup.Link,
+                        Type = "openUrl",
+                        Title = "Consulter"
+                    };
+                    cardsAction.Add(action);
+
+                    DateTime date = new DateTime(1970, 1, 1).Add(TimeSpan.FromMilliseconds((meetup.Time))).AddHours(2);
+
+                    HeroCard plCard = new HeroCard()
+                    {
+                        Title = meetup.Name + " (" + date + ")",
+                        Text = "Lieux: " + meetup.Venue.Name + " " + meetup.Venue.City,
+                        //Subtitle = Regex.Replace(meetup.Description, @"<(.|\n)*?>", string.Empty),
+                        Subtitle = meetup.HowToFind,
+                        Images = cardImages,
+                        Buttons = cardsAction
+                    };
+
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
                 }
-
-                List<CardImage> cardImages = new List<CardImage>();
-                if (possiblePictures.Count == 0)
-                {
-                    cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
-                }
-                else
-                {
-                    cardImages.Add(new CardImage(url: Convert.ToString(possiblePictures[0])));
-                }
-
-                List<CardAction> cardsAction = new List<CardAction>();
-                CardAction action = new CardAction()
-                {
-                    Value = meetup.Link,
-                    Type = "openUrl",
-                    Title = "Consulter"
-                };
-                cardsAction.Add(action);
-
-                DateTime date = new DateTime(1970, 1, 1).Add(TimeSpan.FromMilliseconds((meetup.Time))).AddHours(2);
-
-                HeroCard plCard = new HeroCard()
-                {
-                    Title = meetup.Name + " (" + date + ")",
-                    Text = "Lieux: " + meetup.Venue.Name + " " + meetup.Venue.City,
-                    //Subtitle = Regex.Replace(meetup.Description, @"<(.|\n)*?>", string.Empty),
-                    Subtitle = meetup.HowToFind,
-                    Images = cardImages,
-                    Buttons = cardsAction
-                };
-
-                Attachment plAttachment = plCard.ToAttachment();
-                replyToConversation.Attachments.Add(plAttachment);
             }
 
             return replyToConversation;

@@ -68,7 +68,6 @@ namespace AdaBot.Dialogs
 
             Activity replyToConversation = await createCarousel.GetEvent(context);
 
-
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
