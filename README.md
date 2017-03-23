@@ -6,7 +6,7 @@ https://www.microsoft.com/cognitive-services/en-us/apis
 
 Have fun !
 
-[![](/doc/assets/ada%20hello.jpg)]()
+[![](/doc/assets/AdaHello.jpg)]()
 
 ## Deployment
 ### Microsoft Cognitive Services
@@ -147,22 +147,19 @@ After that you need to add a file a file AppSettings.config
 	<add key="WebAppUrl" value="" /> <!--Use for the picture-->
  
   
-	<add key="FaceBookMIC" value="" /> <!--Link to the Facebook page-->
-  
-	<add key="YoutubeMIC" value="" /> <!--Link to the youtube page-->
-  
-	<add key="MeetupMIC" value="" /> <!--Link to the meetup page-->
-  
-	<add key="SiteMIC" value="" /> <!--Link to the website-->
-  
-	<add key="IMGYoutube" value="" /> <!--Link to an image for youtube-->
-  
-	<add key="IMGMIC" value="" /> <!--Link to an image for the society-->
-  
+	<add key="FaceBook" value="" /> <!--Link to the Facebook page-->
+	<add key="YoutubC" value="" /> <!--Link to the youtube page-->  
+	<add key="Meetup" value="" /> <!--Link to the meetup page-->
+	<add key="Linkedin" value="" /> <!--Link to the linkedin page-->
+	<add key="Twitter" value/> <!--Link to the twitter page-->
+	<add key="Site" value="" /> <!--Link to the website-->  
+	
+	<add key="IMGYoutube" value="" /> <!--Link to an image for youtube-->  
+	<add key="IMGMIC" value="" /> <!--Link to an image for the society--> 
 	<add key="IMGFacebook" value="" /> <!--Link to an image for Facebook-->
-  
 	<add key="IMGMeetup" value="" /> <!--Link to an image for the meetup-->
-  
+	<add key="IMGLinkedin" value="" /> <!--Link to an image for linkedin-->
+	<add key="IMGTwitter" value/> <!--Link to to an image for twitter-->
 	<add key="IMGMore" value=""/> <!--Link to an image for the button more-->
 
 </appSettings>
