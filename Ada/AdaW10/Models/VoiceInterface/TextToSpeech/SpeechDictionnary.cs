@@ -13,13 +13,13 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
         #region Random sentences
         private static readonly List<string> RandomMaleSentences = new List<string>
         {
-            "Bienvenue au D T A !",
-            "Bienvenue au digital boostcampe !",
+            "Bienvenue au Microsoft Innovation Center !",
             "Passez une bonne journée !",
             "Bienvenue au MIC.",
-            "N'hésitez pas à vous prendre un petit café.",
-            "Je suis ADA, votre assistante numérique içi au MIC.",
-            "De l'eau est à votre disposition derrière le mur."
+            "N'hésite pas à te prendre un petit café.",
+            "Je suis ADA, ton assistante virtuelle içi au MIC.",
+            "J'espère que tu vas bien.",
+            "Si tu as besoin de moi, n'hésite pas."
             /*
             "Que la force soit avec toi !",
             "Tu es rayonnant aujourd'hui.",
@@ -47,13 +47,13 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
 
         private static readonly List<string> RandomFemaleSentences = new List<string>
         {
-            "Bienvenue au D T A !",
-            "Bienvenue au digital boostcampe !",
+            "Bienvenue au Microsoft Innovation Center !",
             "Passez une bonne journée !",
             "Bienvenue au MIC.",
-            "N'hésitez pas à vous prendre un petit café.",
-            "Je suis ADA, votre assistante numérique içi au MIC.",
-            "De l'eau est à votre disposition derrière le mur."
+            "N'hésite pas à te prendre un petit café.",
+            "Je suis ADA, ton assistante virtuelle içi au MIC.",
+            "J'espère que tu vas bien.",
+            "Si tu as besoin de moi, n'hésite pas."
 
             /*"Passe une bonne journée !",
             "Que la force soit avec toi !",
@@ -85,13 +85,13 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
 
         private static readonly List<string> RandomSentences = new List<string>
         {
-            "Bienvenue au D T A !",
-            "Bienvenue au digital boostcampe !",
+            "Bienvenue au Microsoft Innovation Center !",
             "Passez une bonne journée !",
             "Bienvenue au MIC.",
-            "N'hésitez pas à vous prendre un petit café.",
-            "Je suis ADA, votre assistante numérique içi au MIC.",
-            "De l'eau est à votre disposition derrière le mur."
+            "N'hésite pas à te prendre un petit café.",
+            "Je suis ADA, ton assistante virtuelle içi au MIC.",
+            "J'espère que tu vas bien.",
+            "Si tu as besoin de moi, n'hésite pas."
 
           /*  "Passez une bonne journée !",
             "Que la force soit avec vous !",
@@ -151,26 +151,26 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
 
         public static string GetAskNameSentence()
         {
-            return "Quel est votre prénom ?";
+            return "Quel est ton prénom ?";
         }
 
         public static string GetNotUnderstoodSentence()
         {
-            return "Je n'ai pas très bien compris ce que vous avez dit ! Pouvez-vous répéter ?";
+            return "Je n'ai pas très bien compris ce que tu as dit ! Peux-tu répéter ?";
         }
 
         public static string GetYesOrNoSentence(string name)
         {
-            return $"Votre nom est-il bien {name}?";
+            return $"Ton nom est-il bien {name}?";
         }
         public static string GetReasonSentence()
         {
-            return "Quelle est la raison de votre visite ?";
+            return "Quelle est la raison de ta visite ?";
         }
 
         public static string GetAskWhatToDoSentence()
         {
-            return "Que puis-je faire pour vous ?";
+            return "Que puis-je faire pour toi ?";
         }
 
         public static string GetEventsAvailableSentence()
