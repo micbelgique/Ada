@@ -155,20 +155,26 @@ namespace AdaBot.Dialogs
 
             List<string> pictures = new List<string>();
             pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["SiteMIC"]);
 
             List<string> btnString = new List<string>();
             btnString.Add("Notre Facebook");
-            btnString.Add("Notre chaîne Youtube");
             btnString.Add("Notre Meetup");
+            btnString.Add("Notre chaîne Youtube");
+            btnString.Add("Notre Twitter");
+            btnString.Add("Notre Linkedin");
             btnString.Add("Notre Site");
 
             for (int i = 0; i < btnAction.Count(); i++)
