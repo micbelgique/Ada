@@ -3,13 +3,21 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    
+    <style>
+        .FMOG
+        {
+            position:absolute;
+            right:0%;
+            top:7%;
+            z-index:-1;
+        }
+    </style>
         <title>@ViewBag.Title </title>
         @Styles.Render("~/bundle/css")
 </head>
 <body>
     @Html.Partial("_MainMenu")
-    <div class="FMOG" align=right>
+    <div class="FMOG">
         <img src="~/Images/fork.png" height=200 />
     </div>
 
