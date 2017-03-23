@@ -48,17 +48,17 @@ namespace AdaBot.Dialogs
             btnAction.Add("Qui est ton meilleur ami?");
 
             List<string> btnString = new List<string>();
-            btnString.Add("Visite du jour");
+            btnString.Add("Visites du jour");
             btnString.Add("Moyenne de fréquentation");
             btnString.Add("Evénements");
-            btnString.Add("Information sur le MIC");
+            btnString.Add("Informations sur le MIC");
             btnString.Add("Meilleur ami");
 
             List<string> titleString = new List<string>();
             titleString.Add("La liste des visites du jour");
             titleString.Add("La moyenne de fréquentation du MIC");
             titleString.Add("Nos événements");
-            titleString.Add("Quelque information");
+            titleString.Add("Quelques informations");
             titleString.Add("Mon meilleur ami");
 
 
