@@ -11,15 +11,10 @@ using AdaSDK;
 using System.Net.Http;
 using System.Configuration;
 using AdaSDK.Models;
-using AdaBot.BotFrameworkHelpers;
+using AdaBot.BotFrameworkHelpers; 
 using System.Threading;
-using System.Drawing;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
-using AdaBot.Models.EventsLoaderServices;
-using HtmlAgilityPack;
-using System.Text.RegularExpressions;
-using System.Net;
 
 namespace AdaBot.Dialogs
 {
