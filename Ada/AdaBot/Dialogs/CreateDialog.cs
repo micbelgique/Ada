@@ -34,11 +34,11 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGMore"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMore"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGVisitsDay"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGAverage"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMore"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGAboutMIC"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGBestFriend"]);
 
             List<string> btnAction = new List<string>();
             btnAction.Add("Liste visite jour");
@@ -157,16 +157,16 @@ namespace AdaBot.Dialogs
             pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGTwitter"]);
+            pictures.Add(ConfigurationManager.AppSettings["IMGLinkedin"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["MeetupMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
-            btnAction.Add(ConfigurationManager.AppSettings["YoutubeMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["TwitterMIC"]);
+            btnAction.Add(ConfigurationManager.AppSettings["LinkedinMIC"]);
             btnAction.Add(ConfigurationManager.AppSettings["SiteMIC"]);
 
             List<string> btnString = new List<string>();
