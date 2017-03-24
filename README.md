@@ -6,7 +6,7 @@ https://www.microsoft.com/cognitive-services/en-us/apis
 
 Have fun !
 
-[![](/doc/assets/AdaHello.jpg)]()
+![](/doc/assets/AdaHello.jpg)
 
 ## Deployment
 ### Microsoft Cognitive Services
@@ -15,7 +15,7 @@ The first step to deploy the web application is to subscribe to Microsoft Cognit
 
 On Microsoft Cognitive Face web console (https://goo.gl/afkZ6R), create a new persons group with a generated guid as group id.
 
-[![](/doc/assets/PersonGroupId.png)]()
+![](/doc/assets/PersonGroupId.png)
 
 ### Web application + SQL Database
 
