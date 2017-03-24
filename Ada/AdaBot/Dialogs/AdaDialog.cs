@@ -430,6 +430,21 @@ namespace AdaBot.Dialogs
                         ageReturn = "entre " + age1 + " et " + age2 + " ans";
                     }
                 }
+                if(splitResult[6] != "null")
+                {
+                    glasses = true;
+                    glassesReturn = " avec des lunettes";
+                }
+                if (splitResult[7] != "null")
+                {
+                    beard = true;
+                    beardReturn = "avec une barbe";
+                }
+                if (splitResult[8] != "null")
+                {
+                    mustache = true;
+                    mustacheReturn = "et une moustache";
+                }
             }
             else
             {
@@ -653,7 +668,7 @@ namespace AdaBot.Dialogs
                     }
                     else if (compteurCarrousel == 10 && splitResult[0] != "MoreGetStatsVisits")
                     {
-                        string buttonValue = treatment.GetValueButton(date1, date2, gender, age1, age2);
+                        string buttonValue = treatment.GetValueButton(date1, date2, gender, age1, age2, glasses, beard, mustache);
 
                         List<CardImage> cardImages = new List<CardImage>();
                         CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");

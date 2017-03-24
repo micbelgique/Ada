@@ -56,13 +56,16 @@ namespace AdaBot.Dialogs
             return _eventList;
         }
 
-        public string GetValueButton(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2)
+        public string GetValueButton(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2, bool glasse, bool beard, bool moustache)
         {
             string returnDate1 = "null";
             string returnDate2 = "null";
             string returnGender = "null";
             string returnAge1 = "null";
             string returnAge2 = "null";
+            string returnGlasses = "null";
+            string returnBeard = "null";
+            string returnMoustache = "null";
 
             if(date1 != null)
             {
@@ -88,9 +91,21 @@ namespace AdaBot.Dialogs
                     returnAge2 = Convert.ToString(age2);
                 }
             }
+            if (glasse)
+            {
+                returnGlasses = "true";
+            }
+            if (beard)
+            {
+                returnBeard = "true";
+            }
+            if (moustache)
+            {
+                returnMoustache = "true";
+            }
 
 
-            return returnDate1 + ":" + returnDate2 + ":" + returnGender + ":" + returnAge1 + ":" + returnAge2;
+            return returnDate1 + ":" + returnDate2 + ":" + returnGender + ":" + returnAge1 + ":" + returnAge2 + ":" + returnGlasses + ":" + returnBeard + ":" + returnMoustache;
         }
 
         public string getHtmlSourceCode(string url)
