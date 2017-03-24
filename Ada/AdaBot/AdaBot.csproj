@@ -176,9 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="AppSettings.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="AppSettings.config" />
     <None Include="Properties\PublishProfiles\AdaDevBot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaDevBot - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">

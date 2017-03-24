@@ -182,8 +182,6 @@ namespace AdaW10.ViewModels
                     await VoiceInterface.ListeningHelloAda();
                 }
             });
-
-
         }
 
         public async Task<PersonDto[]> MakeRecognition()
