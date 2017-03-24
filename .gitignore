@@ -252,5 +252,4 @@ paket-files/
 *.sln.iml
 
 Ada/AdaWebApp/ConnectionString.config
-Ada/AdaW10/AppConfig.cs
 Ada/AdaBot/AppSettings.config
