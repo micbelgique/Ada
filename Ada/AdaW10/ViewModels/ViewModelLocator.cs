@@ -10,7 +10,6 @@ namespace AdaW10.ViewModels
     public class ViewModelLocator
     {
         public const string MainPage = "Main";
-        public const string SwitchPage = "Switch";
         public const string MenuPage = "Menu";
         public const string EventPage = "Event";
 
@@ -38,7 +37,6 @@ namespace AdaW10.ViewModels
             SimpleIoc.Default.Register<EventsLoaderService>();
 
             //View Models
-            SimpleIoc.Default.Register<SwitchViewModel>();
             SimpleIoc.Default.Register<EventViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<MenuViewModel>();
@@ -47,7 +45,6 @@ namespace AdaW10.ViewModels
         private INavigationService CreateNavigationService()
         {
             var navigationService = new Views.NavigationService();
-            navigationService.Configure(SwitchPage, typeof(Views.SwitchPage));
             navigationService.Configure(MainPage, typeof(Views.MainPage));
             navigationService.Configure(MenuPage, typeof (Views.MenuPage));
             navigationService.Configure(EventPage, typeof(Views.EventPage));

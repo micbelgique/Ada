@@ -1,0 +1,88 @@
+{
+  "luis_schema_version": "2.0.0",
+  "versionId": "0.1",
+  "name": "Ada",
+  "desc": "",
+  "culture": "fr-fr",
+  "intents": [
+    {
+      "name": "BestFriend"
+    },
+    {
+      "name": "GetAverageVisits"
+    },
+    {
+      "name": "GetHelp"
+    },
+    {
+      "name": "GetLastVisitPerson"
+    },
+    {
+      "name": "GetStatsVisits"
+    },
+    {
+      "name": "GetVisitsPersonByFirstname"
+    },
+    {
+      "name": "GetVisitsToday"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Possibilities"
+    },
+    {
+      "name": "What'sUp"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Emotion"
+    },
+    {
+      "name": "FacialHair"
+    },
+    {
+      "name": "Firstname"
+    },
+    {
+      "name": "Gender"
+    },
+    {
+      "name": "Glasses"
+    },
+    {
+      "name": "Number"
+    }
+  ],
+  "composites": [
+    {
+      "name": "IntervalAge",
+      "children": [
+        "Number"
+      ]
+    },
+    {
+      "name": "IntervalDate",
+      "children": [
+        "datetime"
+      ]
+    },
+    {
+      "name": "SingleAge",
+      "children": [
+        "Number"
+      ]
+    }
+  ],
+  "closedLists": [],
+  "bing_entities": [
+    "datetime"
+  ],
+  "actions": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+  ]
+}

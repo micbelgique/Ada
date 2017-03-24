@@ -31,7 +31,7 @@ namespace AdaW10.Models.VoiceInterface
         {
             if (person == null) return;
 
-            if (person.FirstName == null) await TtsService.SayAsync("Bonjour, il semblerait que je ne vous connais pas.");
+            if (person.FirstName == null) await TtsService.SayAsync("Bonjour, il semblerait que je ne te connaisse pas.");
             else await TtsService.SayAsync($"Bonjour {person.FirstName}");
         }
 
@@ -51,30 +51,30 @@ namespace AdaW10.Models.VoiceInterface
 
             var genderSentence = person.Gender == GenderValues.Male ? "un homme" : "une femme";
 
-            await TtsService.SayAsync($"Il semblerait que vous soyer {genderSentence} de {person.Age} ans");
+            await TtsService.SayAsync($"Il semblerait que tu soies {genderSentence} de {person.Age} ans");
         }
 
         public async Task SayGoodBye()
         {
-            await TtsService.SayAsync("Passez une bonne journée !");
+            await TtsService.SayAsync("Passe une bonne journée !");
         }
 
         #endregion
 
-        #region Linstening section
+        #region Listening section
 
         private SttService _continuousRecognitionSession;
 
         public async Task PrepareListening()
         {
             if (_continuousRecognitionSession != null){
-                await StopLinstening(); 
+                await StopListening(); 
             }
 
             _continuousRecognitionSession = new SttService();
         }
 
-        public async Task StopLinstening()
+        public async Task StopListening()
         {
             if (_continuousRecognitionSession != null)
             {

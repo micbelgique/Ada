@@ -44,7 +44,18 @@ namespace AdaWebApp.Models.Entities
                 ID = visit.Id,
                 Date = visit.Date,
                 NbPasses = visit.NbPasses,
-                //ProfilePicture = visit.ProfilePictures.Last().ToDto(),
+                ProfilePicture = tmp.Last().ToDto(),
+                PersonVisit = visit.Person.ToDto()
+            };
+        }
+        public static VisitDto ToDtoListPicture(this Visit visit)
+        {
+            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
+            return new VisitDto()
+            {
+                ID = visit.Id,
+                Date = visit.Date,
+                NbPasses = visit.NbPasses,
                 ProfilePicture = tmp.ToDto(),
                 PersonVisit = visit.Person.ToDto()
             };
@@ -62,6 +73,21 @@ namespace AdaWebApp.Models.Entities
             };
         }
 
+        public static List<ProfilePictureDto> ToDto(this ProfilePicture picture)
+        {
+            List<ProfilePictureDto> listReturn = new List<ProfilePictureDto>();
+
+            listReturn.Add(new ProfilePictureDto()
+            {
+                Uri = picture.Uri,
+                Glasses = picture.Glasses,
+                Beard = picture.Beard,
+                Mustache = picture.Moustache,
+                EmotionScore = null
+            });
+            return listReturn;
+        }
+
         public static List<ProfilePictureDto> ToDto(this List<ProfilePicture> picture)
         {
             List<ProfilePictureDto> listReturn = new List<ProfilePictureDto>();
@@ -72,6 +98,9 @@ namespace AdaWebApp.Models.Entities
                     listReturn.Add(new ProfilePictureDto()
                     {
                         Uri = picture[i].Uri,
+                        Glasses = picture[i].Glasses,
+                        Beard = picture[i].Beard,
+                        Mustache = picture[i].Moustache,
                         EmotionScore = null
                     });
                 }
@@ -80,6 +109,9 @@ namespace AdaWebApp.Models.Entities
                     listReturn.Add(new ProfilePictureDto()
                     {
                         Uri = picture[i].Uri,
+                        Glasses = picture[i].Glasses,
+                        Beard = picture[i].Beard,
+                        Mustache = picture[i].Moustache,
                         EmotionScore = picture[i].EmotionScores.ToDto()
                     });
                 }

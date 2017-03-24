@@ -1,0 +1,72 @@
+{
+  "luis_schema_version": "2.0.0",
+  "versionId": "0.1",
+  "name": "MIC-Common",
+  "desc": "",
+  "culture": "fr-fr",
+  "intents": [
+    {
+      "name": "Age"
+    },
+    {
+      "name": "Compliment"
+    },
+    {
+      "name": "Farewell"
+    },
+    {
+      "name": "Feelings"
+    },
+    {
+      "name": "Greetings"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "Home"
+    },
+    {
+      "name": "InfoRequest"
+    },
+    {
+      "name": "Insult"
+    },
+    {
+      "name": "JokeRequest"
+    },
+    {
+      "name": "LifeSignification"
+    },
+    {
+      "name": "Name"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Phone"
+    },
+    {
+      "name": "Reality"
+    },
+    {
+      "name": "Sex"
+    },
+    {
+      "name": "Thanks"
+    },
+    {
+      "name": "Time"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [],
+  "actions": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+  ]
+}

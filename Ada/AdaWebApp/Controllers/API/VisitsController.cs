@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AdaWebApp.Models.DAL;
 using AdaWebApp.Models.Entities;
-using AdaWebApp.Models.DAL.Repositories;
 using Common.Logging;
 using System.Threading.Tasks;
 using AdaSDK.Models;
@@ -54,6 +49,19 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("BestFriend")]
+        // GET: get visits of the day
+        public VisitDto BestFriend()
+        {
+            var visits = _unit.VisitsRepository.GetBestFriend();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.ToDto();
+        }
+
+        [HttpGet]
         [Route("VisitsByDate/{date1}/{date2}")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsByDate(DateTime date1, DateTime? date2)
@@ -64,6 +72,19 @@ namespace AdaWebApp.Controllers.API
                 return null;
             }
             return visits.Select(v => v.ToDto()).ToList();
+        }
+
+        [HttpGet]
+        [Route("VisitsForStats/{date1}/{date2}/{gender}/{age1}/{age2}/{glasses}/{beard}/{mustache}")]
+        // GET: get visits of the day
+        public List<VisitDto> GetVisitsForStats(DateTime? date1, DateTime? date2, GenderValues? gender, int? age1, int? age2, bool glasses, bool beard, bool mustache)
+        {
+            var visits = _unit.VisitsRepository.GetVisitsForStats(date1, date2, gender, age1, age2, glasses, beard, mustache);
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.Select(v => v.ToDtoListPicture()).ToList();
         }
 
         [HttpGet]

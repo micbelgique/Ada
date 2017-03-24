@@ -22,6 +22,14 @@ namespace AdaWebApp.Models.Entities
 
         public FaceRectangle FaceRectangle { get; set; }
 
+        public double Moustache { get; set; }
+
+        public double Beard { get; set; }
+
+        public double Sideburns { get; set; }
+
+        public Glasses Glasses { get; set; }
+
         // Foreign key
         public virtual EmotionScores EmotionScores { get; set; }
         
