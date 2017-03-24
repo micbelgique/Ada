@@ -135,7 +135,7 @@ You need to register your bot on the bot framework website : https://dev.botfram
  	<add key="WebAppUrl" value="" /> <!--Use for the picture--> 
    
  	<add key="FaceBook" value="" /> <!--Link to the Facebook page-->
- 	<add key="YoutubC" value="" /> <!--Link to the youtube page-->  
+ 	<add key="Youtube" value="" /> <!--Link to the youtube page-->  
  	<add key="Meetup" value="" /> <!--Link to the meetup page-->
  	<add key="Linkedin" value="" /> <!--Link to the linkedin page-->
  	<add key="Twitter" value/> <!--Link to the twitter page-->
