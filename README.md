@@ -55,32 +55,9 @@ Publish.
 
 ### Application UWP
 
-To use the UWP application you need to add a class named : AppConfig.cs directly in the UWP project.
-
+To use the UWP application you need to modify the AppConfig.cs class.
 The class is used for the URL and the login to the web application.
 
-The class must be like : 
-
-```csharp
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdaW10
-{
-    public static class AppConfig
-    {
-#if DEBUG
-        public static readonly string WebUri = "";      // WebApp URL for Test
-#else
-        public static readonly string WebUri = "";      // WebApp URL fro Prod
-#endif
-        public static readonly string UserName = "";    // Use to get the API token
-        public static readonly string Password = "";
-    }
-}
-```
 
 ### Bot
 
@@ -109,62 +86,7 @@ You need to register your bot on the bot framework website : https://dev.botfram
 
 # Step 4
 
-After that you need to add a file a file AppSettings.config 
-
-```
-<?xml version="1.0"?>
-
-<appSettings>
-  
-	<!-- Keys for BotFramework -->
-  
-	<add key="BotId" value="" />
-  
-	<add key="MicrosoftAppId" value="" />
-  
-	<add key="MicrosoftAppPassword" value="" />
-
- 
-
-	<!-- Keys for LUIS Ada-->
-  
-	<add key="ModelId" value=""/>
-  
-	<add key="SubscriptionKey" value=""/>
-
-  
-
-	<!-- Keys for LUIS trivial-->
-  
-	<add key="ModelIdTrivial" value=""/>
-  
-	<add key="SubscriptionKeyTrivial" value=""/>
-
-  
-
-	<!-- URI for bot -->
-  
-	<add key="WebAppUrl" value="" /> <!--Use for the picture-->
- 
-  
-	<add key="FaceBook" value="" /> <!--Link to the Facebook page-->
-	<add key="YoutubC" value="" /> <!--Link to the youtube page-->  
-	<add key="Meetup" value="" /> <!--Link to the meetup page-->
-	<add key="Linkedin" value="" /> <!--Link to the linkedin page-->
-	<add key="Twitter" value/> <!--Link to the twitter page-->
-	<add key="Site" value="" /> <!--Link to the website-->  
-	
-	<add key="IMGYoutube" value="" /> <!--Link to an image for youtube-->  
-	<add key="IMGMIC" value="" /> <!--Link to an image for the society--> 
-	<add key="IMGFacebook" value="" /> <!--Link to an image for Facebook-->
-	<add key="IMGMeetup" value="" /> <!--Link to an image for the meetup-->
-	<add key="IMGLinkedin" value="" /> <!--Link to an image for linkedin-->
-	<add key="IMGTwitter" value/> <!--Link to to an image for twitter-->
-	<add key="IMGMore" value=""/> <!--Link to an image for the button more-->
-
-</appSettings>
-```
-
+After that you need to add the different values in the AppSettings.config file.
 
 [![](/doc/assets/AddFileConfig.PNG)]()
 [![](/doc/assets/FileConfig.PNG)]()
