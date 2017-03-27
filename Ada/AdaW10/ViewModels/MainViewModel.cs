@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -8,7 +7,6 @@ using Windows.Media.Core;
 using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using AdaSDK;
@@ -18,11 +16,17 @@ using AdaW10.Models;
 using AdaW10.Models.VoiceInterface;
 using AdaW10.Models.VoiceInterface.TextToSpeech;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Bot.Connector.DirectLine;
+using System.Collections.Generic;
+using System.Net;
 
 namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private DirectLineClient _client;
+        private Conversation _conversation;
+
         public MainViewModel()
         {
             DispatcherHelper.Initialize();
@@ -76,6 +80,10 @@ namespace AdaW10.ViewModels
                 }
             });
 
+            _client = new DirectLineClient(AppConfig.DirectLine);
+            _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
+            new Task(async () => await ReadBotMessagesAsync(_client, _conversation.ConversationId)).Start();
+
             // Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
             await CameraLoadExecute();
@@ -118,70 +126,112 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
+
             LogHelper.Log("Je suis à toi dans un instant...");
 
-            await RunTaskAsync(async () =>
+            await VoiceInterface.StopListening();
+            var str = await VoiceInterface.Listen();
+            LogHelper.Log(str);
+
+            //await RunTaskAsync(async () =>
+            //{
+            //    // Arrêt de l'écoute continue, sinon le programme plante lors de l'écoute du nom ou de la raison
+            //    await WebcamService.StopFaceDetectionAsync();
+            //    await VoiceInterface.StopListening();
+
+            //    var person = (await MakeRecognition())?.FirstOrDefault();
+
+            //    if (person != null)
+            //    {
+            //        bool update = false;
+            //        PersonUpdateDto updateDto = new PersonUpdateDto
+            //        {
+            //            PersonId = person.PersonId,
+            //            RecognitionId = person.RecognitionId
+            //        };
+
+            //        await VoiceInterface.SayHelloAsync(person);
+
+            //        // Update person's name
+            //        if (person.FirstName == null)
+            //        {
+            //            string name = await VoiceInterface.AskNameAsync();
+
+            //            if (name == null)
+            //            {
+            //                return;
+            //            }
+
+            //            updateDto.FirstName = name;
+            //            person.FirstName = name;
+            //            update = true;
+            //        }
+
+            //        // Update person's visit
+            //        if (person.ReasonOfVisit == null)
+            //        {
+            //            string reason = await VoiceInterface.AskReason();
+            //            updateDto.ReasonOfVisit = reason;
+            //            person.ReasonOfVisit = reason;
+            //            update = true;
+            //        }
+
+            //        if (update)
+            //        {
+            //            await DataService.UpdatePersonInformation(updateDto);
+            //        }
+
+            //        if (person.FirstName != null && person.ReasonOfVisit != null)
+            //        {
+            //            await GoToMenuPage(person);
+            //        }
+            //        else
+            //        {
+            //            await VoiceInterface.ListeningHelloAda();
+            //        }
+            //    }
+            //    else
+            //    {
+            //        await VoiceInterface.ListeningHelloAda();
+            //    }
+            //});
+
+            var activity = new Activity
             {
-                // Arrêt de l'écoute continue, sinon le programme plante lors de l'écoute du nom ou de la raison
-                await WebcamService.StopFaceDetectionAsync();
-                await VoiceInterface.StopListening();
+                From = new ChannelAccount("Jean"),
+                Text = str,
+                Type = ActivityTypes.Message
+            };
+            await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+        }
 
-                var person = (await MakeRecognition())?.FirstOrDefault();
+        private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
+        {
+            string watermark = null;
 
-                if (person != null)
+            while (true)
+            {
+                var activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
+                watermark = activitySet?.Watermark;
+
+                var activities = from x in activitySet.Activities
+                                 where x.From.Id != "Jean"
+                                 select x;
+                var enumerable = activities as IList<Activity> ?? activities.ToList();
+                foreach (Activity activity in enumerable)
                 {
-                    bool update = false;
-                    PersonUpdateDto updateDto = new PersonUpdateDto
-                    {
-                        PersonId = person.PersonId,
-                        RecognitionId = person.RecognitionId
-                    };
-
-                    await VoiceInterface.SayHelloAsync(person);
-
-                    // Update person's name
-                    if (person.FirstName == null)
-                    {
-                        string name = await VoiceInterface.AskNameAsync();
-
-                        if (name == null)
-                        {
-                            return;
-                        }
-
-                        updateDto.FirstName = name;
-                        person.FirstName = name;
-                        update = true;
-                    }
-
-                    // Update person's visit
-                    if (person.ReasonOfVisit == null)
-                    {
-                        string reason = await VoiceInterface.AskReason();
-                        updateDto.ReasonOfVisit = reason;
-                        person.ReasonOfVisit = reason;
-                        update = true;
-                    }
-
-                    if (update)
-                    {
-                        await DataService.UpdatePersonInformation(updateDto);
-                    }
-
-                    if (person.FirstName != null && person.ReasonOfVisit != null)
-                    {
-                        await GoToMenuPage(person);
-                    }
-                    else
-                    {
-                        await VoiceInterface.ListeningHelloAda();
-                    }
+                    var text = WebUtility.HtmlDecode(activity.Text);
+                    LogHelper.Log(text);
+                    await TtsService.SayAsync(text);
                 }
-                else
+
+                if (enumerable.Count > 0)
                 {
-                    await VoiceInterface.ListeningHelloAda();
+                    await SolicitExecute();
                 }
-            });
+
+                await Task.Delay(TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
+            }
         }
 
         public async Task<PersonDto[]> MakeRecognition()

@@ -123,6 +123,21 @@ namespace AdaW10.Models.VoiceInterface
 
         #region Instant recognitions section 
 
+        public async Task<string> Listen()
+        {
+            using (var sttService = new SttService())
+            {
+                await TtsService.SayAsync(SpeechDictionnary.GetReasonSentence());
+
+                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForOtherWords);
+
+                var result = await sttService.RecognizeAsync();
+
+                var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
+                return firedConstraint.Commands.First();
+            }
+        }
+
         public async Task<string> AskReason()
         {
             using (var sttService = new SttService())

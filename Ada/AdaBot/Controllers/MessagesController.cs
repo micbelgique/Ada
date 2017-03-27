@@ -15,6 +15,7 @@ using AdaSDK;
 using AdaSDK.Models;
 using Newtonsoft.Json.Linq;
 
+
 namespace AdaBot
 { 
     [BotAuthentication]
