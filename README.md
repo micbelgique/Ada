@@ -53,6 +53,8 @@ Right clic on project → publish
 In the wizard, select the azure resource, select database and check pre-compile and migration checkbox.
 Publish.
 
+**Warning : Sometime the seed method doesn't run and you need to do it manually. You just need to make a migration for that.**
+
 ### Application UWP
 
 To use the UWP application you need to add a class named : AppConfig.cs directly in the UWP project.
@@ -161,4 +163,59 @@ You need to register your bot on the bot framework website : https://dev.botfram
 
 If you want to use the bot on facebook messenger or an other application allow by the bot framework. You just need to login to
 the bot framework's website and follow the different step to add the bot in the application.
+
 [![](/doc/assets/Application.PNG)]()
+
+## Persistent menu on Facebook
+
+On Facebook you can have a persistent menu and a button start for your bot.
+[![](/doc/assets/Menu.png)]()
+
+### First : the start button
+
+For this button you need to send a post request to Facebook (you can do it with postman).
+
+ ```
+ https://graph.facebook.com/v2.6/YOUR_APP_ID/thread_settings?access_token=PAGE_ACCESS_TOKEN
+ 
+ 
+ {
+  "setting_type":"call_to_actions",
+  "thread_state":"new_thread",
+  "call_to_actions":[
+    {
+      "payload":"USER_DEFINED_PAYLOAD"
+    }
+  ]
+}
+ ```
+ [![](/doc/assets/StartButtonPostman.PNG)]()
+ 
+ ### Second : the start button
+ 
+ It's the same but the body of the request is different.
+ 
+  ```
+ https://graph.facebook.com/v2.6/YOUR_APP_ID/thread_settings?access_token=PAGE_ACCESS_TOKEN
+  
+ {
+     "setting_type" : "call_to_actions",
+    "thread_state" : "existing_thread",
+   "locale":"default",
+   "composer_input_disabled":false,
+   "call_to_actions":[
+      {
+        "title":"Your title",
+        "type":"postback",
+        "payload":"USER_DEFINED_PAYLOAD"
+      },
+       {
+        "title":"Your title",
+        "type":"postback",
+        "payload":"USER_DEFINED_PAYLOAD"
+      }
+    ]
+  }
+ ```
+ 
+  [![](/doc/assets/PersistentMenuPostman.PNG)]()
