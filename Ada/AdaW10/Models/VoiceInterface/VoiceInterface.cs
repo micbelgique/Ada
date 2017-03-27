@@ -129,10 +129,17 @@ namespace AdaW10.Models.VoiceInterface
             {
                 await TtsService.SayAsync("Bonjour");
 
+               // await sttService.SpeechRecognizer();
+
                 var result = await sttService.RecognizeAsync();
 
-                var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
-                return firedConstraint.Commands.First();
+                if (result.Confidence != SpeechRecognitionConfidence.Rejected)
+                {
+                    var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
+                    return firedConstraint.Commands.First();
+                }
+
+                return "Autre";
             }
         }
 
