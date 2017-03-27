@@ -7,8 +7,8 @@ using Microsoft.Bot.Connector;
 using System;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
-using Windows.Media.Protection.PlayReady;
 using AdaSDK;
+using System.Configuration;
 
 namespace AdaBot.Dialogs
 {
@@ -63,7 +63,7 @@ namespace AdaBot.Dialogs
         public async Task Greetings(IDialogContext context, LuisResult result)
         {
             string nameUser = context.Activity.From.Name;
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             Activity replyToConversation;
 
             string[] firstNameUser = nameUser.Split(' ');

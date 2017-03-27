@@ -28,7 +28,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = context.Activity.From.Id;
 
             var accessAllow = await client.GetAuthorizationFacebook(idUser);
@@ -99,7 +99,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("BestFriend")]
         public async Task BestFriend(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             VisitDto bestFriend = await client.GetBestFriend();
             Activity replyToConversation;
             if (bestFriend == null)
@@ -138,7 +138,7 @@ namespace AdaBot.Dialogs
             //Message d'attente
             await context.PostAsync($"{Dialog.Waiting.Spintax()}");
 
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             List<VisitDto> visits = await client.GetVisitsToday();
 
             Activity replyToConversation;
@@ -275,7 +275,7 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
             string firstname = result.Entities[0].Entity;
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
             Activity replyToConversation;
@@ -359,7 +359,7 @@ namespace AdaBot.Dialogs
             //Message d'attente
             await context.PostAsync($"{Dialog.Waiting.Spintax()}");
 
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             Activity replyToConversation;
             CreateDialog customDialog = new CreateDialog();
             TreatmentDialog treatment = new TreatmentDialog();
@@ -743,7 +743,7 @@ namespace AdaBot.Dialogs
             await context.PostAsync($"{Dialog.Waiting.Spintax()}");
 
             Activity replyToConversation = null;
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             int nbVisit = 10;
 
@@ -885,7 +885,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetAverageVisits")]
         public async Task GetAverageVisits(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             GenderValues? gender;
             int? age1 = null;

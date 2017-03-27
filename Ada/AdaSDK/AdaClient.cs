@@ -12,6 +12,7 @@ namespace AdaSDK
     public class AdaClient
     {
         public HttpClient HttpClient { get; set; }
+        public string WebAppUrl { get; set; }
 
         public AdaClient()
         {
@@ -23,7 +24,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/CheckIdFacebook/"+idfacebook));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/UserIndentified/CheckIdFacebook/" + idfacebook));
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
@@ -38,7 +39,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/GetAuthorization/" + idfacebook));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/UserIndentified/GetAuthorization/" + idfacebook));
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
@@ -61,7 +62,7 @@ namespace AdaSDK
 
                 var client = new HttpClient();
 
-                var result = await HttpClient.PostAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/AddUserIndentified"), byteContent);
+                var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "Api/UserIndentified/AddUserIndentified"), byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                return result.EnsureSuccessStatusCode();
@@ -77,7 +78,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsToday"));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitsToday"));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -93,7 +94,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/BestFriend"));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/BestFriend"));
                 var content = await response.Content.ReadAsStringAsync();
                 var visit = JsonConvert.DeserializeObject<VisitDto>(content);
                 return visit;
@@ -175,7 +176,7 @@ namespace AdaSDK
                     a2 = age2.ToString();
                 }
 
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2 + "/" + glasses + "/" + beard + "/" + mustache));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2 + "/" + glasses + "/" + beard + "/" + mustache));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -191,7 +192,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/LastVisitByFirstname/" + firstname));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/LastVisitByFirstname/" + firstname));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -207,7 +208,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitPersonById/" + id + "/" + nbVisit));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitPersonById/" + id + "/" + nbVisit));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -223,7 +224,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/GetNbVisits/" + gender + "/" + age1 + "/" + age2));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/GetNbVisits/" + gender + "/" + age1 + "/" + age2));
                 var content = await response.Content.ReadAsStringAsync();
                 var nbVisitsAge = JsonConvert.DeserializeObject<int>(content);
                 return nbVisitsAge;

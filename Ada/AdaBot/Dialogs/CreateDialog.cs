@@ -40,6 +40,14 @@ namespace AdaBot.Dialogs
             pictures.Add(ConfigurationManager.AppSettings["IMGAboutMIC"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGBestFriend"]);
 
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                }
+            }
+
             List<string> btnAction = new List<string>();
             btnAction.Add("Liste visite jour");
             btnAction.Add("Combien de personne viennent en moyenne au MIC?");
@@ -105,6 +113,14 @@ namespace AdaBot.Dialogs
             pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
 
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                }
+            }
+
             List<string> btnAction = new List<string>();
             btnAction.Add("On fait un truc?");
             btnAction.Add("tu as des infos?");
@@ -160,6 +176,14 @@ namespace AdaBot.Dialogs
             pictures.Add(ConfigurationManager.AppSettings["IMGTwitter"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGLinkedin"]);
             pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                }
+            }
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
@@ -255,7 +279,14 @@ namespace AdaBot.Dialogs
                     List<CardImage> cardImages = new List<CardImage>();
                     if (possiblePictures.Count == 0)
                     {
-                        cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                        if ($"{ConfigurationManager.AppSettings["IMGMIC"]}" == "")
+                        {
+                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg"));
+                        }
+                        else
+                        {
+                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                        }
                     }
                     else
                     {
@@ -296,23 +327,23 @@ namespace AdaBot.Dialogs
             string message;
 
             var diffDate = DateTime.Now - dateVisit;
-            if(diffDate.TotalMinutes < 1)
+            if (diffDate.TotalMinutes < 1)
             {
                 message = "Je vois " + firstname + " en ce moment. :)";
             }
-            else if(diffDate.TotalMinutes < 60)
+            else if (diffDate.TotalMinutes < 60)
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Minutes) + " minute(s)";
             }
-            else if(diffDate.TotalHours < 24)
-            { 
+            else if (diffDate.TotalHours < 24)
+            {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Hours) + " heure(s)";
             }
             else if (diffDate.TotalDays < 30)
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Days) + " jour(s)";
             }
-            else if(diffDate.TotalDays < 366) 
+            else if (diffDate.TotalDays < 366)
             {
                 int nbMonth = Convert.ToInt32((diffDate.TotalDays) / 30);
 
@@ -329,11 +360,11 @@ namespace AdaBot.Dialogs
             return message;
         }
         public string getEmotion(EmotionDto emotion)
-        { 
+        {
             if (emotion != null)
             {
                 string result = "Neutral";
-                double value = 0.75 ;
+                double value = 0.75;
 
                 if (emotion.Sadness > value)
                 {
