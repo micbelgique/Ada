@@ -28,7 +28,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = context.Activity.From.Id;
 
             var accessAllow = await client.GetAuthorizationFacebook(idUser);

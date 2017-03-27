@@ -359,6 +359,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\ADA Pleure Shadow.png" />
     <Content Include="Images\fork.png" />
     <Content Include="Images\SITE MIC v4.jpg" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />

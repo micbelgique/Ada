@@ -11,7 +11,7 @@ using AdaSDK;
 using System.Net.Http;
 using System.Configuration;
 using AdaSDK.Models;
-using AdaBot.BotFrameworkHelpers; 
+using AdaBot.BotFrameworkHelpers;
 using System.Threading;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
@@ -91,7 +91,7 @@ namespace AdaBot.Dialogs
 
             Activity replyToConversation = createCarousel.CarouselPossibilities(context);
 
-           
+
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -100,34 +100,47 @@ namespace AdaBot.Dialogs
         public async Task BestFriend(IDialogContext context, LuisResult result)
         {
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-            VisitDto bestFriend = await client.GetBestFriend();
+            List<VisitDto> bestFriends = await client.GetBestFriend();
             Activity replyToConversation;
-            if (bestFriend.PersonVisit == null)
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"Ca fait un moment que plus personne n'est venu me voir :'(");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-            }
-            else
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Best.Spintax()} " + bestFriend.PersonVisit.FirstName + "!");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-                replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
 
-                List<CardImage> cardImages = new List<CardImage>();
-                cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(bestFriend.ProfilePicture.Last().Uri)}"));
+            replyToConversation = ((Activity)context.Activity).CreateReply("Voici mes meilleurs amis! :D");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+            HeroCard plCard = new HeroCard();
 
-                HeroCard plCard = new HeroCard()
+            for (int i=0; i<3; i++)
+            {
+                if (bestFriends[i].PersonVisit != null)
                 {
-                    Title = bestFriend.PersonVisit.FirstName,
-                    Images = cardImages
-                };
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(bestFriends[i].ProfilePicture.Last().Uri)}"));
+
+                    plCard = new HeroCard()
+                    {
+                        Title = bestFriends[i].PersonVisit.FirstName,
+                        Subtitle = $"{Dialog.Best.Spintax()} " + bestFriends[i].PersonVisit.FirstName + "!",
+                        Images = cardImages
+                    };
+                }
+                else
+                {
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }Images/ADA Pleure Shadow.png"));
+
+                    plCard = new HeroCard()
+                    {
+                        Title = "",
+                        Subtitle = "On ne fait pas beaucoup attention à moi de ce côté là pour le moment...",
+                        Images = cardImages
+                    };
+                }
 
                 Attachment plAttachment = plCard.ToAttachment();
                 replyToConversation.Attachments.Add(plAttachment);
             }
+
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -153,7 +166,7 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.See.Spintax()} " + visits.Count + $" personnes aujourd'hui! :D");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message"; 
+                replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
 
@@ -226,7 +239,7 @@ namespace AdaBot.Dialogs
                         replyToConversation.Attachments.Add(plAttachment);
                         compteurCarrousel += 1;
                     }
-                    else if(result.Query == "GetVisitsTodayMoreResult")
+                    else if (result.Query == "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
@@ -396,7 +409,7 @@ namespace AdaBot.Dialogs
             {
                 if (splitResult[1] != "null")
                 {
-                   date1 = Convert.ToDateTime(splitResult[1]);
+                    date1 = Convert.ToDateTime(splitResult[1]);
 
                     dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
 
@@ -412,7 +425,7 @@ namespace AdaBot.Dialogs
                     {
                         gender = GenderValues.Female;
                         genderReturn = "femme(s)";
-                    } 
+                    }
                     else if (splitResult[3] == Convert.ToString(GenderValues.Male))
                     {
                         gender = GenderValues.Male;
@@ -430,7 +443,7 @@ namespace AdaBot.Dialogs
                         ageReturn = "entre " + age1 + " et " + age2 + " ans";
                     }
                 }
-                if(splitResult[6] != "null")
+                if (splitResult[6] != "null")
                 {
                     glasses = true;
                     glassesReturn = " avec des lunettes";
