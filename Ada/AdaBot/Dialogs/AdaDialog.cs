@@ -102,7 +102,7 @@ namespace AdaBot.Dialogs
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             VisitDto bestFriend = await client.GetBestFriend();
             Activity replyToConversation;
-            if (bestFriend == null)
+            if (bestFriend.PersonVisit == null)
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"Ca fait un moment que plus personne n'est venu me voir :'(");
                 replyToConversation.Recipient = context.Activity.From;
