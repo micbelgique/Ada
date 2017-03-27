@@ -36,12 +36,12 @@ namespace AdaWebApp.Models.DAL.Repositories
         public Visit GetBestFriend()
         {
             DateTime date2 = DateTime.Today;
-            DateTime date1 = date2.AddDays(-1);
-            int maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            DateTime date1 = date2.AddMinutes(-10);
+            int maxPasses = Table.Include(v => v.Person).Where(v => (v.Date) >= (date1)
+            && (v.Date) <= (date2)
             && v.Person.FirstName != null).Max(v => v.NbPasses);
-            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            return Table.Include(v => v.Person).Where(v => (v.Date) >= (date1)
+            && (v.Date) <= (date2)
             && v.Person.FirstName != null).First(v => v.NbPasses == maxPasses);
         }
 
