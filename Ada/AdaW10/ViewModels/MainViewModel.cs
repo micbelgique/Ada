@@ -31,8 +31,8 @@ namespace AdaW10.ViewModels
         {
             DispatcherHelper.Initialize();
 
-            WebcamService = ServiceLocator.Current.GetInstance<WebcamService>(); 
-            VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();            
+            WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
+            VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
             //    SelectModeCommand = new RelayCommand<ModeValues>(OnSelectMode);
         }
 
@@ -41,7 +41,7 @@ namespace AdaW10.ViewModels
         // Services
         public WebcamService WebcamService { get; }
         public VoiceInterface VoiceInterface { get; }
-        
+
         // Properties
         private string _logMessage;
         public string LogMessage
@@ -55,18 +55,18 @@ namespace AdaW10.ViewModels
         public CaptureElement CaptureElement
         {
             get { return _captureElement; }
-            set { Set(() => CaptureElement, ref _captureElement, value);  }
+            set { Set(() => CaptureElement, ref _captureElement, value); }
         }
-        
+
         #endregion
 
         #region Events
-        
+
         protected override async Task OnLoadedAsync()
         {
             // Registers to messenger for on screen log messages
             Messenger.Default.Register<LogMessage>(this, async e => await DispatcherHelper.RunAsync(() => LogMessage += e.Message));
-            
+
             // Begins to listening "hello ada"
             await VoiceInterface.ListeningHelloAda();
 
@@ -117,10 +117,10 @@ namespace AdaW10.ViewModels
             await WebcamService.InitializeCameraAsync();
             WebcamService.CaptureElement = CaptureElement;
             await WebcamService.StartCameraPreviewAsync();
-            
+
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
-               WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;        
+                WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
 
@@ -128,10 +128,6 @@ namespace AdaW10.ViewModels
         {
 
             LogHelper.Log("Je suis à toi dans un instant...");
-
-            await VoiceInterface.StopListening();
-            var str = await VoiceInterface.Listen();
-            LogHelper.Log(str);
 
             //await RunTaskAsync(async () =>
             //{
@@ -150,6 +146,7 @@ namespace AdaW10.ViewModels
             //            RecognitionId = person.RecognitionId
             //        };
 
+
             //        await VoiceInterface.SayHelloAsync(person);
 
             //        // Update person's name
@@ -167,14 +164,14 @@ namespace AdaW10.ViewModels
             //            update = true;
             //        }
 
-            //        // Update person's visit
-            //        if (person.ReasonOfVisit == null)
-            //        {
-            //            string reason = await VoiceInterface.AskReason();
-            //            updateDto.ReasonOfVisit = reason;
-            //            person.ReasonOfVisit = reason;
-            //            update = true;
-            //        }
+            //        //// Update person's visit
+            //        //if (person.ReasonOfVisit == null)
+            //        //{
+            //        //    string reason = await VoiceInterface.AskReason();
+            //        //    updateDto.ReasonOfVisit = reason;
+            //        //    person.ReasonOfVisit = reason;
+            //        //    update = true;
+            //        //}
 
             //        if (update)
             //        {
@@ -194,7 +191,11 @@ namespace AdaW10.ViewModels
             //    {
             //        await VoiceInterface.ListeningHelloAda();
             //    }
+
             //});
+            await VoiceInterface.StopListening();
+            var str = await VoiceInterface.Listen();
+            LogHelper.Log(str);
 
             var activity = new Activity
             {
@@ -244,7 +245,7 @@ namespace AdaW10.ViewModels
 
                 try
                 {
-                //    LogHelper.Log("Je vois quelqu'un :-) Qui est-ce ?");
+                    //    LogHelper.Log("Je vois quelqu'un :-) Qui est-ce ?");
                     PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     // Logs results on screen
                     if (persons != null) LogHelper.LogPersons(persons);
@@ -272,7 +273,7 @@ namespace AdaW10.ViewModels
 
             NavigationService.NavigateTo(ViewModelLocator.MenuPage, person);
         }
-        
-        #endregion       
+
+        #endregion
     }
 }

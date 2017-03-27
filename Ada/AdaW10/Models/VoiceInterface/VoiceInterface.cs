@@ -127,9 +127,8 @@ namespace AdaW10.Models.VoiceInterface
         {
             using (var sttService = new SttService())
             {
-                await TtsService.SayAsync("Bonjour");
-
-               // await sttService.SpeechRecognizer();
+                //await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForEvents);
+                //await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForOtherWords);
 
                 var result = await sttService.RecognizeAsync();
 
