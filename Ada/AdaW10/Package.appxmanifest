@@ -4,8 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="f58a7731-f827-4905-90a3-6ff0a6ffc8b4" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>AdaW10</DisplayName>
-    <PublisherDisplayName>
-    </PublisherDisplayName>
+    <PublisherDisplayName>Louis</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
