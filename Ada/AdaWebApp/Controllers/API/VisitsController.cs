@@ -49,16 +49,29 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("VisitsNow")]
+        // GET: get visits of the day
+        public List<VisitDto> GetVisitsNow()
+        {
+            var visits = _unit.VisitsRepository.GetVisitsNow();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.Select(v => v.ToDto()).ToList();
+        }
+
+        [HttpGet]
         [Route("BestFriend")]
         // GET: get visits of the day
-        public VisitDto BestFriend()
+        public List<VisitDto> BestFriend()
         {
             var visits = _unit.VisitsRepository.GetBestFriend();
             if (visits == null)
             {
                 return null;
             }
-            return visits.ToDto();
+            return visits.Select(v => v.ToDto()).ToList();
         }
 
         [HttpGet]

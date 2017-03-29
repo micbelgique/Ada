@@ -38,15 +38,22 @@ namespace AdaWebApp.Models.Entities
 
         public static VisitDto ToDto(this Visit visit)
         {
-            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
-            return new VisitDto()
+            if (visit == null)
             {
-                ID = visit.Id,
-                Date = visit.Date,
-                NbPasses = visit.NbPasses,
-                ProfilePicture = tmp.Last().ToDto(),
-                PersonVisit = visit.Person.ToDto()
-            };
+                return null;
+            }
+            else
+            {
+                List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
+                return new VisitDto()
+                {
+                    ID = visit.Id,
+                    Date = visit.Date,
+                    NbPasses = visit.NbPasses,
+                    ProfilePicture = tmp.Last().ToDto(),
+                    PersonVisit = visit.Person.ToDto()
+                };
+            }
         }
         public static VisitDto ToDtoListPicture(this Visit visit)
         {

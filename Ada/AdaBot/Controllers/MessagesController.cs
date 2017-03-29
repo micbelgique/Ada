@@ -26,7 +26,7 @@ namespace AdaBot
         /// </summary> 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = activity.From.Id;
             var accessAllow = await client.CheckIdFacebook(idUser);
 

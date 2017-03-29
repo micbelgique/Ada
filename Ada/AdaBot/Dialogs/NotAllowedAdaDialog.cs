@@ -28,7 +28,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = context.Activity.From.Id;
 
             var accessAllow = await client.GetAuthorizationFacebook(idUser);
@@ -99,6 +99,15 @@ namespace AdaBot.Dialogs
 
         [LuisIntent("BestFriend")]
         public async Task BestFriend(IDialogContext context, LuisResult result)
+        {
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("SeeNow")] 
+        public async Task SeeNow(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.NotAllowed.Spintax()}";
 

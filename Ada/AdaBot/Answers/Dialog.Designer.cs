@@ -168,7 +168,7 @@ namespace AdaBot.Answers {
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
         ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
-        ///- Ah ben c&apos;est un poussin que j&apos;ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se [rest of string was truncated]&quot;;.
+        ///- Ah ben c&apos;est un poussin que j&apos;ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnés [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
@@ -195,6 +195,15 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Je ne vois personnes pour le moment.|Là, je ne vois personne.|Ils doivent être bien cachés car je ne vois personne.].
+        /// </summary>
+        internal static string NobodyNow {
+            get {
+                return ResourceManager.GetString("NobodyNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Je n&apos;ai croisé personne correspondant à ta description|Malheureusement je n&apos;ai personne correspondant à ta demande].
         /// </summary>
         internal static string NobodyStats {
@@ -213,7 +222,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Tu n&apos;as pas l&apos;autorisation d&apos;accéder à ces données.|Tu n&apos;as pas accès a ce genre d&apos;informations.|Je suis navré mais ces informations requièrent une autorisation.].
+        ///   Looks up a localized string similar to [Je suis désolée mais cette demande requiert une autorisation.|Je ne peux pas te donner librement ce genre d&apos;informations, passe donc nous voir au MIC ;) |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC? :) | Ces informations sont classées secrètes... (Mais si tu pas nous voir au MIC, il y a peut-être moyen de s&apos;arranger... ;) ).].
         /// </summary>
         internal static string NotAllowed {
             get {

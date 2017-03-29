@@ -33,16 +33,93 @@ namespace AdaWebApp.Models.DAL.Repositories
                 .ToList();
         }
 
-        public Visit GetBestFriend()
+        public List<Visit> GetVisitsNow()
+        {
+            DateTime date = DateTime.Now;
+            date = date.AddMinutes(-1);
+
+            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date)
+            && DbFunctions.CreateTime(
+                v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second
+                ) >= DbFunctions.CreateTime(
+                    date.Hour, date.Minute, date.Second
+                    )).ToList();
+        }
+
+        public List<Visit> GetBestFriend()
         {
             DateTime date2 = DateTime.Today;
-            DateTime date1 = date2.AddDays(-1);
-            int maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            DateTime date1 = date2.AddDays(-2);
+            List<Visit> bestFriends = new List<Visit>();
+            int maxPasses;
+
+            //Best MALE friend
+            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
             && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null).Max(v => v.NbPasses);
-            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Male).Count() == 0)
+            {
+                bestFriends.Add(null);
+            }
+            else
+            {
+                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
             && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null).First(v => v.NbPasses == maxPasses);
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Male).Max(v => v.NbPasses);
+                bestFriends.Add(
+                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                && v.Person.FirstName != null
+                && v.Person.Gender == GenderValues.Male).First(v => v.NbPasses == maxPasses)
+                );
+            }
+            //Best FEMALE friend
+            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Female).Count() == 0)
+            {
+                bestFriends.Add(null);
+            }
+            else
+            {
+                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Female).Max(v => v.NbPasses);
+                bestFriends.Add(
+                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                && v.Person.FirstName != null
+                && v.Person.Gender == GenderValues.Female).First(v => v.NbPasses == maxPasses)
+                );
+            }
+            //Best beard friend
+            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Male
+            && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).Count() == 0)
+            {
+                bestFriends.Add(null);
+            }
+            else
+            {
+                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+            && v.Person.FirstName != null
+            && v.Person.Gender == GenderValues.Male
+            && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).Max(v => v.NbPasses);
+                bestFriends.Add(
+                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                && v.Person.FirstName != null
+                && v.Person.Gender == GenderValues.Male
+                && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).First(v => v.NbPasses == maxPasses)
+                );
+            }
+            return bestFriends;
         }
 
         public List<Visit> GetVisitsByDate(DateTime date1, DateTime? date2)
