@@ -106,7 +106,7 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        [LuisIntent("SeeNow")]
+        [LuisIntent("SeeNow")] 
         public async Task SeeNow(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.NotAllowed.Spintax()}";
