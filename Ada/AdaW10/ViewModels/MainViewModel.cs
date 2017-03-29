@@ -248,9 +248,7 @@ namespace AdaW10.ViewModels
                 foreach (Activity activity in enumerable)
                 {
                     var text = WebUtility.HtmlDecode(activity.Text);
-                    var test = WebUtility.HtmlDecode(activity.ToString());
                     LogHelper.Log(text);
-                    LogHelper.Log(test);
                     await TtsService.SayAsync(text);
                 }
 
