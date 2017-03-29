@@ -49,7 +49,7 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint ConstraintForAbortWords => new SpeechRecognitionListConstraint(new[]
         {
-            "annuler", "au-revoir", "terminer", "sortir", "quitter", "retour", "merci", "bonne journée"
+            "au-revoir", "terminer", "sortir", "quitter", "retour", "bonne journée" , "adieu"
         },
         "constraint_abord_words");
 

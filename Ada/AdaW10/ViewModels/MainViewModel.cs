@@ -212,23 +212,17 @@ namespace AdaW10.ViewModels
                 Text = str,
                 Type = ActivityTypes.Message
             };
-            await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
 
-            //await Speak();
-        }
-
-        private async Task Speak ()
-        {
-            var str = await VoiceInterface.Listen();
-            LogHelper.Log(str);
-
-            var activity = new Activity
+            if (activity.Text == "au-revoir")
             {
-                From = new ChannelAccount("Jean"),
-                Text = str,
-                Type = ActivityTypes.Message
-            };
-            await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+                await TtsService.SayAsync("au revoir");
+                //await WebcamService.InitializeCameraAsync();
+                //await VoiceInterface.ListeningHelloAda();
+            }
+            else
+            {
+                await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+            }
         }
 
         private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
