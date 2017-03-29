@@ -33,6 +33,20 @@ namespace AdaWebApp.Models.DAL.Repositories
                 .ToList();
         }
 
+        public List<Visit> GetVisitsNow()
+        {
+            DateTime date = DateTime.Now;
+            date = date.AddMinutes(-1);
+            date = date.AddHours(-2);
+
+            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date)
+            && DbFunctions.CreateTime(
+                v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second
+                ) >= DbFunctions.CreateTime(
+                    date.Hour, date.Minute, date.Second
+                    )).ToList();
+        }
+
         public List<Visit> GetBestFriend()
         {
             DateTime date2 = DateTime.Today;

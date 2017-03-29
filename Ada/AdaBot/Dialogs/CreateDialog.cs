@@ -326,7 +326,7 @@ namespace AdaBot.Dialogs
         {
             string message;
 
-            var diffDate = DateTime.Now - dateVisit;
+            var diffDate = DateTime.Now - dateVisit.AddHours(2);
             if (diffDate.TotalMinutes < 1)
             {
                 message = "Je vois " + firstname + " en ce moment. :)";
