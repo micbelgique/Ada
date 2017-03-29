@@ -237,10 +237,10 @@ namespace AdaW10.ViewModels
 
             while (true)
             {
-                var activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
+                ActivitySet activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
                 
                 watermark = activitySet?.Watermark;
-                LogHelper.Log(activitySet.Activities.ToString());
+
                 var activities = from x in activitySet.Activities
                                  where x.From.Id != "Jean"
                                  select x;
@@ -248,7 +248,9 @@ namespace AdaW10.ViewModels
                 foreach (Activity activity in enumerable)
                 {
                     var text = WebUtility.HtmlDecode(activity.Text);
+                    var test = WebUtility.HtmlDecode(activity.Name);
                     LogHelper.Log(text);
+                    LogHelper.Log(test);
                     await TtsService.SayAsync(text);
                 }
 
