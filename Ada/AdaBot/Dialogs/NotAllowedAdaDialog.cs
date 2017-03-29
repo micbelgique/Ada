@@ -106,6 +106,15 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
+        [LuisIntent("SeeNow")]
+        public async Task SeeNow(IDialogContext context, LuisResult result)
+        {
+            string message = $"{Dialog.NotAllowed.Spintax()}";
+
+            await context.PostAsync(message);
+            context.Wait(MessageReceived);
+        }
+
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
