@@ -81,5 +81,10 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         {
             return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.FormFilling, "Person Name");
         }
+
+        public static ISpeechRecognitionConstraint GetConstraintForSpeak()
+        {
+            return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "test");
+        }
     }
 }

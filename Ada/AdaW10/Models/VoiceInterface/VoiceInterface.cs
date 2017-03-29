@@ -127,18 +127,12 @@ namespace AdaW10.Models.VoiceInterface
         {
             using (var sttService = new SttService())
             {
-                //await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForEvents);
-                //await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForOtherWords);
+                await sttService.AddConstraintAsync(ConstraintsDictionnary.GetConstraintForSpeak());
 
                 var result = await sttService.RecognizeAsync();
 
-                if (result.Confidence != SpeechRecognitionConfidence.Rejected)
-                {
-                    var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
-                    return firedConstraint.Commands.First();
-                }
-
-                return "Autre";
+                return result.Text;
+              
             }
         }
 
