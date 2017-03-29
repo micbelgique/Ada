@@ -37,7 +37,6 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             DateTime date = DateTime.Now;
             date = date.AddMinutes(-1);
-            date = date.AddHours(-2);
 
             return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date)
             && DbFunctions.CreateTime(
