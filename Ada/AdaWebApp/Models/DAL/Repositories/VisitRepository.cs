@@ -51,74 +51,43 @@ namespace AdaWebApp.Models.DAL.Repositories
             DateTime date2 = DateTime.Today;
             DateTime date1 = date2.AddDays(-2);
             List<Visit> bestFriends = new List<Visit>();
-            int maxPasses;
 
             //Best MALE friend
-            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Male).Count() == 0)
-            {
-                bestFriends.Add(null);
-            }
-            else
-            {
-                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Male).Max(v => v.NbPasses);
-                bestFriends.Add(
-                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-                && v.Person.FirstName != null
-                && v.Person.Gender == GenderValues.Male).First(v => v.NbPasses == maxPasses)
-                );
-            }
-            //Best FEMALE friend
-            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Female).Count() == 0)
-            {
-                bestFriends.Add(null);
-            }
-            else
-            {
-                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Female).Max(v => v.NbPasses);
-                bestFriends.Add(
-                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-                && v.Person.FirstName != null
-                && v.Person.Gender == GenderValues.Female).First(v => v.NbPasses == maxPasses)
-                );
-            }
-            //Best beard friend
-            if (Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Male
-            && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).Count() == 0)
-            {
-                bestFriends.Add(null);
-            }
-            else
-            {
-                maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null
-            && v.Person.Gender == GenderValues.Male
-            && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).Max(v => v.NbPasses);
-                bestFriends.Add(
-                Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-                && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-                && v.Person.FirstName != null
-                && v.Person.Gender == GenderValues.Male
-                && v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5).First(v => v.NbPasses == maxPasses)
-                );
-            }
+
+            var bestMale = Table.Include(v => v.Person)
+                                .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                         && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                         && v.Person.FirstName != null
+                                         && v.Person.Gender == GenderValues.Male)
+                                .OrderByDescending(v => v.NbPasses)
+                                .FirstOrDefault();
+
+            bestFriends.Add(bestMale);
+
+            var bestFemale = Table.Include(v => v.Person)
+                                  .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                              && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                              && v.Person.FirstName != null
+                                              && v.Person.Gender == GenderValues.Female)
+                                  .OrderByDescending(v => v.NbPasses)
+                                  .FirstOrDefault();
+
+            bestFriends.Add(bestFemale);
+
+            var bestBeard = Table.Include(v => v.Person)
+                                 .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                          && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                          && v.Person.FirstName != null
+                                          && v.Person.Gender == GenderValues.Male
+                                          && v.ProfilePictures.Average(p => p.Beard) >= 0.5)
+                                 .OrderByDescending(v => v.NbPasses)
+                                 .FirstOrDefault();
+
+            bestFriends.Add(bestBeard);
+
+            // Get all PersonId from people who have on average a indice of 0.5 beard on their pictures.
+            // Context.Set<ProfilePicture>().GroupBy(p => p.Visit.PersonId).Select(g => new { Key = g.Key, Value = g.Average(p => p.Beard) }).Where(g => g.Value > 0.5);
+
             return bestFriends;
         }
 
