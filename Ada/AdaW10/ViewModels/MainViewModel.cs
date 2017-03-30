@@ -221,8 +221,9 @@ namespace AdaW10.ViewModels
                     if (attachments.Count > 0)
                     {
                         await VoiceInterface.StopListening();
+                        var person = (await MakeRecognition())?.FirstOrDefault();
                         //Messenger.Default.Unregister(this);
-                        NavigationService.NavigateTo(ViewModelLocator.EventPage, CurrentPerson);
+                        NavigationService.NavigateTo(ViewModelLocator.EventPage, person);
                     }
 
                     LogHelper.Log(text);
