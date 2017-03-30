@@ -76,7 +76,44 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
-                    await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
+                    await WebcamService.StopFaceDetectionAsync();
+                    await VoiceInterface.StopListening();
+
+                    var person = (await MakeRecognition())?.FirstOrDefault();
+
+                    if (person != null)
+                    {
+                        bool update = false;
+                        PersonUpdateDto updateDto = new PersonUpdateDto
+                        {
+                            PersonId = person.PersonId,
+                            RecognitionId = person.RecognitionId
+                        };
+
+                        await VoiceInterface.SayHelloAsync(person);
+
+                        // Update person's name
+                        if (person.FirstName == null)
+                        {
+                            string answer = await VoiceInterface.AskIdentified();
+
+                            if (answer != "non")
+                            {
+                                string name = await VoiceInterface.AskNameAsync();
+
+                                if (name == null)
+                                {
+                                    return;
+                                }
+
+                                updateDto.FirstName = name;
+                                person.FirstName = name;
+                                update = true;
+                            }
+                        }
+                    }
+
+                    await TtsService.SayAsync("En quoi puis je t'aider ?");
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
@@ -127,81 +164,7 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
-
             LogHelper.Log("Je suis à toi dans un instant...");
-
-            await WebcamService.StopFaceDetectionAsync();
-            await VoiceInterface.StopListening();
-
-            //await RunTaskAsync(async () =>
-            //{
-            //    // Arrêt de l'écoute continue, sinon le programme plante lors de l'écoute du nom ou de la raison
-            //    await WebcamService.StopFaceDetectionAsync();
-            //    await VoiceInterface.StopListening();
-
-            //var person = (await MakeRecognition())?.FirstOrDefault();
-
-            //if (person != null)
-            //{
-            //    bool update = false;
-            //    PersonUpdateDto updateDto = new PersonUpdateDto
-            //    {
-            //        PersonId = person.PersonId,
-            //        RecognitionId = person.RecognitionId
-            //    };
-            //}
-
-
-            //       await VoiceInterface.SayHelloAsync(person);
-
-
-            //        //// Update person's name
-            //        //if (person.FirstName == null)
-            //        //{
-            //        //    //string name = await VoiceInterface.AskNameAsync();
-
-            //        //    //if (name == null)
-            //        //    //{
-            //        //    //    return;
-            //        //    //}
-
-            //        //    //updateDto.FirstName = name;
-            //        //    //person.FirstName = name;
-            //        //    //update = true;
-
-
-            //        //}
-
-            //        //// Update person's visit
-            //        //if (person.ReasonOfVisit == null)
-            //        //{
-            //        //    string reason = await VoiceInterface.AskReason();
-            //        //    updateDto.ReasonOfVisit = reason;
-            //        //    person.ReasonOfVisit = reason;
-            //        //    update = true;
-            //        //}
-
-            //        //if (update)
-            //        //{
-            //        //    await DataService.UpdatePersonInformation(updateDto);
-            //        //}
-
-            //        //if (person.FirstName != null && person.ReasonOfVisit != null)
-            //        //{
-            //        //    await GoToMenuPage(person);
-            //        //}
-            //        //else
-            //        //{
-            //        //    await VoiceInterface.ListeningHelloAda();
-            //        //}
-            //    }
-            //    //else
-            //    //{
-            //    //    await VoiceInterface.ListeningHelloAda();
-            //    //}
-
-            //});
-            //await VoiceInterface.StopListening();
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
@@ -213,16 +176,27 @@ namespace AdaW10.ViewModels
                 Type = ActivityTypes.Message
             };
 
-            if (activity.Text == "au-revoir")
+            if (activity.Text == "")
             {
                 await TtsService.SayAsync("au revoir");
-                //await WebcamService.InitializeCameraAsync();
-                //await VoiceInterface.ListeningHelloAda();
+
+                await VoiceInterface.ListeningHelloAda();
+                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
+                {
+                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+                }
             }
             else
             {
                 await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
             }
+        }
+
+        public PersonDto CurrentPerson { get; set; }
+
+        protected override async Task OnNavigationFrom(object parameter)
+        {
+            await Task.Run(() => CurrentPerson = (PersonDto)parameter);
         }
 
         private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
@@ -232,7 +206,7 @@ namespace AdaW10.ViewModels
             while (true)
             {
                 ActivitySet activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
-                
+
                 watermark = activitySet?.Watermark;
 
                 var activities = from x in activitySet.Activities
@@ -242,6 +216,15 @@ namespace AdaW10.ViewModels
                 foreach (Activity activity in enumerable)
                 {
                     var text = WebUtility.HtmlDecode(activity.Text);
+                    var attachments = activity.Attachments;
+
+                    if (attachments.Count > 0)
+                    {
+                        await VoiceInterface.StopListening();
+                        //Messenger.Default.Unregister(this);
+                        NavigationService.NavigateTo(ViewModelLocator.EventPage, CurrentPerson);
+                    }
+
                     LogHelper.Log(text);
                     await TtsService.SayAsync(text);
                 }
@@ -265,7 +248,6 @@ namespace AdaW10.ViewModels
 
                 try
                 {
-                    //    LogHelper.Log("Je vois quelqu'un :-) Qui est-ce ?");
                     PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     // Logs results on screen
                     if (persons != null) LogHelper.LogPersons(persons);

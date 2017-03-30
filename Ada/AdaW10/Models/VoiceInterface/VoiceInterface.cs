@@ -5,6 +5,7 @@ using Windows.Media.SpeechRecognition;
 using AdaSDK;
 using AdaW10.Models.VoiceInterface.SpeechToText;
 using AdaW10.Models.VoiceInterface.TextToSpeech;
+using AdaW10.Helper;
 
 namespace AdaW10.Models.VoiceInterface
 {
@@ -127,20 +128,11 @@ namespace AdaW10.Models.VoiceInterface
         {
             using (var sttService = new SttService())
             {
-                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForAbortWords);
-                
-                var result = await sttService.RecognizeAsync();
-
-                if (result.Confidence != SpeechRecognitionConfidence.Rejected)
-                {
-                    var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
-                    return firedConstraint.Commands.First();
-                }
-
                 await sttService.AddConstraintAsync(ConstraintsDictionnary.GetConstraintForSpeak());
 
-                return result.Text;
-              
+                var result = await sttService.RecognizeAsync();
+
+                return result.Text;              
             }
         }
 
@@ -165,6 +157,28 @@ namespace AdaW10.Models.VoiceInterface
 
                 return "Autre";
             }
+        }
+
+        public async Task<string> AskIdentified()
+        {
+            using (var sttService = new SttService())
+            {
+                await TtsService.SayAsync("Veux tu t'identifier ?");
+
+                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForYes, false);
+                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForNo);
+
+                var result = await sttService.RecognizeAsync();
+
+                if (result.Confidence != SpeechRecognitionConfidence.Rejected)
+                {
+                    var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
+                    return firedConstraint.Commands.First();
+                }
+
+                return "non";
+            }
+
         }
 
         public async Task<string> AskNameAsync()

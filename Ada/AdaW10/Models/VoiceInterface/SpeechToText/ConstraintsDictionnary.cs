@@ -84,7 +84,7 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint GetConstraintForSpeak()
         {
-            return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "test");
+            return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "Speak");
         }
     }
 }

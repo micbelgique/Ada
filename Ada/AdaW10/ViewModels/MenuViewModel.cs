@@ -65,8 +65,9 @@ namespace AdaW10.ViewModels
                 {
                     switch (e.Result.Constraint.Tag)
                     {
-                        case "constraint_events": await GoToEventPageExecute();
-                        break;
+                        case "constraint_events":
+                              await GoToEventPageExecute();
+                              break;
 
                         case "constraint_description":
                             await DescribeExecute();
