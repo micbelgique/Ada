@@ -14,6 +14,8 @@ using System.Configuration;
 using AdaSDK;
 using AdaSDK.Models;
 using Newtonsoft.Json.Linq;
+using AdaBot.Models.FormFlows;
+using Microsoft.Bot.Builder.FormFlow;
 
 namespace AdaBot
 { 
