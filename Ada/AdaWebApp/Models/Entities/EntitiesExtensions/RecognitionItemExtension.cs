@@ -3,7 +3,6 @@ using System.Linq;
 using AdaSDK;
 using AdaWebApp.Helpers;
 using AdaSDK.Models;
-using AdaWebApp.Models.Entities;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
@@ -34,6 +33,27 @@ namespace AdaWebApp.Models.Entities
                 Age = (int)age,
                 Gender = gender
             };
+        }
+
+        public static MessageDto ToDto(this Message message)
+        {
+            if (message == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new MessageDto()
+                {
+                    ID = message.Id,
+                    From = message.From,
+                    Contenu = message.Contenu,
+                    IsRead = message.IsRead,
+                    Send = message.Send,
+                    Read = message.Read,
+                    To = message.ToId
+                };
+            }
         }
 
         public static VisitDto ToDto(this Visit visit)

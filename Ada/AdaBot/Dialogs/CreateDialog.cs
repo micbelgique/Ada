@@ -241,6 +241,7 @@ namespace AdaBot.Dialogs
             replyToConversation.Type = "message";
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
+            List<string> possiblePictures = new List<string>();
 
             foreach (var meetup in _eventList)
             {
@@ -251,29 +252,13 @@ namespace AdaBot.Dialogs
                         softLab = true;
                     }
                     //Récupération du lien image
-                    List<string> possiblePictures = new List<string>();
+                    possiblePictures.Clear();
 
-                    foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                    //foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                    foreach (Match m in Regex.Matches(meetup.Description, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
                         string src = m.Groups[1].Value;
-                        //string tmp = treatment.getHtmlSourceCode(src);
-                        HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml(src);
-                        string tmp = "";
-                        try
-                        {
-                            tmp = treatment.getHtmlSourceCode(src);
-                        }
-                        catch (Exception e)
-                        {
-                            tmp = "";
-                        }
-
-                        foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
-                        {
-                            string src2 = m2.Groups[1].Value;
-                            possiblePictures.Add(src2);
-                        }
+                        possiblePictures.Add(src);
                     }
 
                     List<CardImage> cardImages = new List<CardImage>();
@@ -281,7 +266,7 @@ namespace AdaBot.Dialogs
                     {
                         if ($"{ConfigurationManager.AppSettings["IMGMIC"]}" == "")
                         {
-                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg"));
+                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE%20MIC%20v4.jpg"));
                         }
                         else
                         {

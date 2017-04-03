@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -47,6 +48,28 @@ namespace AdaSDK
             {
                 // TODO : Propagate exception to caller
                 return "false";
+            }
+        }
+
+        public async Task<HttpResponseMessage> AddNewMessage(MessageDto message)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(message);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(WebAppUrl + "api/Message", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                return result.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return null;
             }
         }
 

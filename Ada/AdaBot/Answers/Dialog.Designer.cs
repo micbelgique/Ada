@@ -168,11 +168,20 @@ namespace AdaBot.Answers {
         ///- ???
         ///- Dis maman, un citron, ça a des pattes ?
         ///- Euh... ben non, un citron ça n&apos;a pas de pattes.
-        ///- Ah ben c&apos;est un poussin que j&apos;ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnés [rest of string was truncated]&quot;;.
+        ///- Ah ben c&apos;est un poussin que j&apos;ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string JokeRequest {
             get {
                 return ResourceManager.GetString("JokeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Je lui fais parvenir ce message au plus vite!|Je lui transmettrai dès que je le croiserai|Très bien, je le lui dirai].
+        /// </summary>
+        internal static string MessageSend {
+            get {
+                return ResourceManager.GetString("MessageSend", resourceCulture);
             }
         }
         

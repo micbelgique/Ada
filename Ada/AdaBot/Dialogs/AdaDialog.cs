@@ -15,12 +15,16 @@ using AdaBot.BotFrameworkHelpers;
 using System.Threading;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using AdaBot.Models.FormFlows;
+using Microsoft.Bot.Builder.FormFlow;
+using System.Diagnostics;
 
 namespace AdaBot.Dialogs
 {
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
+        public int PersonTo;
         public AdaDialog(params ILuisService[] services) : base(services)
         {
 
@@ -220,6 +224,119 @@ namespace AdaBot.Dialogs
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("SendMessage")]
+        public async Task SendMessage(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation = null;
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+
+            var splitResult = result.Query.Split(':');
+
+            if (splitResult[0] == "MessageTo ")
+            {
+                //FLOW
+                PersonTo = Convert.ToInt32(splitResult[1]);
+                var form = MakeMessage();
+                //NE SE LANCE PAS!
+                context.Call(form, ResumeAfterMessageSending);
+            }
+            else
+            {
+                string firstname = null;
+
+                int nbEntities = result.Entities.Count();
+                for (int i = 0; i < nbEntities; i++)
+                {
+                    if (result.Entities[i].Type == "Firstname")
+                    {
+                        firstname = result.Entities[i].Entity;
+                    }
+                }
+
+                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                if (visits.Count == 0)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                }
+                else if (visits.Count > 1)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.AttachmentLayout = "carousel";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visits)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+
+                        List<CardAction> cardButtons = new List<CardAction>();
+
+                        CardAction plButtonChoice = new CardAction()
+                        {
+                            Value = "MessageTo :" + visit.PersonVisit.PersonId,
+                            Type = "postBack",
+                            Title = "Le voilà !"
+                        };
+                        cardButtons.Add(plButtonChoice);
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            Images = cardImages,
+                            Buttons = cardButtons
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    //FLOW
+                    PersonTo = visits[0].PersonVisit.PersonId;
+                    var form = MakeMessage();
+                    context.Call(form, ResumeAfterMessageSending);
+                }
+            }
+        }
+
+        private async Task ResumeAfterMessageSending(IDialogContext context, IAwaitable<MessageFlow> result)
+        {
+            try
+            {
+                var messageToSend = await result;
+
+                MessageDto message = new MessageDto();
+                message.From = context.Activity.From.Name;
+                message.To = PersonTo;
+                message.Send = DateTime.Now;
+                message.IsRead = false;
+                message.Contenu = messageToSend.Message;
+
+                AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+                await client.AddNewMessage(message);
+
+                await context.PostAsync($"{Dialog.MessageSend.Spintax()}");
+            }
+            catch (FormCanceledException<MessageFlow> e)
+            {
+                Debug.WriteLine(e.Message);
+                context.Done(true);
+            }
+        }
+
+        internal static IDialog<MessageFlow> MakeMessage()
+        {
+            return Chain.From(() => FormDialog.FromForm(MessageFlow.BuildForm, options: FormOptions.PromptInStart));
+        }
+
         [LuisIntent("Possibilities")]
         public async Task Possibilities(IDialogContext context, LuisResult result)
         {
@@ -250,7 +367,7 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
             HeroCard plCard = new HeroCard();
 
-            for (int i=0; i<3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (bestFriends[i] != null)
                 {
@@ -904,7 +1021,6 @@ namespace AdaBot.Dialogs
 
             if (splitResult[0] == "ChoosePersonId ")
             {
-
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
                 nbVisit = Convert.ToInt32(splitResult[3]);

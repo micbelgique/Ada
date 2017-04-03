@@ -161,6 +161,9 @@
 - Euh... ben non, un citron ça n'a pas de pattes.
 - Ah ben c'est un poussin que j'ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se souviennent quand même de Chuck Norris.|Chuck Norris peut applaudir d´une seule main.|Si Chuck Norris est en retard, le temps a intérêt à ralentir.|Chuck Norris a terminé l´histoire sans fin.]</value>
   </data>
+  <data name="MessageSend" xml:space="preserve">
+    <value>[Je lui fais parvenir ce message au plus vite!|Je lui transmettrai dès que je le croiserai|Très bien, je le lui dirai]</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>[Je m'appelle Ada|Mon nom est Ada|Je suis Ada|Moi c'est Ada|Mes parents m'ont appelé Ada]</value>
   </data>
