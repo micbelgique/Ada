@@ -320,8 +320,10 @@ namespace AdaBot.Dialogs
                 message.IsRead = false;
                 message.Contenu = messageToSend.Message;
 
-                AdaClient client = new AdaClient();
+                AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
                 await client.AddNewMessage(message);
+
+                await context.PostAsync($"{Dialog.MessageSend.Spintax()}");
             }
             catch (FormCanceledException<MessageFlow> e)
             {

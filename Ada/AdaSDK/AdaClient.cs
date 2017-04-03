@@ -61,7 +61,7 @@ namespace AdaSDK
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "Api/UserIndentified/AddUserIndentified"), byteContent);
+                var result = await HttpClient.PostAsync(WebAppUrl + "api/Message", byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 return result.EnsureSuccessStatusCode();
