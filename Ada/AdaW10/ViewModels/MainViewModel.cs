@@ -19,6 +19,10 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Bot.Connector.DirectLine;
 using System.Collections.Generic;
 using System.Net;
+using GalaSoft.MvvmLight.Views;
+using AdaW10.Views;
+using GalaSoft.MvvmLight.Command;
+using Windows.UI.Core;
 
 namespace AdaW10.ViewModels
 {
@@ -33,7 +37,18 @@ namespace AdaW10.ViewModels
 
             WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
-            //    SelectModeCommand = new RelayCommand<ModeValues>(OnSelectMode);
+        }
+
+        public RelayCommand GoToCarouselPageCommand { get; set; }
+
+        public async Task GoToCarouselPageExecute(IList<Attachment> attachments)
+        {
+            await RunTaskAsync(async () =>
+            {
+                await VoiceInterface.StopListening();
+                Messenger.Default.Unregister(this);
+                NavigationService.NavigateTo(ViewModelLocator.CarouselPage, attachments);
+            });
         }
 
         #region Services, Commands and Properties
@@ -192,13 +207,6 @@ namespace AdaW10.ViewModels
             }
         }
 
-        public PersonDto CurrentPerson { get; set; }
-
-        protected override async Task OnNavigationFrom(object parameter)
-        {
-            await Task.Run(() => CurrentPerson = (PersonDto)parameter);
-        }
-
         private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
         {
             string watermark = null;
@@ -221,9 +229,12 @@ namespace AdaW10.ViewModels
                     if (attachments.Count > 0)
                     {
                         await VoiceInterface.StopListening();
-                        var person = (await MakeRecognition())?.FirstOrDefault();
-                        //Messenger.Default.Unregister(this);
-                        NavigationService.NavigateTo(ViewModelLocator.EventPage, person);
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        async () =>
+                        {
+                           await GoToCarouselPageExecute(attachments);
+                        }
+                        );
                     }
 
                     LogHelper.Log(text);
@@ -232,6 +243,8 @@ namespace AdaW10.ViewModels
 
                 if (enumerable.Count > 0)
                 {
+                    //await Task.Delay(TimeSpan.FromMilliseconds(10000)).ConfigureAwait(false);
+                    //await TtsService.SayAsync("Un petit instant je reviens :)");
                     await SolicitExecute();
                 }
 

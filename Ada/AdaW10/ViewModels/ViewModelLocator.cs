@@ -4,6 +4,8 @@ using AdaW10.Models.EventsLoaderServices;
 using AdaW10.Models.Interfaces;
 using AdaW10.Models.VoiceInterface;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Bot.Connector.DirectLine;
+using AdaW10.Views;
 
 namespace AdaW10.ViewModels
 {
@@ -12,12 +14,13 @@ namespace AdaW10.ViewModels
         public const string MainPage = "Main";
         public const string MenuPage = "Menu";
         public const string EventPage = "Event";
+        public const string CarouselPage = "Carousel";
 
         public ViewModelLocator()
         {
             // SimpleIoC
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            
+
             // Models
             if (GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
             {
@@ -28,7 +31,7 @@ namespace AdaW10.ViewModels
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
-                SimpleIoc.Default.Register<IDialogService, Views.DialogService>();
+                SimpleIoc.Default.Register<IDialogService, DialogService>();
                 SimpleIoc.Default.Register(CreateNavigationService);
             }
 
@@ -40,6 +43,7 @@ namespace AdaW10.ViewModels
             SimpleIoc.Default.Register<EventViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<MenuViewModel>();
+            SimpleIoc.Default.Register<CarouselViewModel>();
         }
 
         private INavigationService CreateNavigationService()
@@ -48,7 +52,16 @@ namespace AdaW10.ViewModels
             navigationService.Configure(MainPage, typeof(Views.MainPage));
             navigationService.Configure(MenuPage, typeof (Views.MenuPage));
             navigationService.Configure(EventPage, typeof(Views.EventPage));
+            navigationService.Configure(CarouselPage, typeof(Views.CarouselPage));
             return navigationService;
+        }
+
+        public CarouselViewModel Carousel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<CarouselViewModel>();
+            }
         }
     }
 }
