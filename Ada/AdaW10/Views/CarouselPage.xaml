@@ -11,22 +11,32 @@
     xmlns:debug="clr-AdaW10.Views:System.Diagnostics;assembly=System"
     mc:Ignorable="d"
     DataContext="{Binding Source={StaticResource ViewModelLocator}, Path= Carousel}">
-    
 
+    <Page.Resources>
+        <vm:CarouselViewModel x:Key="ViewModel"/>
+        <converters:LongToDateStringConverter x:Key="LongToDateStringConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Text="CAROUSEL" FontSize="25" Height="28" VerticalAlignment="Top" HorizontalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="TITRE" FontSize="25" Height="28" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
-        <ListView Grid.Column="1"  Margin="10,33,10,47"  ItemsSource="{Binding Carouseltest}"  >
+        <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <ListView Grid.Column="1"  Margin="10,33,10,47"  ItemsSource="{Binding CarouselList}"  >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <StackPanel Margin="20, 10">
+                            <TextBlock Text="{Binding Title}"/>
                             <TextBlock Text="{Binding Text}" />
+                            <TextBlock Text="{Binding ListImages}"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

@@ -27,13 +27,13 @@ namespace AdaW10.Views
         public CarouselPage()
         {
             this.InitializeComponent();
-            //Loaded += async delegate { await ViewModel.CallOnLoaded(); };
-            //Unloaded += async delegate { await ViewModel.CallOnUnloaded(); };
+            Loaded += async delegate { await ViewModel.CallOnLoaded(); };
+            Unloaded += async delegate { await ViewModel.CallOnUnloaded(); };
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            await ((CarouselViewModel)DataContext).OnNavigatedTo(e);
+            ((CarouselViewModel)DataContext).OnNavigatedTo(e);
         }
 
         private CarouselViewModel ViewModel => (CarouselViewModel)Resources["ViewModel"];

@@ -28,18 +28,22 @@ namespace AdaW10.ViewModels
 
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
             EventsLoaderService = ServiceLocator.Current.GetInstance<EventsLoaderService>();
+
+            GoBackToMainPageCommand = new RelayCommand(async () => await GoBackToMainExecute());
         }
+
+        public RelayCommand GoBackToMainPageCommand { get; set; }
 
         public IEventsLoaderService EventsLoaderService { get; set; }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }
         public VoiceInterface VoiceInterface { get; set; }
 
-        public IList<string> Attachments { get; set; }
+        public IList<Attachment> Attachments { get; set; }
 
-        public async Task OnNavigatedTo(NavigationEventArgs e)
+        public void OnNavigatedTo(NavigationEventArgs e)
         {
-            await Task.Run(() => Attachments = (IList<string>)e.Parameter);
+            Attachments = (IList<Attachment>)e.Parameter;
         }
 
         private List<Carousel> _carouselList;
@@ -49,21 +53,19 @@ namespace AdaW10.ViewModels
             set { Set(() => CarouselList, ref _carouselList, value); }
         }
 
-        public Carousel Carouseltest { get; set; }
-
+       
         protected override async Task OnLoadedAsync()
         {
             await RunTaskAsync(() =>
             {
-                Carouseltest = JsonConvert.DeserializeObject<Carousel>(Convert.ToString(Attachments[0]));
+                foreach (Attachment attachment in Attachments)
+                {
+                    CarouselList.Add(JsonConvert.DeserializeObject<Carousel>(Convert.ToString(attachment)));
+                }
+                
             })
             .ContinueWith(async task =>
             {
-                if (!task.IsFaulted)
-                {
-                    await VoiceInterface.SayEventsAvailable();
-                }
-
                 await VoiceInterface.ListeningCancellation();
 
                 Messenger.Default.Register<SpeechResultGeneratedMessage>(this, async e =>
