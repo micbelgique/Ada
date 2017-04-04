@@ -13,6 +13,9 @@ namespace AdaWebApp
         // Oxford key for emotion api
         public static readonly string OxfordEmotionApiKey = ConfigurationManager.AppSettings["OxfordEmotionApiKey"];
 
+        // Oxford key for vision api
+        public static readonly string OxfordComputerVisionApiKey = ConfigurationManager.AppSettings["OxfordComputerVisionApiKey"];
+
         // Oxford person group id with contains all kown persons
         public static readonly string OxfordPersonGroupId = ConfigurationManager.AppSettings["OxfordPersonGroupId"];
 
