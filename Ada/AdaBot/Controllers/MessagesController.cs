@@ -82,17 +82,11 @@ namespace AdaBot
                                         VisualFeature.Description //generate image caption
                                         };
                             AnalysisResult analysisResult = null;
-
-                            if (activity == null || activity.GetActivityType() != ActivityTypes.Message)
-                            {
-                                //add code to handle errors, or non-messaging activities
-                            }
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
                                 //stores image url (parsed from attachment or message)
-                                string uploadedImageUrl = activity.Attachments.First().ContentUrl; ;
-                                //uploadedImageUrl = HttpUtility.UrlDecode(uploadedImageUrl.Substring(uploadedImageUrl.IndexOf("file=") + 5));
+                                string uploadedImageUrl = activity.Attachments.First().ContentUrl;
 
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
@@ -106,7 +100,7 @@ namespace AdaBot
                                     }
                                 }
                             }
-                            var reply = activity.CreateReply(analysisResult.Description.Captions.First().Text);
+                            var reply = activity.CreateReply("Je vois: " + analysisResult.Description.Captions.First().Text);
 
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(reply);
