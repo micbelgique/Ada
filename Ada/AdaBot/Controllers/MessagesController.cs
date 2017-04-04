@@ -86,7 +86,7 @@ namespace AdaBot
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
                                 //stores image url (parsed from attachment or message)
-                                string uploadedImageUrl = activity.Attachments.First().ContentUrl;
+                                string uploadedImageUrl = activity.Attachments.First().ContentUrl; 
 
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
