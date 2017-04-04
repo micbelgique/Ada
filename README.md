@@ -191,7 +191,7 @@ For this button you need to send a post request to Facebook (you can do it with 
  ```
  [![](/doc/assets/StartButtonPostman.PNG)]()
  
- ### Second : the start button
+ ### Second : the persistent menu
  
  It's the same but the body of the request is different.
  

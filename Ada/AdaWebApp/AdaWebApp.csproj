@@ -25,8 +25,8 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <ApplicationInsightsResourceId>/subscriptions/102acd85-0c2f-4a00-a401-c1e46b3223f2/resourcegroups/martineobot-resources/providers/microsoft.insights/components/martine-o-bot</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/102acd85-0c2f-4a00-a401-c1e46b3223f2/resourcegroups/martineobot-resources/providers/microsoft.insights/components/martine-o-bot</ApplicationInsightsAnnotationResourceId>
+    <ApplicationInsightsResourceId>/subscriptions/79528c3a-2c00-4560-8599-42b7c6fee323/resourcegroups/AdaWebApp/providers/microsoft.insights/components/AdaWebApp</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/79528c3a-2c00-4560-8599-42b7c6fee323/resourcegroups/AdaResources/providers/microsoft.insights/components/AdaApplicationInsignts</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
