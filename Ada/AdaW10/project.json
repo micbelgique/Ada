@@ -3,7 +3,8 @@
     "Microsoft.Bot.Connector.DirectLine": "3.0.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.1",
     "Microsoft.Rest.ClientRuntime": "2.3.6",
-    "MvvmLight": "5.2.0"
+    "MvvmLight": "5.2.0",
+    "Newtonsoft.Json": "10.0.1"
   },
   "frameworks": {
     "uap10.0": {}

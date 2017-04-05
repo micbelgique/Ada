@@ -16,6 +16,8 @@ using System.Diagnostics;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Ioc;
 using Windows.UI.Core;
+using System.Xml;
+using System.Collections.ObjectModel;
 
 namespace AdaW10.ViewModels
 {
@@ -39,11 +41,18 @@ namespace AdaW10.ViewModels
         public RelayCommand GoToCarouselPageCommand { get; set; }
         public VoiceInterface VoiceInterface { get; set; }
 
-        public IList<Attachment> Attachments { get; set; }
+        private List<Attachment> _attachments;
 
-        public void OnNavigatedTo(NavigationEventArgs e)
+        public List<Attachment> Attachments
         {
-            Attachments = (IList<Attachment>)e.Parameter;
+            get { return _attachments; }
+            set { Set(() => Attachments, ref _attachments, value); }
+        }
+
+        public async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Attachments = (List<Attachment>)e.Parameter;
+            await OnLoadedAsync();
         }
 
         private List<Carousel> _carouselList;
@@ -53,16 +62,23 @@ namespace AdaW10.ViewModels
             set { Set(() => CarouselList, ref _carouselList, value); }
         }
 
-       
         protected override async Task OnLoadedAsync()
         {
-            await RunTaskAsync(() =>
+            List<Carousel> ListCarousel = new List<Carousel>();
+            await RunTaskAsync(async () =>
             {
+                string _carousel;
                 foreach (Attachment attachment in Attachments)
                 {
-                    CarouselList.Add(JsonConvert.DeserializeObject<Carousel>(Convert.ToString(attachment)));
+                    _carousel = JsonConvert.SerializeObject(attachment.Content);
+                    ListCarousel.Add(JsonConvert.DeserializeObject<Carousel>(_carousel));
                 }
-                
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                         () =>
+                         {
+                             CarouselList = ListCarousel;
+                         }
+                         );
             })
             .ContinueWith(async task =>
             {
@@ -72,21 +88,21 @@ namespace AdaW10.ViewModels
                 {
                     if (e.Result.Constraint.Tag == "constraint_abord_words")
                     {
-                        if (e.Result.Text.Contains("au-revoir") || e.Result.Text.Contains("bonne journée"))
-                            await DispatcherHelper.RunAsync(async () => await GoBackToMainExecute());
+                        await DispatcherHelper.RunAsync(async () => await GoBackToMainExecute());
                     }
                 });
             });
         }
 
+
         private async Task GoBackToMainExecute()
         {
             // Cleans up services and messenger
             await VoiceInterface.StopListening();
-            await VoiceInterface.SayGoodBye();
             Messenger.Default.Unregister(this);
 
             NavigationService.NavigateTo(ViewModelLocator.MainPage);
+
         }
     }
 }

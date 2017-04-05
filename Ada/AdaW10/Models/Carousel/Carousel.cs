@@ -10,11 +10,11 @@ namespace AdaW10.Models.Carousel
     {
         public string Title { get; set; }
         public string Text { get; set; }
-        public Images[] ListImages  { get; set; }
+        public Image[] Images  { get; set; }
 
-        public class Images
+        public class Image
         {
-            public Uri Image { get; set; }
+            public Uri Url { get; set; }
         }
     }
 }

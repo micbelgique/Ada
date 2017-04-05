@@ -25,7 +25,6 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Text="TITRE" FontSize="25" Height="28" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
         <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
@@ -34,25 +33,13 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <StackPanel Margin="20, 10">
+                            <Image HorizontalAlignment="Left" Height="100" Width="100" Source="{Binding Images[0].Url}"/>
                             <TextBlock Text="{Binding Title}"/>
                             <TextBlock Text="{Binding Text}" />
-                            <TextBlock Text="{Binding ListImages}"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Button Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkOrchid" Foreground="White" FontSize="20">Retour</Button>
-        </Grid>
-
     </Grid>
 </Page>

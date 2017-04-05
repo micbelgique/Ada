@@ -98,8 +98,6 @@ namespace AdaW10.Models.VoiceInterface
         public async Task ListeningCancellation()
         {
             await PrepareListening(); 
-
-            await _continuousRecognitionSession.CleanConstraintsAsync();
             await _continuousRecognitionSession.AddConstraintAsync(ConstraintsDictionnary.ConstraintForAbortWords);
             await _continuousRecognitionSession.StartContinuousRecognitionAsync();
         }

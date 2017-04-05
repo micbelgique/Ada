@@ -27,8 +27,6 @@ namespace AdaW10.Views
         public CarouselPage()
         {
             this.InitializeComponent();
-            Loaded += async delegate { await ViewModel.CallOnLoaded(); };
-            Unloaded += async delegate { await ViewModel.CallOnUnloaded(); };
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

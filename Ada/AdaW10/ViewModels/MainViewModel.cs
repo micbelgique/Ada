@@ -23,6 +23,7 @@ using GalaSoft.MvvmLight.Views;
 using AdaW10.Views;
 using GalaSoft.MvvmLight.Command;
 using Windows.UI.Core;
+using System.Threading;
 
 namespace AdaW10.ViewModels
 {
@@ -91,14 +92,14 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
+                    
                     await WebcamService.StopFaceDetectionAsync();
                     await VoiceInterface.StopListening();
 
                     var person = (await MakeRecognition())?.FirstOrDefault();
 
                     if (person != null)
-                    {
-                        bool update = false;
+                    {                      
                         PersonUpdateDto updateDto = new PersonUpdateDto
                         {
                             PersonId = person.PersonId,
@@ -123,7 +124,6 @@ namespace AdaW10.ViewModels
 
                                 updateDto.FirstName = name;
                                 person.FirstName = name;
-                                update = true;
                             }
                         }
                     }
@@ -135,7 +135,18 @@ namespace AdaW10.ViewModels
 
             _client = new DirectLineClient(AppConfig.DirectLine);
             _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
-            new Task(async () => await ReadBotMessagesAsync(_client, _conversation.ConversationId)).Start();
+
+            int timeout = 2000;
+            var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
+            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
+            {
+               
+            }
+            else
+            {
+                
+            }
+            
 
             // Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
@@ -151,9 +162,7 @@ namespace AdaW10.ViewModels
                     await RunTaskAsync(async () =>
                     {
                         var persons = await MakeRecognition();
-                        // LogHelper.Log("Recognition ended");
                         await VoiceInterface.SayHelloAsync(persons);
-                        // LogHelper.Log("Seaking ended");
                     });
                 });
             }
@@ -168,11 +177,11 @@ namespace AdaW10.ViewModels
             LogHelper.Log<WebcamService>("Je me mets au travail !");
 
             await WebcamService.InitializeCameraAsync();
-            WebcamService.CaptureElement = CaptureElement;
-            await WebcamService.StartCameraPreviewAsync();
+            WebcamService.CaptureElement = CaptureElement;        
 
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
+                await WebcamService.StartCameraPreviewAsync();
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
@@ -228,27 +237,27 @@ namespace AdaW10.ViewModels
 
                     if (attachments.Count > 0)
                     {
+
+                        var token = new CancellationTokenSource();
+
                         await VoiceInterface.StopListening();
                         await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        async () =>
-                        {
+                         async () =>
+                       {
+                           await WebcamService.CleanUpAsync();
                            await GoToCarouselPageExecute(attachments);
-                        }
-                        );
-                    }
-
+                       }
+                       );
+                    } 
                     LogHelper.Log(text);
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0)
+                if (enumerable.Count > 0 && enumerable[0].Attachments.Count == 0)
                 {
-                    //await Task.Delay(TimeSpan.FromMilliseconds(10000)).ConfigureAwait(false);
-                    //await TtsService.SayAsync("Un petit instant je reviens :)");
+                    //await Task.Delay(TimeSpan.FromMilliseconds(3000)).ConfigureAwait(false);
                     await SolicitExecute();
                 }
-
-                await Task.Delay(TimeSpan.FromMilliseconds(100)).ConfigureAwait(false);
             }
         }
 
