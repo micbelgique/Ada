@@ -48,7 +48,7 @@ namespace AdaBot.Dialogs
         {
             string message = $"{Dialog.Age.Spintax()}";
             await context.PostAsync(message);
-            context.Done<object>(null);
+            context.Done<object>(null); 
         }
 
         [LuisIntent("Compliment")]
