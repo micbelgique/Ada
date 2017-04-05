@@ -272,7 +272,7 @@ namespace AdaBot.Dialogs
                     foreach (var visit in visits)
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); 
 
                         List<CardAction> cardButtons = new List<CardAction>();
 
@@ -384,7 +384,7 @@ namespace AdaBot.Dialogs
                 else
                 {
                     List<CardImage> cardImages = new List<CardImage>();
-                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }Images/ADA Pleure Shadow.png"));
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }Images/AdaSad.jpg"));
 
                     plCard = new HeroCard()
                     {
