@@ -22,6 +22,7 @@ using System.IO;
 using AdaBot.Services;
 using Microsoft.ProjectOxford.Vision.Contract;
 
+
 namespace AdaBot
 { 
     [BotAuthentication]

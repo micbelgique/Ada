@@ -49,7 +49,7 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint ConstraintForAbortWords => new SpeechRecognitionListConstraint(new[]
         {
-            "annuler", "au-revoir", "terminer", "sortir", "quitter", "retour", "merci", "bonne journée"
+            "au-revoir", "terminer", "sortir", "quitter", "retour", "bonne journée" , "adieu" , "annuler", "aurevoir"
         },
         "constraint_abord_words");
 
@@ -80,6 +80,11 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         public static ISpeechRecognitionConstraint GetConstraintForName()
         {
             return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.FormFilling, "Person Name");
+        }
+
+        public static ISpeechRecognitionConstraint GetConstraintForSpeak()
+        {
+            return new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "Speak");
         }
     }
 }

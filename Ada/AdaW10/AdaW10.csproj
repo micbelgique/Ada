@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AdaW10</RootNamespace>
     <AssemblyName>AdaW10</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>fr-FR</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
@@ -117,6 +117,7 @@
     <Compile Include="Messages\SpeechStateChangedMessage.cs" />
     <Compile Include="Models\AuthenticationServices\TokenManagerException.cs" />
     <Compile Include="Models\AuthenticationServices\TokenManagerService.cs" />
+    <Compile Include="Models\Carousel\Carousel.cs" />
     <Compile Include="Models\EventsLoaderServices\EventsLoaderException.cs" />
     <Compile Include="Models\EventsLoaderServices\EventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\IEventsLoaderService.cs" />
@@ -128,10 +129,14 @@
     <Compile Include="Models\VoiceInterface\TextToSpeech\TTSService.cs" />
     <Compile Include="Models\VoiceInterface\VoiceInterface.cs" />
     <Compile Include="Models\WebcamService.cs" />
+    <Compile Include="ViewModels\CarouselViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\CarouselPage.xaml.cs">
+      <DependentUpon>CarouselPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DialogService.cs" />
     <Compile Include="Models\DataService.cs" />
     <Compile Include="Models\Interfaces\IDataService.cs" />
@@ -156,6 +161,10 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Ada.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
     <Content Include="Images\mic-banner.png" />
     <Content Include="Images\mic-banner_ada.png" />
     <Content Include="Images\music.mp4" />
@@ -192,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\CarouselPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EventPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +217,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

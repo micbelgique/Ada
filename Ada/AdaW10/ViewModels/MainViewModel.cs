@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -8,7 +7,6 @@ using Windows.Media.Core;
 using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using AdaSDK;
@@ -18,18 +16,40 @@ using AdaW10.Models;
 using AdaW10.Models.VoiceInterface;
 using AdaW10.Models.VoiceInterface.TextToSpeech;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Bot.Connector.DirectLine;
+using System.Collections.Generic;
+using System.Net;
+using GalaSoft.MvvmLight.Views;
+using AdaW10.Views;
+using GalaSoft.MvvmLight.Command;
+using Windows.UI.Core;
+using System.Threading;
 
 namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private DirectLineClient _client;
+        private Conversation _conversation;
+
         public MainViewModel()
         {
             DispatcherHelper.Initialize();
 
-            WebcamService = ServiceLocator.Current.GetInstance<WebcamService>(); 
-            VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();            
-            //    SelectModeCommand = new RelayCommand<ModeValues>(OnSelectMode);
+            WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
+            VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
+        }
+
+        public RelayCommand GoToCarouselPageCommand { get; set; }
+
+        public async Task GoToCarouselPageExecute(IList<Attachment> attachments)
+        {
+            await RunTaskAsync(async () =>
+            {
+                await VoiceInterface.StopListening();
+                Messenger.Default.Unregister(this);
+                NavigationService.NavigateTo(ViewModelLocator.CarouselPage, attachments);
+            });
         }
 
         #region Services, Commands and Properties
@@ -37,7 +57,7 @@ namespace AdaW10.ViewModels
         // Services
         public WebcamService WebcamService { get; }
         public VoiceInterface VoiceInterface { get; }
-        
+
         // Properties
         private string _logMessage;
         public string LogMessage
@@ -51,18 +71,18 @@ namespace AdaW10.ViewModels
         public CaptureElement CaptureElement
         {
             get { return _captureElement; }
-            set { Set(() => CaptureElement, ref _captureElement, value);  }
+            set { Set(() => CaptureElement, ref _captureElement, value); }
         }
-        
+
         #endregion
 
         #region Events
-        
+
         protected override async Task OnLoadedAsync()
         {
             // Registers to messenger for on screen log messages
             Messenger.Default.Register<LogMessage>(this, async e => await DispatcherHelper.RunAsync(() => LogMessage += e.Message));
-            
+
             // Begins to listening "hello ada"
             await VoiceInterface.ListeningHelloAda();
 
@@ -72,9 +92,61 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
+                    
+                    await WebcamService.StopFaceDetectionAsync();
+                    await VoiceInterface.StopListening();
+
+                    var person = (await MakeRecognition())?.FirstOrDefault();
+
+                    if (person != null)
+                    {                      
+                        PersonUpdateDto updateDto = new PersonUpdateDto
+                        {
+                            PersonId = person.PersonId,
+                            RecognitionId = person.RecognitionId
+                        };
+
+                        await VoiceInterface.SayHelloAsync(person);
+
+                        // Update person's name
+                        if (person.FirstName == null)
+                        {
+                            string answer = await VoiceInterface.AskIdentified();
+
+                            if (answer != "non")
+                            {
+                                string name = await VoiceInterface.AskNameAsync();
+
+                                if (name == null)
+                                {
+                                    return;
+                                }
+
+                                updateDto.FirstName = name;
+                                person.FirstName = name;
+                            }
+                        }
+                    }
+
+                    await TtsService.SayAsync("En quoi puis je t'aider ?");
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
+
+            _client = new DirectLineClient(AppConfig.DirectLine);
+            _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
+
+            int timeout = 2000;
+            var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
+            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
+            {
+               
+            }
+            else
+            {
+                
+            }
+            
 
             // Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
@@ -90,9 +162,7 @@ namespace AdaW10.ViewModels
                     await RunTaskAsync(async () =>
                     {
                         var persons = await MakeRecognition();
-                        // LogHelper.Log("Recognition ended");
                         await VoiceInterface.SayHelloAsync(persons);
-                        // LogHelper.Log("Seaking ended");
                     });
                 });
             }
@@ -107,12 +177,12 @@ namespace AdaW10.ViewModels
             LogHelper.Log<WebcamService>("Je me mets au travail !");
 
             await WebcamService.InitializeCameraAsync();
-            WebcamService.CaptureElement = CaptureElement;
-            await WebcamService.StartCameraPreviewAsync();
-            
+            WebcamService.CaptureElement = CaptureElement;        
+
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
-               WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;        
+                await WebcamService.StartCameraPreviewAsync();
+                WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
 
@@ -120,70 +190,75 @@ namespace AdaW10.ViewModels
         {
             LogHelper.Log("Je suis à toi dans un instant...");
 
-            await RunTaskAsync(async () =>
+            var str = await VoiceInterface.Listen();
+            LogHelper.Log(str);
+
+            var activity = new Activity
             {
-                // Arrêt de l'écoute continue, sinon le programme plante lors de l'écoute du nom ou de la raison
-                await WebcamService.StopFaceDetectionAsync();
-                await VoiceInterface.StopListening();
+                From = new ChannelAccount("Jean"),
+                Text = str,
+                Type = ActivityTypes.Message
+            };
 
-                var person = (await MakeRecognition())?.FirstOrDefault();
+            if (activity.Text == "")
+            {
+                await TtsService.SayAsync("au revoir");
 
-                if (person != null)
+                await VoiceInterface.ListeningHelloAda();
+                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
                 {
-                    bool update = false;
-                    PersonUpdateDto updateDto = new PersonUpdateDto
-                    {
-                        PersonId = person.PersonId,
-                        RecognitionId = person.RecognitionId
-                    };
-
-                    await VoiceInterface.SayHelloAsync(person);
-
-                    // Update person's name
-                    if (person.FirstName == null)
-                    {
-                        string name = await VoiceInterface.AskNameAsync();
-
-                        if (name == null)
-                        {
-                            return;
-                        }
-
-                        updateDto.FirstName = name;
-                        person.FirstName = name;
-                        update = true;
-                    }
-
-                    // Update person's visit
-                    if (person.ReasonOfVisit == null)
-                    {
-                        string reason = await VoiceInterface.AskReason();
-                        updateDto.ReasonOfVisit = reason;
-                        person.ReasonOfVisit = reason;
-                        update = true;
-                    }
-
-                    if (update)
-                    {
-                        await DataService.UpdatePersonInformation(updateDto);
-                    }
-
-                    if (person.FirstName != null && person.ReasonOfVisit != null)
-                    {
-                        await GoToMenuPage(person);
-                    }
-                    else
-                    {
-                        await VoiceInterface.ListeningHelloAda();
-                    }
+                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
                 }
-                else
+            }
+            else
+            {
+                await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+            }
+        }
+
+        private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
+        {
+            string watermark = null;
+
+            while (true)
+            {
+                ActivitySet activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
+
+                watermark = activitySet?.Watermark;
+
+                var activities = from x in activitySet.Activities
+                                 where x.From.Id != "Jean"
+                                 select x;
+                var enumerable = activities as IList<Activity> ?? activities.ToList();
+                foreach (Activity activity in enumerable)
                 {
-                    await VoiceInterface.ListeningHelloAda();
+                    var text = WebUtility.HtmlDecode(activity.Text);
+                    var attachments = activity.Attachments;
+
+                    if (attachments.Count > 0)
+                    {
+
+                        var token = new CancellationTokenSource();
+
+                        await VoiceInterface.StopListening();
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                         async () =>
+                       {
+                           await WebcamService.CleanUpAsync();
+                           await GoToCarouselPageExecute(attachments);
+                       }
+                       );
+                    } 
+                    LogHelper.Log(text);
+                    await TtsService.SayAsync(text);
                 }
-            });
 
-
+                if (enumerable.Count > 0 && enumerable[0].Attachments.Count == 0)
+                {
+                    //await Task.Delay(TimeSpan.FromMilliseconds(3000)).ConfigureAwait(false);
+                    await SolicitExecute();
+                }
+            }
         }
 
         public async Task<PersonDto[]> MakeRecognition()
@@ -196,7 +271,6 @@ namespace AdaW10.ViewModels
 
                 try
                 {
-                //    LogHelper.Log("Je vois quelqu'un :-) Qui est-ce ?");
                     PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     // Logs results on screen
                     if (persons != null) LogHelper.LogPersons(persons);
@@ -224,7 +298,7 @@ namespace AdaW10.ViewModels
 
             NavigationService.NavigateTo(ViewModelLocator.MenuPage, person);
         }
-        
-        #endregion       
+
+        #endregion
     }
 }

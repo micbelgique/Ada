@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Windows.Media.SpeechRecognition;
 using GalaSoft.MvvmLight.Messaging;
 using AdaW10.Messages;
-
+using AdaW10.Helper;
+using System.Threading;
 
 namespace AdaW10.Models.VoiceInterface.SpeechToText
 {
