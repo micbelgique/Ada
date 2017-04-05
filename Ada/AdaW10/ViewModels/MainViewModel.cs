@@ -136,16 +136,9 @@ namespace AdaW10.ViewModels
             _client = new DirectLineClient(AppConfig.DirectLine);
             _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
 
-            int timeout = 2000;
+            int timeout = 10;
             var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
-            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
-            {
-               
-            }
-            else
-            {
-                
-            }
+            await Task.WhenAny(task, Task.Delay(timeout));
             
 
             // Prepares capture element to camera feed and load camera

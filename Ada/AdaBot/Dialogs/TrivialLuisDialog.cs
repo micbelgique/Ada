@@ -65,9 +65,17 @@ namespace AdaBot.Dialogs
             string nameUser = context.Activity.From.Name;
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             Activity replyToConversation;
+            string message;
 
-            string[] firstNameUser = nameUser.Split(' ');
-            string message = $"{Dialog.Greeting.Spintax()} {firstNameUser[0]}";
+            if (nameUser != null)
+            {
+                string[] firstNameUser = nameUser.Split(' ');
+                message = $"{Dialog.Greeting.Spintax()} {firstNameUser[0]}";
+            }
+            else
+            {
+                message = $"{Dialog.Greeting.Spintax()}";
+            }
             await context.PostAsync(message);
 
             CreateDialog createCarousel = new CreateDialog();
@@ -94,7 +102,7 @@ namespace AdaBot.Dialogs
             string nameUser = context.Activity.From.Name;
 
             string[] firstNameUser = nameUser.Split(' ');
-            string message = $"{Dialog.Bye.Spintax()}{firstNameUser[0]}";
+            string message = $"{Dialog.Bye.Spintax()}";
             await context.PostAsync(message);
             context.Done<object>(null);
         }

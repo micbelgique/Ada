@@ -377,7 +377,7 @@ namespace AdaBot.Dialogs
                     plCard = new HeroCard()
                     {
                         Title = title[i],
-                        Subtitle = $"{Dialog.Best.Spintax()} " + bestFriends[i].PersonVisit.FirstName + "!",
+                        Text = $"{Dialog.Best.Spintax()} " + bestFriends[i].PersonVisit.FirstName + "!",
                         Images = cardImages
                     };
                 }
@@ -389,7 +389,7 @@ namespace AdaBot.Dialogs
                     plCard = new HeroCard()
                     {
                         Title = title[i],
-                        Subtitle = "On ne fait pas beaucoup attention à moi de ce côté là pour le moment...",
+                        Text = "On ne fait pas beaucoup attention à moi de ce côté là pour le moment...",
                         Images = cardImages
                     };
                 }
@@ -601,11 +601,9 @@ namespace AdaBot.Dialogs
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = "Afficher plus (A venir)",
+                            Title = "Afficher plus",
                             Text = "",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
