@@ -231,9 +231,8 @@ namespace AdaW10.ViewModels
                     var text = WebUtility.HtmlDecode(activity.Text);
                     var attachments = activity.Attachments;
 
-                    if (attachments.Count > 0)
+                    if (attachments.Count > 0 && attachments[0].ContentType == "application/vnd.microsoft.card.hero")
                     {
-
                         var token = new CancellationTokenSource();
 
                         await VoiceInterface.StopListening();
