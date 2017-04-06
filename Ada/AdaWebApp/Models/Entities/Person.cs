@@ -30,5 +30,10 @@ namespace AdaWebApp.Models.Entities
         public Person(){
             Visits = new List<Visit>(); 
         }
+
+        internal object Select(Func<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

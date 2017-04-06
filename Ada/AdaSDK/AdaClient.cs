@@ -61,7 +61,29 @@ namespace AdaSDK
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var result = await HttpClient.PostAsync(WebAppUrl + "api/Message", byteContent);
+                var result = await HttpClient.PostAsync(WebAppUrl + "/api/Message", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                return result.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return null;
+            }
+        }
+
+        public async Task<HttpResponseMessage> PutMessage(MessageDto message)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(message);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/Message/PutMessage/" + message.ID), byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 return result.EnsureSuccessStatusCode();
@@ -88,7 +110,7 @@ namespace AdaSDK
                 var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "Api/UserIndentified/AddUserIndentified"), byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-               return result.EnsureSuccessStatusCode();
+                return result.EnsureSuccessStatusCode();
             }
             catch (Exception e)
             {
@@ -164,7 +186,7 @@ namespace AdaSDK
                     tmp[0] = tmp[0].Replace('/', '-');
                     date1 = Convert.ToDateTime(tmp[0]);
                     tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
-                    
+
                     if (date2 != null)
                     {
                         //Convertion date2
@@ -259,6 +281,22 @@ namespace AdaSDK
             }
         }
 
+        public async Task<List<MessageDto>> GetMessageByReceiver(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/Message/MessageReceiver/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var messages = JsonConvert.DeserializeObject<List<MessageDto>>(content);
+                return messages;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<MessageDto>();
+            }
+        }
+
         public async Task<int> GetNbVisits(string gender, string age1, string age2)
         {
             try
@@ -272,6 +310,24 @@ namespace AdaSDK
             {
                 // TODO : Propagate exception to caller
                 return new int();
+            }
+        }
+        public async Task<PersonVisitDto> GetPersonByFaceId(Guid id)
+        {
+            try
+            {
+                string url = (WebAppUrl + "/Api/Visits/GetPersonByFaceId/" + id);
+                url = url.Replace("{", "");
+                url = url.Replace("}", "");
+                var response = await HttpClient.GetAsync(url);
+                var content = await response.Content.ReadAsStringAsync();
+                var person = JsonConvert.DeserializeObject<PersonVisitDto>(content);
+                return person;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new PersonVisitDto();
             }
         }
     }
