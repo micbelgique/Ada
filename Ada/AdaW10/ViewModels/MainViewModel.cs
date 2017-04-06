@@ -206,6 +206,8 @@ namespace AdaW10.ViewModels
             }
             else
             {
+                activity.Text = (activity.Text).Replace('.', ' ');
+
                 await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
             }
         }

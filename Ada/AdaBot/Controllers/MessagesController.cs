@@ -43,29 +43,39 @@ namespace AdaBot
 
             //Vision SDK classes
             visionClient = new VisionServiceClient(visionApiKey);
+            string accessAllow;
+            string idUser;
 
-            var idUser = activity.From.Id;
-            var accessAllow = await client.CheckIdFacebook(idUser);
-
-            if(accessAllow == "false")
+            if (activity.ServiceUrl == "https://facebook.botframework.com")
             {
-                UserIndentifiedDto userIndentified = new UserIndentifiedDto();
-                string nameUser = activity.From.Name + " ";
-                string[] nameUserSplit;
-                nameUserSplit  = nameUser.Split(' ');
+                idUser = activity.From.Id;
+                accessAllow = await client.CheckIdFacebook(idUser);
 
-                userIndentified.IdFacebook = idUser;
-                userIndentified.Firtsname = nameUserSplit[0];
-                var nbNameSplit = nameUserSplit.Count();
-                string lastName ="";
-                for(int i = 1; i < nbNameSplit ; i++)
+                if (accessAllow == "false")
                 {
-                    lastName +=nameUserSplit[i]+ " ";
-                }
-                userIndentified.LastName = lastName;
-                userIndentified.authorization = false;
+                    UserIndentifiedDto userIndentified = new UserIndentifiedDto();
+                    string nameUser = activity.From.Name + " ";
+                    string[] nameUserSplit;
+                    nameUserSplit = nameUser.Split(' ');
 
-                var respond = await client.AddNewUserIndentified(userIndentified);
+                    userIndentified.IdFacebook = idUser;
+                    userIndentified.Firtsname = nameUserSplit[0];
+                    var nbNameSplit = nameUserSplit.Count();
+                    string lastName = "";
+                    for (int i = 1; i < nbNameSplit; i++)
+                    {
+                        lastName += nameUserSplit[i] + " ";
+                    }
+                    userIndentified.LastName = lastName;
+                    userIndentified.authorization = false;
+
+                    var respond = await client.AddNewUserIndentified(userIndentified);
+                }
+            }
+
+            if(activity.ServiceUrl == "https://slack.botframework.com" && activity.Text.Contains("@ada"))
+            {
+                activity.Text = "spam";
             }
 
             if (activity.Type == ActivityTypes.Message)
@@ -118,6 +128,7 @@ namespace AdaBot
                     }
                 }
 
+                idUser = activity.From.Id;
                 accessAllow = await client.GetAuthorizationFacebook(idUser);
                 if (accessAllow == "false")
                 {
