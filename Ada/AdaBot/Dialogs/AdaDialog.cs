@@ -74,8 +74,6 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetHelp")]
         public async Task GetHelp(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync(context.Activity.ServiceUrl);
-
             var form = MakeInfo();
             context.Call(form, ResumeAfterInfo); 
         }

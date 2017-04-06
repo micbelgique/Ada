@@ -207,6 +207,16 @@ namespace AdaW10.ViewModels
             else
             {
                 activity.Text = (activity.Text).Replace('.', ' ');
+                activity.Text = (activity.Text).ToLower();
+
+                if(activity.Text == "oui ")
+                {
+                    activity.Text = "yes";
+                }
+                if (activity.Text == "non ")
+                {
+                    activity.Text = "no";
+                }
 
                 await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
             }
@@ -231,7 +241,7 @@ namespace AdaW10.ViewModels
                     var text = WebUtility.HtmlDecode(activity.Text);
                     var attachments = activity.Attachments;
 
-                    if (attachments.Count > 0 && attachments[0].ContentType == "application/vnd.microsoft.card.hero")
+                    if (attachments.Count > 1 && attachments[0].ContentType == "application/vnd.microsoft.card.hero")
                     {
                         var token = new CancellationTokenSource();
 
@@ -248,7 +258,7 @@ namespace AdaW10.ViewModels
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0 && enumerable[0].Attachments.Count == 0)
+                if (enumerable.Count > 0)
                 {
                     //await Task.Delay(TimeSpan.FromMilliseconds(3000)).ConfigureAwait(false);
                     await SolicitExecute();
