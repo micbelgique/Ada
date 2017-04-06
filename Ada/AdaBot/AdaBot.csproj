@@ -221,6 +221,7 @@
     <Compile Include="Models\EventsLoaderServices\EventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\IEventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\MeetupEvent.cs" />
+    <Compile Include="Models\FormFlows\FormInfo.cs" />
     <Compile Include="Models\FormFlows\MessageFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\VisionService.cs" />
