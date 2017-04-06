@@ -37,6 +37,8 @@ namespace AdaBot
         /// </summary> 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+            bool answer = true;
+
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
@@ -73,9 +75,9 @@ namespace AdaBot
                 }
             }
 
-            if(activity.ServiceUrl == "https://slack.botframework.com" && activity.Text.Contains("@ada"))
+            if(activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
             {
-                activity.Text = "spam";
+                answer = false;
             }
 
             if (activity.Type == ActivityTypes.Message)
@@ -128,21 +130,24 @@ namespace AdaBot
                     }
                 }
 
-                idUser = activity.From.Id;
-                accessAllow = await client.GetAuthorizationFacebook(idUser);
-                if (accessAllow == "false")
+                if (answer)
                 {
-                    await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
-                    new LuisService(new LuisModelAttribute(
-                    ConfigurationManager.AppSettings["ModelId"],
-                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
-                }
-                else
-                {
-                    await Conversation.SendAsync(activity, () => new AdaDialog(
-                    new LuisService(new LuisModelAttribute(
-                    ConfigurationManager.AppSettings["ModelId"],
-                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    idUser = activity.From.Id;
+                    accessAllow = await client.GetAuthorizationFacebook(idUser);
+                    if (accessAllow == "false")
+                    {
+                        await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    }
+                    else
+                    {
+                        await Conversation.SendAsync(activity, () => new AdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    }
                 }
             }
             else
