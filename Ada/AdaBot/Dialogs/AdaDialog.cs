@@ -75,7 +75,7 @@ namespace AdaBot.Dialogs
         public async Task GetHelp(IDialogContext context, LuisResult result)
         {
             var form = MakeInfo();
-            context.Call(form, ResumeAfterInfo);
+            context.Call(form, ResumeAfterInfo); 
         }
 
         private async Task ResumeAfterInfo(IDialogContext context, IAwaitable<FormInfo> result)
