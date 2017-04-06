@@ -24,6 +24,7 @@ using AdaW10.Views;
 using GalaSoft.MvvmLight.Command;
 using Windows.UI.Core;
 using System.Threading;
+using AdaSDK.Models;
 
 namespace AdaW10.ViewModels
 {
@@ -256,6 +257,7 @@ namespace AdaW10.ViewModels
 
         public async Task<PersonDto[]> MakeRecognition()
         {
+            AdaClient client = new AdaClient() { WebAppUrl = AppConfig.WebUri };
             using (var stream = new InMemoryRandomAccessStream())
             {
                 await WebcamService.MediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreateJpeg(), stream);
@@ -266,7 +268,26 @@ namespace AdaW10.ViewModels
                 {
                     PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     // Logs results on screen
-                    if (persons != null) LogHelper.LogPersons(persons);
+                    if (persons != null)
+                    {
+                        LogHelper.LogPersons(persons);
+
+                        foreach (PersonDto person in persons)
+                        {
+                            Guid faceApi = person.PersonId;
+                            var personMessage = await client.GetPersonByFaceId(faceApi);
+                            List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
+                            foreach (MessageDto message in messages)
+                            {
+                                await TtsService.SayAsync("Tu as un nouveau message de la part de " + message.From);
+                                await TtsService.SayAsync(message.Contenu);
+                                message.IsRead = true;
+                                message.Read = DateTime.Now;
+
+                                await client.PutMessage(message);
+                            }
+                        }
+                    }
                     if (persons == null) LogHelper.Log("Ho, j'ai cru voir quelqu'un :'(");
 
                     return persons;

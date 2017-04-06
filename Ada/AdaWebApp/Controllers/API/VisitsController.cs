@@ -49,6 +49,20 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("GetPersonByFaceId/{id}")]
+        public PersonVisitDto GetPersonByFaceId(Guid id)
+        {
+            Person person = _unit.PersonRepository.GetByApiId(id);
+
+            if (person == null)
+            {
+                return null;
+            }
+
+            return person.ToDto();
+        }
+
+        [HttpGet]
         [Route("VisitsNow")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsNow()
