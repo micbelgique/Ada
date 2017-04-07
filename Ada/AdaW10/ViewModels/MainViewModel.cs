@@ -93,7 +93,9 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
-                    
+                    LogHelper.Log("Message reçu ;)");
+                    LogHelper.Log("Je suis à toi dans un instant");
+
                     await WebcamService.StopFaceDetectionAsync();
                     await VoiceInterface.StopListening();
 
@@ -182,7 +184,7 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
-            LogHelper.Log("Je suis à toi dans un instant...");
+            LogHelper.Log("Que puis-je faire pour toi ?");
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
