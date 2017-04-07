@@ -74,8 +74,16 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetHelp")]
         public async Task GetHelp(IDialogContext context, LuisResult result)
         {
-            var form = MakeInfo();
-            context.Call(form, ResumeAfterInfo); 
+            if (result.TopScoringIntent.Score > 0.70)
+            {
+                var form = MakeInfo();
+                context.Call(form, ResumeAfterInfo);
+            }
+            else
+            {
+                string message = $"{Dialog.None.Spintax()}";
+                await context.PostAsync(message);
+            }
         }
 
         private async Task ResumeAfterInfo(IDialogContext context, IAwaitable<FormInfo> result)
