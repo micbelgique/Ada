@@ -241,7 +241,7 @@ namespace AdaW10.ViewModels
                     var text = WebUtility.HtmlDecode(activity.Text);
                     var attachments = activity.Attachments;
 
-                    if (attachments.Count > 1 && attachments[0].ContentType == "application/vnd.microsoft.card.hero")
+                    if (attachments.Count > 0)
                     {
                         var token = new CancellationTokenSource();
 
@@ -260,7 +260,6 @@ namespace AdaW10.ViewModels
 
                 if (enumerable.Count > 0)
                 {
-                    //await Task.Delay(TimeSpan.FromMilliseconds(3000)).ConfigureAwait(false);
                     await SolicitExecute();
                 }
             }
