@@ -276,7 +276,7 @@ namespace AdaW10.ViewModels
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0)
+                if (enumerable.Count > 0 && activitySet.Activities[0].Name == "Finish")
                 {
                     await SolicitExecute();
                 }
