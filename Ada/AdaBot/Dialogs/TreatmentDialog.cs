@@ -170,7 +170,7 @@ namespace AdaBot.Dialogs
             int age = DateTime.Now.Year - visit.PersonVisit.Age;
             if (visit.PersonVisit.Gender == GenderValues.Male)
             {
-                response += "un homme de " + age + " ";
+                response += "un homme de " + age + " ans ";
                 if (Convert.ToDouble(picture.Glasses) >= 0.50)
                 {
                     response += "portant des lunettes ";
@@ -181,11 +181,11 @@ namespace AdaBot.Dialogs
                 }
                 else if (Convert.ToDouble(picture.Beard) >= 0.60)
                 {
-                    response += "avec une barbe ";
+                    response += "avec une barbe";
                 }
                 else if (Convert.ToDouble(picture.Mustache) >= 0.60)
                 {
-                    response += "avec une mustache ";
+                    response += "avec une moustache";
                 }
             }
             else

@@ -30,6 +30,7 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             DateTime date = DateTime.Today;
             return Table.Include(v => v.Person).Where(v => v.Date >= date)
+                .OrderByDescending(v => DbFunctions.CreateDateTime(date.Year, date.Month, date.Day, v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second))
                 .ToList();
         }
 
