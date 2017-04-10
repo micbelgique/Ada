@@ -164,18 +164,34 @@ namespace AdaBot.Dialogs
             }
         }
 
-        public string describe (VisitDto visit)
+        public string describe (VisitDto visit, ProfilePictureDto picture)
         {
             string response = "Il semblerait que tu sois ";
-            if (visit.PersonVisit.Gender == GenderValues.Female)
+            int age = DateTime.Now.Year - visit.PersonVisit.Age;
+            if (visit.PersonVisit.Gender == GenderValues.Male)
             {
-                response += "une femme de ";
+                response += "un homme de " + age + " ";
+                if (Convert.ToDouble(picture.Glasses) >= 0.50)
+                {
+                    response += "portant des lunettes ";
+                }
+                if (Convert.ToDouble(picture.Mustache) >= 0.60 && Convert.ToDouble(picture.Beard) >= 0.60)
+                {
+                    response += "avec une barbe et une superbe moustache! ;)";
+                }
+                else if (Convert.ToDouble(picture.Beard) >= 0.60)
+                {
+                    response += "avec une barbe ";
+                }
+                else if (Convert.ToDouble(picture.Mustache) >= 0.60)
+                {
+                    response += "avec une mustache ";
+                }
             }
             else
             {
-                response += "un homme de ";
+                response += "un femme de " + age + " ";
             }
-            response += visit.PersonVisit.Age + " ans";
             return response;
         }
     }
