@@ -666,7 +666,7 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-
+            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
