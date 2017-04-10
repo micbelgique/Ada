@@ -309,7 +309,14 @@ namespace AdaW10.ViewModels
                                 List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
                                 foreach (MessageDto message in messages)
                                 {
-                                    await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
+                                    if (message.From != null)
+                                    {
+                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
+                                    }
+                                    else
+                                    {
+                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message ");
+                                    }
                                     await TtsService.SayAsync(message.Contenu);
                                     message.IsRead = true;
                                     message.Read = DateTime.Now;
