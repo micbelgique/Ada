@@ -93,6 +93,9 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
+                    LogHelper.Log("Message reçu ;)");
+                    LogHelper.Log("Je suis à toi dans un instant");
+
                     await WebcamService.StopFaceDetectionAsync();
                     await VoiceInterface.StopListening();
 
@@ -181,7 +184,7 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
-            LogHelper.Log("Je suis à toi dans un instant...");
+            LogHelper.Log("Que puis-je faire pour toi ?");
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
@@ -240,7 +243,7 @@ namespace AdaW10.ViewModels
                     var text = WebUtility.HtmlDecode(activity.Text);
                     var attachments = activity.Attachments;
 
-                    if (attachments.Count > 1 && attachments[0].ContentType == "application/vnd.microsoft.card.hero")
+                    if (attachments.Count > 0)
                     {
                         var token = new CancellationTokenSource();
 
@@ -259,7 +262,6 @@ namespace AdaW10.ViewModels
 
                 if (enumerable.Count > 0)
                 {
-                    //await Task.Delay(TimeSpan.FromMilliseconds(3000)).ConfigureAwait(false);
                     await SolicitExecute();
                 }
             }
