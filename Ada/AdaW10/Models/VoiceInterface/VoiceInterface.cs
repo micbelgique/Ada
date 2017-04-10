@@ -130,7 +130,7 @@ namespace AdaW10.Models.VoiceInterface
 
                 var result = await sttService.RecognizeAsync();
 
-                return result.Text;              
+                return result.Text;
             }
         }
 

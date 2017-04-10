@@ -93,13 +93,21 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
+                    if (VoiceInterface != null)
+                    {
+                        await VoiceInterface.StopListening();
+                    }
+
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
 
-                    await WebcamService.StopFaceDetectionAsync();
-                    await VoiceInterface.StopListening();
+                    PersonDto person = null;
 
-                    var person = (await MakeRecognition())?.FirstOrDefault();
+                    if(WebcamService.FaceDetectionEffect != null)
+                    {
+                        await WebcamService.StopFaceDetectionAsync();
+                        person = (await MakeRecognition())?.FirstOrDefault();
+                    }                 
 
                     if (person != null)
                     {                      
@@ -129,9 +137,15 @@ namespace AdaW10.ViewModels
                                 person.FirstName = name;
                             }
                         }
+
+                        await TtsService.SayAsync("En quoi puis je t'aider ?");
+                    }
+                    else
+                    {
+                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
                     }
 
-                    await TtsService.SayAsync("En quoi puis je t'aider ?");
+
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
@@ -173,17 +187,23 @@ namespace AdaW10.ViewModels
             LogHelper.Log<WebcamService>("Je me mets au travail !");
 
             await WebcamService.InitializeCameraAsync();
-            WebcamService.CaptureElement = CaptureElement;        
+            WebcamService.CaptureElement = CaptureElement;
+
+            await WebcamService.StartCameraPreviewAsync();
 
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-            {
-                await WebcamService.StartCameraPreviewAsync();
+            {           
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
 
         private async Task SolicitExecute()
         {
+            if (WebcamService.FaceDetectionEffect != null)
+            {
+                await WebcamService.StopFaceDetectionAsync();
+            }
+
             LogHelper.Log("Que puis-je faire pour toi ?");
 
             var str = await VoiceInterface.Listen();
@@ -201,10 +221,6 @@ namespace AdaW10.ViewModels
                 await TtsService.SayAsync("au revoir");
 
                 await VoiceInterface.ListeningHelloAda();
-                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-                {
-                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
-                }
             }
             else
             {
@@ -260,7 +276,7 @@ namespace AdaW10.ViewModels
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0)
+                if (enumerable.Count > 0 && activitySet.Activities[0].Name == "Finish")
                 {
                     await SolicitExecute();
                 }
@@ -288,15 +304,25 @@ namespace AdaW10.ViewModels
                         {
                             Guid faceApi = person.PersonId;
                             var personMessage = await client.GetPersonByFaceId(faceApi);
-                            List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
-                            foreach (MessageDto message in messages)
+                            if (personMessage != null)
                             {
-                                await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
-                                await TtsService.SayAsync(message.Contenu);
-                                message.IsRead = true;
-                                message.Read = DateTime.Now;
+                                List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
+                                foreach (MessageDto message in messages)
+                                {
+                                    if (message.From != null)
+                                    {
+                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
+                                    }
+                                    else
+                                    {
+                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message ");
+                                    }
+                                    await TtsService.SayAsync(message.Contenu);
+                                    message.IsRead = true;
+                                    message.Read = DateTime.Now;
 
-                                await client.PutMessage(message);
+                                    await client.PutMessage(message);
+                                }
                             }
                         }
                     }
