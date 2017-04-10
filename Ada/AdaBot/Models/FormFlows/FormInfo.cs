@@ -10,7 +10,7 @@ namespace AdaBot.Models.FormFlows
     public enum QuestionVisitOptions
     {
         test,
-        Que_fait_le_MIC, 
+        Que_fait_le_MIC,
         Que_faire_au_MIC,
         Quels_sont_les_horaires_du_MIC
     };
@@ -61,11 +61,11 @@ namespace AdaBot.Models.FormFlows
         {
             return new FormBuilder<FormInfo>()
                 .Field(nameof(QuestionVisit), IsVisit)
-            .Field(nameof(QuestionStudent), IsStudent)
-            .Field(nameof(QuestionDev), IsDev)
-            .Field(nameof(QuestionProject), IsProject)
-            .AddRemainingFields()
-                    .Build();
+                .Field(nameof(QuestionStudent), IsStudent)
+                .Field(nameof(QuestionDev), IsDev)
+                .Field(nameof(QuestionProject), IsProject)
+                .AddRemainingFields()
+                .Build();
         }
 
         private static bool IsStudent(FormInfo state)

@@ -33,6 +33,14 @@ namespace AdaWebApp.Models.DAL.Repositories
                 .ToList();
         }
 
+        public Visit GetLastVisit()
+        {
+            DateTime date = DateTime.Today;
+            return Table.Include(v => v.Person).Where(v => v.Date >= date)
+                .OrderByDescending(v => DbFunctions.CreateDateTime(date.Year, date.Month, date.Day, v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second))
+                .FirstOrDefault();
+        }
+
         public List<Visit> GetVisitsNow()
         {
             DateTime date = DateTime.Now;
@@ -132,12 +140,15 @@ namespace AdaWebApp.Models.DAL.Repositories
             var predicate = PredicateBuilder.True<Visit>();
             if (searchCriteria.D1 != null && searchCriteria.D2 == null)
             {
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(searchCriteria.D1));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                == DbFunctions.TruncateTime(searchCriteria.D1));
             }
             if (searchCriteria.D1 != null && searchCriteria.D2 != null)
             {
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(searchCriteria.D1));
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(searchCriteria.D2));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                >= DbFunctions.TruncateTime(searchCriteria.D1));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                <= DbFunctions.TruncateTime(searchCriteria.D2));
             }
             if (searchCriteria.D1 == null && searchCriteria.D2 == null)
             {
@@ -158,15 +169,18 @@ namespace AdaWebApp.Models.DAL.Repositories
             }
             if (searchCriteria.Glasses == true)
             {
-                predicate = predicate.And(v => glassesTest.Contains(v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Glasses));
+                predicate = predicate.And(v => glassesTest
+                .Contains(v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Glasses));
             }
             if (searchCriteria.Beard == true)
             {
-                predicate = predicate.And(v => v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5);
+                predicate = predicate.And(v => v.ProfilePictures
+                .OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5);
             }
             if (searchCriteria.Mustache == true)
             {
-                predicate = predicate.And(v => v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Moustache >= 0.5);
+                predicate = predicate.And(v => v.ProfilePictures
+                .OrderByDescending(p => p.Id).FirstOrDefault().Moustache >= 0.5);
             }
             return Context.Visits.AsExpandable().Where(predicate).ToList();
         }

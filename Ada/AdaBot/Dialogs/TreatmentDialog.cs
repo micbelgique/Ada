@@ -163,5 +163,20 @@ namespace AdaBot.Dialogs
                 return "Je n'ai pas encore de réponse à ta question :/";
             }
         }
+
+        public string describe (VisitDto visit)
+        {
+            string response = "Il semblerait que tu sois ";
+            if (visit.PersonVisit.Gender == GenderValues.Female)
+            {
+                response += "une femme de ";
+            }
+            else
+            {
+                response += "un homme de ";
+            }
+            response += visit.PersonVisit.Age + " ans";
+            return response;
+        }
     }
 }

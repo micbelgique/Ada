@@ -36,6 +36,19 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("LastVisit")]
+        // GET: get visits of the day
+        public VisitDto GetLastToday()
+        {
+            var visits = _unit.VisitsRepository.GetLastVisit();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.ToDto();
+        }
+
+        [HttpGet]
         [Route("VisitsToday")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsToday()

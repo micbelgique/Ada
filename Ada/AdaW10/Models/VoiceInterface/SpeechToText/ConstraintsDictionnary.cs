@@ -7,7 +7,9 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint ConstraintForHelloAda => new SpeechRecognitionListConstraint(new[]
         {
-            "hey ada", "salut ada", "hello ada", "coucou ada", "bonjour ada"
+            "J'ai besoin de toi Ada", "Ada j'ai besoin de toi", "Réveille-toi Ada", "Je suis là Ada", "Ada réveille-toi",
+            "Je veux te parler Ada","Ada je veux te parler", "Tu as une minute Ada",
+            "Tu es dispo Ada", "Ada tu as une minute", "Ada tu es dispo"
         },
         "constraint_hello_ada");
 

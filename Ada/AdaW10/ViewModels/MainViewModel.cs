@@ -93,7 +93,6 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
-                    
                     await WebcamService.StopFaceDetectionAsync();
                     await VoiceInterface.StopListening();
 

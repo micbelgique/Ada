@@ -265,6 +265,95 @@ namespace AdaBot.Dialogs
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("Describe")]
+        public async Task Describe(IDialogContext context, LuisResult result)
+        {
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+            TreatmentDialog treatment = new TreatmentDialog();
+            Activity replyToConversation;
+            VisitDto lastVisit = new VisitDto();
+            if (context.Activity.ServiceUrl == "https://facebook.botframework.com")
+            {
+                var splitResult = result.Query.Split(':');
+                if (splitResult[0] == "ConfirmationIdentityFace ")
+                {
+                    List<VisitDto> visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
+                    lastVisit = visits.Last();
+                    string response = treatment.describe(lastVisit);
+                    replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    string name = context.Activity.From.Name;
+                    string[] firstNameUser = name.Split(' ');
+                    string firstname = firstNameUser[0];
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("J'ai une petite hésitation, peux-tu me confirmer lequel de ces " + firstname + " es-tu? :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "ConfirmationIdentityFace :" + visit.PersonVisit.PersonId,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                    else
+                    {
+                        visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
+                        lastVisit = visits.Last();
+                        string response = treatment.describe(lastVisit);
+                        replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                }
+            }
+            else
+            {
+                lastVisit = await client.GetLastVisit();
+                string response = treatment.describe(lastVisit);
+                replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                await context.PostAsync(replyToConversation);
+                context.Wait(MessageReceived);
+            }
+        }
+
         [LuisIntent("SendMessage")]
         public async Task SendMessage(IDialogContext context, LuisResult result)
         {
@@ -275,10 +364,8 @@ namespace AdaBot.Dialogs
 
             if (splitResult[0] == "MessageTo ")
             {
-                //FLOW
                 PersonTo = Convert.ToInt32(splitResult[1]);
                 var form = MakeMessage();
-                //NE SE LANCE PAS!
                 context.Call(form, ResumeAfterMessageSending);
             }
             else
@@ -340,7 +427,6 @@ namespace AdaBot.Dialogs
                 }
                 else
                 {
-                    //FLOW
                     PersonTo = visits[0].PersonVisit.PersonId;
                     var form = MakeMessage();
                     context.Call(form, ResumeAfterMessageSending);

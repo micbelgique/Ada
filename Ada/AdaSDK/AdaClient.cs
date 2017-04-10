@@ -135,6 +135,22 @@ namespace AdaSDK
             }
         }
 
+        public async Task<VisitDto> GetLastVisit()
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/LastVisit"));
+                var content = await response.Content.ReadAsStringAsync();
+                var visit = JsonConvert.DeserializeObject<VisitDto>(content);
+                return visit;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new VisitDto();
+            }
+        }
+
         public async Task<List<VisitDto>> GetVisitsNow()
         {
             try
