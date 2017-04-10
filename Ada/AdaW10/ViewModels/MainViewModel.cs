@@ -96,10 +96,16 @@ namespace AdaW10.ViewModels
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
 
-                    await WebcamService.StopFaceDetectionAsync();
-                    await VoiceInterface.StopListening();
+                    PersonDto person = null;
 
-                    var person = (await MakeRecognition())?.FirstOrDefault();
+                    var test = WebcamService.FaceDetectionEffect;
+
+                    if(test != null)
+                    {
+                        await WebcamService.StopFaceDetectionAsync();
+                        person = (await MakeRecognition())?.FirstOrDefault();
+                    }
+                    await VoiceInterface.StopListening();
 
                     if (person != null)
                     {                      
@@ -173,11 +179,12 @@ namespace AdaW10.ViewModels
             LogHelper.Log<WebcamService>("Je me mets au travail !");
 
             await WebcamService.InitializeCameraAsync();
-            WebcamService.CaptureElement = CaptureElement;        
+            WebcamService.CaptureElement = CaptureElement;
+
+            await WebcamService.StartCameraPreviewAsync();
 
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-            {
-                await WebcamService.StartCameraPreviewAsync();
+            {           
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
@@ -201,10 +208,6 @@ namespace AdaW10.ViewModels
                 await TtsService.SayAsync("au revoir");
 
                 await VoiceInterface.ListeningHelloAda();
-                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-                {
-                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
-                }
             }
             else
             {
