@@ -30,9 +30,6 @@ namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private static MainViewModel _instance;
-        static readonly object instanceLock = new object();
-
         private DirectLineClient _client;
         private Conversation _conversation;
 
@@ -42,20 +39,6 @@ namespace AdaW10.ViewModels
 
             WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
-        }
-
-        public static MainViewModel getInstance()
-        {
-            if (_instance == null)
-            {
-                lock (instanceLock)
-                {
-                    if (_instance == null)
-                        _instance = new MainViewModel();
-                }
-            }
-
-            return _instance;
         }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }
@@ -110,19 +93,21 @@ namespace AdaW10.ViewModels
             {
                 if (e.Result.Constraint.Tag == "constraint_hello_ada")
                 {
+                    if (VoiceInterface != null)
+                    {
+                        await VoiceInterface.StopListening();
+                    }
+
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
 
                     PersonDto person = null;
 
-                    var test = WebcamService.FaceDetectionEffect;
-
-                    if(test != null)
+                    if(WebcamService.FaceDetectionEffect != null)
                     {
                         await WebcamService.StopFaceDetectionAsync();
                         person = (await MakeRecognition())?.FirstOrDefault();
-                    }
-                    await VoiceInterface.StopListening();
+                    }                 
 
                     if (person != null)
                     {                      
@@ -152,9 +137,15 @@ namespace AdaW10.ViewModels
                                 person.FirstName = name;
                             }
                         }
+
+                        await TtsService.SayAsync("En quoi puis je t'aider ?");
+                    }
+                    else
+                    {
+                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
                     }
 
-                    await TtsService.SayAsync("En quoi puis je t'aider ?");
+
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
@@ -208,6 +199,11 @@ namespace AdaW10.ViewModels
 
         private async Task SolicitExecute()
         {
+            if (WebcamService.FaceDetectionEffect != null)
+            {
+                await WebcamService.StopFaceDetectionAsync();
+            }
+
             LogHelper.Log("Que puis-je faire pour toi ?");
 
             var str = await VoiceInterface.Listen();

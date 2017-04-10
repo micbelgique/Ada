@@ -92,7 +92,10 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         public async Task<bool> CancelContinuousRecognitionAsync()
         {
             try{
-                await SpeechRecognizer.ContinuousRecognitionSession.CancelAsync();
+                if (SpeechRecognizer != null)
+                {
+                    await SpeechRecognizer.ContinuousRecognitionSession.CancelAsync();
+                }
                 return true; 
             }
             catch (Exception){
