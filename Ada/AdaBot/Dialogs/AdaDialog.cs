@@ -279,7 +279,8 @@ namespace AdaBot.Dialogs
                 {
                     List<VisitDto> visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
                     lastVisit = visits.Last();
-                    string response = treatment.describe(lastVisit);
+                    ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                    string response = treatment.describe(lastVisit, picture);
                     replyToConversation = ((Activity)context.Activity).CreateReply(response);
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
@@ -337,7 +338,8 @@ namespace AdaBot.Dialogs
                     {
                         visits = await client.GetLastVisitPerson(firstname);
                         lastVisit = visits.Last();
-                        string response = treatment.describe(lastVisit);
+                        ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                        string response = treatment.describe(lastVisit, picture);
                         replyToConversation = ((Activity)context.Activity).CreateReply(response);
                         await context.PostAsync(replyToConversation);
                         context.Wait(MessageReceived);
