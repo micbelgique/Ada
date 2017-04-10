@@ -38,8 +38,13 @@ namespace AdaBot.Dialogs
             {
                 message = $"{Dialog.NotSureInsult.Spintax()}";
             }
-            
-            await context.PostAsync(message);
+
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         } 
 
@@ -47,7 +52,12 @@ namespace AdaBot.Dialogs
         public async Task Age(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Age.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null); 
         }
 
@@ -55,7 +65,12 @@ namespace AdaBot.Dialogs
         public async Task Compliment(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Compliment.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -90,7 +105,7 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
             }
-
+            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
 
             context.Done<object>(null);
@@ -103,7 +118,12 @@ namespace AdaBot.Dialogs
 
             string[] firstNameUser = nameUser.Split(' ');
             string message = $"{Dialog.Bye.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -111,7 +131,12 @@ namespace AdaBot.Dialogs
         public async Task LifeSignification(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Sens.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -119,7 +144,12 @@ namespace AdaBot.Dialogs
         public async Task Feelings(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Feelings.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -127,7 +157,12 @@ namespace AdaBot.Dialogs
         public async Task Home(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Home.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -135,7 +170,12 @@ namespace AdaBot.Dialogs
         public async Task InfoRequest(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.InfoRequest.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -143,7 +183,12 @@ namespace AdaBot.Dialogs
         public async Task JokeRequest(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.JokeRequest.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -151,7 +196,12 @@ namespace AdaBot.Dialogs
         public async Task Name(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Name.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -159,7 +209,12 @@ namespace AdaBot.Dialogs
         public async Task Phone(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Phone.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -167,7 +222,12 @@ namespace AdaBot.Dialogs
         public async Task Reality(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Reality.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -175,7 +235,12 @@ namespace AdaBot.Dialogs
         public async Task Sex(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Sex.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -183,7 +248,12 @@ namespace AdaBot.Dialogs
         public async Task Thanks(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Thanks.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -191,8 +261,14 @@ namespace AdaBot.Dialogs
         public async Task Time(IDialogContext context, LuisResult result)
         {
             DateTime date = DateTime.Now;
+            date = date.AddHours(2);
             string message = $"Nous sommes le : " + date.ToString("dd/MM/yyyy") + " et il est : " + date.Hour +"h" + date.Minute;
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
 
@@ -200,7 +276,12 @@ namespace AdaBot.Dialogs
         public async Task None(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.None.Spintax()}";
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.Name = "Finish";
+            await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
     }
