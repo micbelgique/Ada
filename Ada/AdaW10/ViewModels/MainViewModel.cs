@@ -30,6 +30,9 @@ namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private static MainViewModel _instance;
+        static readonly object instanceLock = new object();
+
         private DirectLineClient _client;
         private Conversation _conversation;
 
@@ -39,6 +42,20 @@ namespace AdaW10.ViewModels
 
             WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
+        }
+
+        public static MainViewModel getInstance()
+        {
+            if (_instance == null)
+            {
+                lock (instanceLock)
+                {
+                    if (_instance == null)
+                        _instance = new MainViewModel();
+                }
+            }
+
+            return _instance;
         }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }
@@ -291,15 +308,18 @@ namespace AdaW10.ViewModels
                         {
                             Guid faceApi = person.PersonId;
                             var personMessage = await client.GetPersonByFaceId(faceApi);
-                            List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
-                            foreach (MessageDto message in messages)
+                            if (personMessage != null)
                             {
-                                await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
-                                await TtsService.SayAsync(message.Contenu);
-                                message.IsRead = true;
-                                message.Read = DateTime.Now;
+                                List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
+                                foreach (MessageDto message in messages)
+                                {
+                                    await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
+                                    await TtsService.SayAsync(message.Contenu);
+                                    message.IsRead = true;
+                                    message.Read = DateTime.Now;
 
-                                await client.PutMessage(message);
+                                    await client.PutMessage(message);
+                                }
                             }
                         }
                     }
