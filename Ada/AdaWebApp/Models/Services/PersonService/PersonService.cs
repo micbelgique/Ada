@@ -40,7 +40,7 @@ namespace AdaWebApp.Models.Services.PersonService
             
             Directory.CreateDirectory(MapPath(Global.TemporaryUploadsFolder));
         }
-
+         
         /// <summary>
         /// Asynchronously saves the temporary picture and return its path
         /// </summary>
