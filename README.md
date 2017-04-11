@@ -175,8 +175,11 @@ On Facebook you can have a persistent menu and a button start for your bot.
 
 For this button you need to send a post request to Facebook (you can do it with postman).
 
+You can find your Access Token on your facebook developer account.
+The page ID is in your parameter in the facebook page of your app.
+
  ```
- https://graph.facebook.com/v2.6/YOUR_APP_ID/thread_settings?access_token=PAGE_ACCESS_TOKEN
+ https://graph.facebook.com/v2.6/YOUR_PAGE_ID/thread_settings?access_token=PAGE_ACCESS_TOKEN
  
  
  {
@@ -184,7 +187,7 @@ For this button you need to send a post request to Facebook (you can do it with 
   "thread_state":"new_thread",
   "call_to_actions":[
     {
-      "payload":"USER_DEFINED_PAYLOAD"
+      "payload":"Bonjour"
     }
   ]
 }
@@ -205,17 +208,23 @@ For this button you need to send a post request to Facebook (you can do it with 
    "composer_input_disabled":false,
    "call_to_actions":[
       {
-        "title":"Your title",
+        "title":"Que fait Ada?",
         "type":"postback",
-        "payload":"USER_DEFINED_PAYLOAD"
+        "payload":"Tu sais faire quoi?"
       },
        {
-        "title":"Your title",
+        "title":"Evénements MIC",
         "type":"postback",
-        "payload":"USER_DEFINED_PAYLOAD"
+        "payload":"On fait un truc?"
+      },
+      {
+        "title":"Informations",
+        "type":"postback",
+        "payload":"help"
       }
     ]
   }
+
  ```
  
   [![](/doc/assets/PersistentMenuPostman.PNG)]()
