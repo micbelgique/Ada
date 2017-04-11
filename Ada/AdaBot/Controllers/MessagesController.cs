@@ -1,36 +1,34 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 using Microsoft.Bot.Builder.Dialogs;
 using AdaBot.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using System.Configuration;
 using AdaSDK;
 using AdaSDK.Models;
-using Newtonsoft.Json.Linq;
-using AdaBot.Models.FormFlows;
-using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
 using System.IO;
 using AdaBot.Services;
 using Microsoft.ProjectOxford.Vision.Contract;
-
+using Newtonsoft.Json;
+using System.Web.Http;
+using Microsoft.ProjectOxford.Face;
+using System.Collections.Generic;
 
 namespace AdaBot
-{ 
+{
     [BotAuthentication]
     public class MessagesController : ApiController 
     {
-
         string visionApiKey;
+        string FaceApiKey;
+
         VisionServiceClient visionClient;
+        FaceServiceClient faceClient;
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -42,9 +40,11 @@ namespace AdaBot
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
+            visionApiKey = ConfigurationManager.AppSettings["FaceApiKey"];
 
             //Vision SDK classes
             visionClient = new VisionServiceClient(visionApiKey);
+            faceClient = new FaceServiceClient(visionApiKey);
             string accessAllow;
             string idUser;
 
@@ -95,9 +95,12 @@ namespace AdaBot
                                         VisualFeature.Description //generate image caption
                                         };
                             AnalysisResult analysisResult = null;
+
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
+                                Guid faceId;
+
                                 //stores image url (parsed from attachment or message)
                                 string uploadedImageUrl = activity.Attachments.First().ContentUrl; 
 
@@ -105,6 +108,15 @@ namespace AdaBot
                                 {
                                     try
                                     {
+                                        var resultFace = await faceClient.DetectAsync(imageFileStream);
+
+                                        foreach(Microsoft.ProjectOxford.Face.Contract.Face result in resultFace)
+                                        {
+                                            faceId = result.FaceId;
+
+                                            var personMessage = await client.GetPersonByFaceId(faceId);
+                                        }
+
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
                                     }
                                     catch (Exception e)
