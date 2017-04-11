@@ -144,8 +144,6 @@ namespace AdaW10.ViewModels
                     {
                         await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
                     }
-
-
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
@@ -276,7 +274,7 @@ namespace AdaW10.ViewModels
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0 && activitySet.Activities[0].Name == "Finish")
+                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count()-1].Name == "Finish")
                 {
                     await SolicitExecute();
                 }
