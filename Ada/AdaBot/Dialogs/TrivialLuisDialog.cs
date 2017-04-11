@@ -20,6 +20,13 @@ namespace AdaBot.Dialogs
 
         }
 
+        protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
+        {
+
+            var message = (Activity)await item;
+            await base.MessageReceived(context, item);
+        }
+
         private async Task TrivialCallback(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var activity = await result;
@@ -46,7 +53,7 @@ namespace AdaBot.Dialogs
             replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
-        } 
+        }
 
         [LuisIntent("Age")]
         public async Task Age(IDialogContext context, LuisResult result)
@@ -58,7 +65,7 @@ namespace AdaBot.Dialogs
             replyToConversation.Type = "message";
             replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
-            context.Done<object>(null); 
+            context.Done<object>(null);
         }
 
         [LuisIntent("Compliment")]
@@ -127,7 +134,7 @@ namespace AdaBot.Dialogs
             context.Done<object>(null);
         }
 
-        [LuisIntent("LifeSignification")] 
+        [LuisIntent("LifeSignification")]
         public async Task LifeSignification(IDialogContext context, LuisResult result)
         {
             string message = $"{Dialog.Sens.Spintax()}";
@@ -262,7 +269,7 @@ namespace AdaBot.Dialogs
         {
             DateTime date = DateTime.Now;
             date = date.AddHours(2);
-            string message = $"Nous sommes le : " + date.ToString("dd/MM/yyyy") + " et il est : " + date.Hour +"h" + date.Minute;
+            string message = $"Nous sommes le : " + date.ToString("dd/MM/yyyy") + " et il est : " + date.Hour + "h" + date.Minute;
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
