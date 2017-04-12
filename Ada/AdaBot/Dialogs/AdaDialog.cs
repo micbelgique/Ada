@@ -397,64 +397,76 @@ namespace AdaBot.Dialogs
                 string firstname = null;
 
                 int nbEntities = result.Entities.Count();
-                for (int i = 0; i < nbEntities; i++)
+                if (nbEntities == 0)
                 {
-                    if (result.Entities[i].Type == "Firstname")
-                    {
-                        firstname = result.Entities[i].Entity;
-                    }
-                }
-
-                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
-
-                if (visits.Count == 0)
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire à qui envoyer ton message.");
                     replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Name = "Finish";
                     replyToConversation.Type = "message";
-                }
-                else if (visits.Count > 1)
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.AttachmentLayout = "carousel";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-                    foreach (var visit in visits)
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); 
-
-                        List<CardAction> cardButtons = new List<CardAction>();
-
-                        CardAction plButtonChoice = new CardAction()
-                        {
-                            Value = "MessageTo :" + visit.PersonVisit.PersonId,
-                            Type = "postBack",
-                            Title = "Le voilà !"
-                        };
-                        cardButtons.Add(plButtonChoice);
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Images = cardImages,
-                            Buttons = cardButtons
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                    }
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
                 }
                 else
                 {
-                    PersonTo = visits[0].PersonVisit.PersonId;
-                    var form = MakeMessage();
-                    context.Call(form, ResumeAfterMessageSending);
+                    for (int i = 0; i < nbEntities; i++)
+                    {
+                        if (result.Entities[i].Type == "Firstname")
+                        {
+                            firstname = result.Entities[i].Entity;
+                        }
+                    }
+
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Name = "Finish";
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "MessageTo :" + visit.PersonVisit.PersonId,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                    else
+                    {
+                        PersonTo = visits[0].PersonVisit.PersonId;
+                        var form = MakeMessage();
+                        context.Call(form, ResumeAfterMessageSending);
+                    }
                 }
             }
         }
