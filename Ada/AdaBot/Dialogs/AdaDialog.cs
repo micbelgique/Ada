@@ -793,11 +793,11 @@ namespace AdaBot.Dialogs
 
             int nbEntities;
             int nbVisits = 0;
-            string genderReturn = "personne(s)";
+            string genderReturn = " personne(s) ";
             string ageReturn = "";
             string emotionReturn = "";
             string emotion = "";
-            string dateReturn = "aujourd'hui";
+            string dateReturn = " aujourd'hui";
             string glassesReturn = "";
             string beardReturn = "";
             string mustacheReturn = "";
@@ -824,7 +824,7 @@ namespace AdaBot.Dialogs
                     if (splitResult[2] != "null")
                     {
                         date2 = Convert.ToDateTime(splitResult[2]);
-                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                        dateReturn = " entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd") + " ";
                     }
                 }
                 if (splitResult[3] != "null")
@@ -832,12 +832,12 @@ namespace AdaBot.Dialogs
                     if (splitResult[3] == Convert.ToString(GenderValues.Female))
                     {
                         gender = GenderValues.Female;
-                        genderReturn = "femme(s)";
+                        genderReturn = " femme(s) ";
                     }
                     else if (splitResult[3] == Convert.ToString(GenderValues.Male))
                     {
                         gender = GenderValues.Male;
-                        genderReturn = "homme(s)";
+                        genderReturn = " homme(s) ";
                     }
                 }
                 if (splitResult[4] != "null")
@@ -848,23 +848,23 @@ namespace AdaBot.Dialogs
                     if (splitResult[5] != "null")
                     {
                         age2 = Convert.ToInt32(splitResult[5]);
-                        ageReturn = "entre " + age1 + " et " + age2 + " ans";
+                        ageReturn = " entre " + age1 + " et " + age2 + " ans ";
                     }
                 }
                 if (splitResult[6] != "null")
                 {
                     glasses = true;
-                    glassesReturn = " avec des lunettes";
+                    glassesReturn = " avec des lunettes ";
                 }
                 if (splitResult[7] != "null")
                 {
                     beard = true;
-                    beardReturn = "avec une barbe";
+                    beardReturn = " avec une barbe ";
                 }
                 if (splitResult[8] != "null")
                 {
                     mustache = true;
-                    mustacheReturn = "et une moustache";
+                    mustacheReturn = " et une moustache ";
                 }
             }
             else
@@ -889,7 +889,7 @@ namespace AdaBot.Dialogs
                                     if (date1 == null)
                                     {
                                         date1 = date;
-                                        dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                                        dateReturn = " le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " ";
                                     }
                                     else if (date1 != null)
                                     {
@@ -900,7 +900,7 @@ namespace AdaBot.Dialogs
                                             date1 = date2;
                                             date2 = tmpDate;
                                         }
-                                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                                        dateReturn = " entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd") + " ";
                                     }
                                 }
                             }
@@ -921,7 +921,7 @@ namespace AdaBot.Dialogs
                                 age1 = age2;
                                 age2 = ageTmp;
                             }
-                            ageReturn = "entre " + age1 + " et " + age2 + " ans";
+                            ageReturn = " entre " + age1 + " et " + age2 + " ans ";
                         }
                     }
                 }
@@ -937,11 +937,11 @@ namespace AdaBot.Dialogs
 
                         if (gender == GenderValues.Male)
                         {
-                            genderReturn = "homme(s)";
+                            genderReturn = " homme(s) ";
                         }
                         else
                         {
-                            genderReturn = "femme(s)";
+                            genderReturn = " femme(s) ";
                         }
                     }
 
@@ -956,14 +956,14 @@ namespace AdaBot.Dialogs
                         if (hair == "barbu" || hair == "barbus" || hair == "barbe")
                         {
                             beard = true;
-                            beardReturn = "avec une barbe";
+                            beardReturn = " avec une barbe ";
                         }
                         if (hair == "moustachu" || hair == "moustachus" || hair == "moustache")
                         {
                             mustache = true;
                             if (beardReturn != "")
                             {
-                                mustacheReturn = "et une moustache";
+                                mustacheReturn = " et une moustache ";
                             }
                         }
                     }
@@ -985,27 +985,27 @@ namespace AdaBot.Dialogs
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
                         emotion = "Happiness";
-                        emotionReturn = "heureux(ses)";
+                        emotionReturn = " heureux(ses) ";
                     }
                     if (emotion == "neutre" || emotion == "neutres")
                     {
                         emotion = "Neutral";
-                        emotionReturn = "neutre(s)";
+                        emotionReturn = " neutre(s) ";
                     }
                     if (emotion == "triste" || emotion == "tristes")
                     {
-                        emotion = "Sadness";
-                        emotionReturn = "triste(s)";
+                        emotion = " Sadness ";
+                        emotionReturn = " triste(s) ";
                     }
                     if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
                     {
                         emotion = "Anger";
-                        emotionReturn = "faché(es)";
+                        emotionReturn = " faché(es) ";
                     }
                     if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
                     {
                         emotion = "Surprise";
-                        emotionReturn = "surpris(es)";
+                        emotionReturn = " surpris(es) ";
                     }
 
                     for (int y = 0; y < nbVisits; y++)
@@ -1033,13 +1033,13 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + glassesReturn + " " + ageReturn + " " + beardReturn + " " + mustacheReturn + " " + dateReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson+ " " + genderReturn + emotionReturn + glassesReturn + ageReturn + beardReturn + mustacheReturn + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyStats.Spintax()} " + dateReturn + "... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyStats.Spintax()}" + dateReturn + "... :/");
             }
 
             if (visitsReturn.Count() != 0)
