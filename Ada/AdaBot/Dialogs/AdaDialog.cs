@@ -66,8 +66,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
-
-            replyToConversation.Name = "Finish";
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -78,8 +77,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = await createCarousel.GetEvent(context);
-
-            replyToConversation.Name = "Finish";
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -97,7 +95,6 @@ namespace AdaBot.Dialogs
                 Activity replyToConversation;
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.None.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Name = "Finish";
                 replyToConversation.Type = "message";
                 await context.PostAsync(replyToConversation);
             }
@@ -272,7 +269,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -299,7 +295,6 @@ namespace AdaBot.Dialogs
                     ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
                     string response = treatment.describe(lastVisit, picture);
                     replyToConversation = ((Activity)context.Activity).CreateReply(response);
-                    replyToConversation.Name = "Finish";
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
                 }
@@ -314,7 +309,6 @@ namespace AdaBot.Dialogs
                     {
                         replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
                         replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Name = "Finish";
                         replyToConversation.Type = "message";
                     }
                     else if (visits.Count > 1)
@@ -360,7 +354,6 @@ namespace AdaBot.Dialogs
                         ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
                         string response = treatment.describe(lastVisit, picture);
                         replyToConversation = ((Activity)context.Activity).CreateReply(response);
-                        replyToConversation.Name = "Finish";
                         await context.PostAsync(replyToConversation);
                         context.Wait(MessageReceived);
                     }
@@ -372,7 +365,6 @@ namespace AdaBot.Dialogs
                 ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
                 string response = treatment.describe(lastVisit, picture);
                 replyToConversation = ((Activity)context.Activity).CreateReply(response);
-                replyToConversation.Name = "Finish";
                 await context.PostAsync(replyToConversation);
                 context.Wait(MessageReceived);
             }
@@ -401,7 +393,6 @@ namespace AdaBot.Dialogs
                 {
                     replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire à qui envoyer ton message.");
                     replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Name = "Finish";
                     replyToConversation.Type = "message";
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
@@ -422,7 +413,6 @@ namespace AdaBot.Dialogs
                     {
                         replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
                         replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Name = "Finish";
                         replyToConversation.Type = "message";
                     }
                     else if (visits.Count > 1)
@@ -549,7 +539,6 @@ namespace AdaBot.Dialogs
                 Attachment plAttachment = plCard.ToAttachment();
                 replyToConversation.Attachments.Add(plAttachment);
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -558,18 +547,20 @@ namespace AdaBot.Dialogs
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             List<VisitDto> visits = await client.GetVisitsToday();
-
-            Activity replyToConversation;
 
             if (visits.Count == 0)
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Nobody.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Name = "Finish";
                 replyToConversation.Type = "message";
             }
             else
@@ -689,7 +680,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -769,7 +759,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -778,10 +767,14 @@ namespace AdaBot.Dialogs
         public async Task GetStatsVisits(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-            Activity replyToConversation;
             CreateDialog customDialog = new CreateDialog();
             TreatmentDialog treatment = new TreatmentDialog();
             EntityRecognizer recog = new EntityRecognizer();
@@ -1154,7 +1147,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -1162,9 +1154,13 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
-
-            Activity replyToConversation = null;
+            //Message d'attente
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             int nbVisit = 10;
@@ -1298,7 +1294,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -1384,7 +1379,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }

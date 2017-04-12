@@ -65,8 +65,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
-
-            replyToConversation.Name = "Finish";
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -77,8 +76,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = await createCarousel.GetEvent(context);
-
-            replyToConversation.Name = "Finish";
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -96,7 +94,6 @@ namespace AdaBot.Dialogs
                 Activity replyToConversation;
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.None.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Name = "Finish";
                 replyToConversation.Type = "message";
                 await context.PostAsync(replyToConversation);
             }
@@ -151,7 +148,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -163,7 +159,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -175,7 +170,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -187,7 +181,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -199,7 +192,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -211,7 +203,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -223,7 +214,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
@@ -235,7 +225,6 @@ namespace AdaBot.Dialogs
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
             replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "Finish";
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);

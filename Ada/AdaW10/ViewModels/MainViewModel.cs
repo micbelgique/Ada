@@ -279,7 +279,7 @@ namespace AdaW10.ViewModels
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count()-1].Name == "Finish")
+                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count()-1].Name != "NotFinish")
                 {
                     await SolicitExecute();
                 }

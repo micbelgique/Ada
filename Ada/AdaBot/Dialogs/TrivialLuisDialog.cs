@@ -50,7 +50,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -63,7 +62,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -76,7 +74,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -112,7 +109,6 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
             }
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
 
             context.Done<object>(null);
@@ -126,7 +122,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -139,7 +134,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -152,7 +146,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -165,7 +158,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -178,7 +170,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -191,7 +182,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -204,7 +194,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -217,7 +206,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -230,7 +218,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -243,7 +230,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -256,7 +242,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -271,7 +256,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -284,7 +268,6 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
-            replyToConversation.Name = "Finish";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
