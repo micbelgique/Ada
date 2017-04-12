@@ -180,7 +180,7 @@
     <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Je ne comprends pas :)]</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
-    <value>[Je suis désolée mais cette demande requiert une autorisation.|Je ne peux pas te donner librement ce genre d'informations, passe donc nous voir au MIC ;) |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC? :) | Ces informations sont classées secrètes... (Mais si tu pas nous voir au MIC, il y a peut-être moyen de s'arranger... ;) ).]</value>
+    <value>[Je suis désolée mais cette demande nécessite des autorisations. Viens découvrir cette fonctionnalité tous les vendredi au MIC.|Je ne peux pas te donner librement ce genre d'informations, passe donc nous voir un vendredi au MIC ;) |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC un vendredi? :) | Ces informations sont classées secrètes... (Mais si tu viens nous voir au MIC, il y a peut-être moyen de s'arranger... ;) ).]</value>
   </data>
   <data name="NotSureInsult" xml:space="preserve">
     <value>[Je n'ai pas bien compris ce que tu m'as dis]</value>
