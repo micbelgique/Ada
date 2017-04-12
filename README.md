@@ -11,7 +11,7 @@ Have fun !
 ## Deployment
 ### Microsoft Cognitive Services
 
-The first step to deploy the web application is to subscribe to Microsoft Cognitive Services Face and Emotion apis and get keys.(https://www.microsoft.com/cognitive-services/en-us/)
+The first step to deploy the web application is to subscribe to Microsoft Cognitive Services Face, Emotion and ComputerVision apis and get keys.(https://www.microsoft.com/cognitive-services/en-us/)
 
 On Microsoft Cognitive Face web console (https://goo.gl/afkZ6R), create a new persons group with a generated guid as group id.
 
