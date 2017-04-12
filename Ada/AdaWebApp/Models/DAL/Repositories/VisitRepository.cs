@@ -168,17 +168,17 @@ namespace AdaWebApp.Models.DAL.Repositories
                 predicate = predicate.And(v => v.Person.DateOfBirth.Year <= searchCriteria.A1);
                 predicate = predicate.And(v => v.Person.DateOfBirth.Year >= searchCriteria.A2);
             }
-            if (searchCriteria.Glasses == true)
+            if (searchCriteria.Glasses)
             {
                 predicate = predicate.And(v => glassesTest
                 .Contains(v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Glasses));
             }
-            if (searchCriteria.Beard == true)
+            if (searchCriteria.Beard)
             {
                 predicate = predicate.And(v => v.ProfilePictures
                 .OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5);
             }
-            if (searchCriteria.Mustache == true)
+            if (searchCriteria.Mustache)
             {
                 predicate = predicate.And(v => v.ProfilePictures
                 .OrderByDescending(p => p.Id).FirstOrDefault().Moustache >= 0.5);

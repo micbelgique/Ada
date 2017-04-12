@@ -775,7 +775,7 @@ namespace AdaBot.Dialogs
         }
 
         [LuisIntent("GetStatsVisits")]
-        public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
+        public async Task GetStatsVisits(IDialogContext context, LuisResult result)
         {
             //Message d'attente
             await context.PostAsync($"{Dialog.Waiting.Spintax()}");
