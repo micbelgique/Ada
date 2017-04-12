@@ -121,9 +121,6 @@ namespace AdaBot.Dialogs
         [LuisIntent("Farewell")]
         public async Task Farewell(IDialogContext context, LuisResult result)
         {
-            string nameUser = context.Activity.From.Name;
-
-            string[] firstNameUser = nameUser.Split(' ');
             string message = $"{Dialog.Bye.Spintax()}";
             Activity replyToConversation;
             replyToConversation = ((Activity)context.Activity).CreateReply(message);

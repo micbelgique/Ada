@@ -218,6 +218,11 @@ namespace AdaW10.ViewModels
             {
                 await TtsService.SayAsync("au revoir");
 
+                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
+                {
+                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+                }
+
                 await VoiceInterface.ListeningHelloAda();
             }
             else
