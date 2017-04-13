@@ -106,7 +106,7 @@ And deploy the 2 Luis in azure :
 
 # Step 2
 
-Now you need to deploy the bot on azur. For that you need to create a new web app and publish the bot on this web app.
+Now you need to deploy the bot on azure. For that you need to create a new web app and publish the bot on this web app.
 
 # Step 3
 
