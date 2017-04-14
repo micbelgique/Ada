@@ -118,7 +118,7 @@ namespace AdaBot
                                         {
                                             imageFileStream.Seek(0, SeekOrigin.Begin);
 
-                                            PersonDto[] persons = await dataService.RecognizePersonsAsync(imageFileStream);
+                                            PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 

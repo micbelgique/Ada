@@ -307,6 +307,28 @@ namespace AdaWebApp.Models.Services.PersonService
 
         #region Queue methods
 
+        public async Task EnqueuePicture(IList<RecognitionItem> recognitionItems)
+        {
+            // Write work items
+            foreach (var recognitionItem in recognitionItems)
+            {
+                // Gets recognized person
+                var person = recognitionItem.Person;
+
+                if (person != null)
+                {
+                    // Update person's statistics 
+                    person.UpdateAge(recognitionItem.Face.FaceAttributes.Age);
+                    person.UpdateGender(GenderValuesHelper.Parse(recognitionItem.Face.FaceAttributes.Gender));
+
+                    _unit.PersonRepository.Update(person);
+                }
+
+                _unit.RecognitionItemsRepository.Insert(recognitionItem);
+                await _unit.SaveAsync();
+            }
+        }
+
         /// <summary>
         /// Asynchronously put a recognition item into queue
         /// </summary>

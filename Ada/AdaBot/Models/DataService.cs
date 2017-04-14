@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 using AdaSDK;
 using Newtonsoft.Json;
 using TokenManagerService = AdaW10.Models.AuthenticationServices.TokenManagerService;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
 
 namespace AdaBot.Models
 {
     public class DataService
     {
-        public static readonly string ApiBasePath = "http://adawebapp.azurewebsites.net/api/person"; // ATENTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-        public static readonly string PersonsRecognitionQuery = "recognizepersons";
+        public static readonly string ApiBasePath = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/api/person";
+        public static readonly string PersonsRecognitionQuery = "recognizepersonsPicture";
 
         public static readonly string PersonUpdateInformationQuery = "updatepersoninformation";
 
@@ -26,7 +27,7 @@ namespace AdaBot.Models
             _httpClient = new HttpClient(); 
         }
 
-        public async Task<PersonDto[]> RecognizePersonsAsync(Stream picture)
+        public async Task<PersonDto[]> recognizepersonsPictureAsync(Stream picture)
         {
             using (var streamContent = new StreamContent(picture))
             using (var formData = new MultipartFormDataContent())

@@ -57,8 +57,44 @@ namespace AdaWebApp.Controllers.API
                 List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
 
                 // Add items to queue
-                await _personService.Enqueue(recogItems);
+                await _personService.EnqueuePicture(recogItems);
                 
+                return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
+            }
+            catch (FaceAPIException e)
+            {
+                _logger.Error($"Exception : {e.ErrorCode} : {e.Message}", e);
+                return GetWebServiceError(e.ErrorCode, e.ErrorMessage);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Exception : {e.Message}", e);
+                return GetWebServiceError("InternalError", e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("recognizepersonsPicture")]
+        public async Task<HttpResponseMessage> RecognizePersonsPictureAsync()
+        {
+            if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0)
+            {
+                return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
+            }
+
+            try
+            {
+                // Get uploaded file
+                HttpPostedFile file = HttpContext.Current.Request.Files[0];
+
+                // Save the temporary file and get its path
+                string filePath = await _personService.SaveTemporaryFileAsync(file);
+
+                // Detect faces into picture
+                Face[] faces = await _personService.DetectFacesFromPictureAsync(filePath);
+
+                List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
+
                 return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
             }
             catch (FaceAPIException e)
