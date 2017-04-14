@@ -114,13 +114,13 @@ namespace AdaBot
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
                                         reply.Append("Je vois: " + analysisResult.Description.Captions.First().Text + ". ");
 
-                                        if (analysisResult.Description.Tags[0] == "person")                                          
+                                        if (analysisResult.Description.Tags.Contains("person"))                                          
                                         {
                                             imageFileStream.Seek(0, SeekOrigin.Begin);
 
                                             PersonDto[] persons = await dataService.RecognizePersonsAsync(imageFileStream);
 
-                                            reply.Append("Il y a " + persons.Count() + " personne(s). ");
+                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 
                                             foreach (PersonDto result in persons)
                                             {
