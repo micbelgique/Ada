@@ -1,35 +1,33 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 using Microsoft.Bot.Builder.Dialogs;
 using AdaBot.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using System.Configuration;
 using AdaSDK;
 using AdaSDK.Models;
-using Newtonsoft.Json.Linq;
-using AdaBot.Models.FormFlows;
-using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
 using System.IO;
 using AdaBot.Services;
 using Microsoft.ProjectOxford.Vision.Contract;
-
+using Newtonsoft.Json;
+using System.Web.Http;
+using Microsoft.ProjectOxford.Face;
+using System.Collections.Generic;
+using AdaBot.Models;
+using System.Text;
 
 namespace AdaBot
-{ 
+{
     [BotAuthentication]
     public class MessagesController : ApiController 
     {
-
         string visionApiKey;
+
         VisionServiceClient visionClient;
         /// <summary>
         /// POST: api/Messages
@@ -45,6 +43,7 @@ namespace AdaBot
 
             //Vision SDK classes
             visionClient = new VisionServiceClient(visionApiKey);
+
             string accessAllow;
             string idUser;
 
@@ -82,10 +81,14 @@ namespace AdaBot
 
             if (activity.Type == ActivityTypes.Message)
             {
+                DataService dataService = new DataService();
+
                 if (activity.Attachments?.Count() >= 1)
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
                     {
+                        StringBuilder reply = new StringBuilder();
+
                         try
                         {
                             VisionService visionService = new VisionService(activity);
@@ -95,17 +98,44 @@ namespace AdaBot
                                         VisualFeature.Description //generate image caption
                                         };
                             AnalysisResult analysisResult = null;
+
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
                                 //stores image url (parsed from attachment or message)
-                                string uploadedImageUrl = activity.Attachments.First().ContentUrl; 
+                                string uploadedImageUrl = activity.Attachments.First().ContentUrl;
+
+                                List<PersonVisitDto> person = new List<PersonVisitDto>();
 
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
                                     try
                                     {
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
+                                        reply.Append("Je vois: " + analysisResult.Description.Captions.First().Text + ". ");
+
+                                        if (analysisResult.Description.Tags[0] == "person")                                          
+                                        {
+                                            imageFileStream.Seek(0, SeekOrigin.Begin);
+
+                                            PersonDto[] persons = await dataService.RecognizePersonsAsync(imageFileStream);
+
+                                            reply.Append("Il y a " + persons.Count() + " personne(s). ");
+
+                                            foreach (PersonDto result in persons)
+                                            {
+                                                if(result.FirstName != null)
+                                                {
+                                                    reply.Append("Je connais " + result.FirstName + ", cette personne a " + result.Age + "ans.");
+                                                }
+                                                else
+                                                {
+                                                    reply.Append("Je ne connais malheureusement pas cette personne mais elle a " + result.Age + "ans.");
+                                                }
+
+                                                person.Add(await client.GetPersonByFaceId(result.PersonId));
+                                            }
+                                        }
                                     }
                                     catch (Exception e)
                                     {
@@ -113,10 +143,10 @@ namespace AdaBot
                                     }
                                 }
                             }
-                            var reply = activity.CreateReply("Je vois: " + analysisResult.Description.Captions.First().Text);
+                          
 
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                            await connector.Conversations.ReplyToActivityAsync(reply);
+                            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }
                         catch(ClientException e)
