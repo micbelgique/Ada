@@ -57,7 +57,7 @@ namespace AdaWebApp.Controllers.API
                 List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
 
                 // Add items to queue
-                await _personService.EnqueuePicture(recogItems);
+                await _personService.Enqueue(recogItems);
                 
                 return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
             }
