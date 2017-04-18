@@ -120,26 +120,26 @@ namespace AdaWebApp.Controllers.API
             return Request.CreateResponse(HttpStatusCode.OK);  
         }
 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[Route("EmotionPicture")]
-        //public async Task<EmotionScores> EmotionPicture()
-        //{
-        //        // Get uploaded file
-        //        HttpPostedFile file = HttpContext.Current.Request.Files[0];
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("EmotionPicture")]
+        public async Task<EmotionScores> EmotionPicture()
+        {
+            // Get uploaded file
+            HttpPostedFile file = HttpContext.Current.Request.Files[0];
 
-        //        // Save the temporary file and get its path
-        //                    string filePath = await _personService.SaveTemporaryFileAsync(file);
+            // Save the temporary file and get its path
+            string filePath = await _personService.SaveTemporaryFileAsync(file);
 
-        //        // Detect faces into picture
-        //                    EmotionScores emotion = await _personService.EmotionPictureAsync(filePath);
+            // Detect faces into picture
+            EmotionScores emotion = await _personService.EmotionPictureAsync(filePath);
 
-        //                    //List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
+            //List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
 
-        //                    //return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
+            //return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
 
-        //    return await _personService.EmotionPictureAsync();
-        //}
+            return emotion;
+        }
 
         [HttpPost]
         [Route("updatepersoninformation")]
