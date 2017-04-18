@@ -409,6 +409,13 @@ namespace AdaWebApp.Models.Services.PersonService
             return person;
         }
 
+        public async Task<EmotionScores> ProcessRecognitionItemPicture(RecognitionItem item)
+        {
+            Task<EmotionScores> emotionTask = RecognizeEmotions(item.ImageUrl, item.Face.FaceRectangle);
+
+            return await emotionTask;
+        }
+
         /// <summary>
         /// Asynchronously process a queue item from id of recognition item
         /// </summary>
@@ -441,6 +448,18 @@ namespace AdaWebApp.Models.Services.PersonService
                 _unit.RecognitionItemsRepository.Remove(item);
                 await _unit.SaveAsync();
             }
+        }
+
+        public async Task<EmotionScores> EmotionPictureAsync(string filePath)
+        {
+            RecognitionItem item;
+            EmotionScores emotion = new EmotionScores();
+
+            while ((item = _unit.RecognitionItemsRepository.Pop()) != null)
+            {
+                emotion = await ProcessRecognitionItemPicture(item);
+            }
+            return emotion;
         }
 
         /// <summary>

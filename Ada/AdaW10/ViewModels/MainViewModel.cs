@@ -30,6 +30,9 @@ namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private static MainViewModel _instance;
+        static readonly object instanceLock = new object();
+
         private DirectLineClient _client;
         private Conversation _conversation;
 
@@ -39,6 +42,20 @@ namespace AdaW10.ViewModels
 
             WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
+        }
+
+        public static MainViewModel GetInstance()
+        {
+            if (_instance == null)
+            {
+                lock (instanceLock)
+                {
+                    if (_instance == null)
+                        _instance = new MainViewModel();
+                }
+            }
+
+            return _instance;
         }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }

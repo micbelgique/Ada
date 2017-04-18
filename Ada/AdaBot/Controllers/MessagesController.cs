@@ -105,8 +105,6 @@ namespace AdaBot
                                 //stores image url (parsed from attachment or message)
                                 string uploadedImageUrl = activity.Attachments.First().ContentUrl;
 
-                                List<PersonVisitDto> person = new List<PersonVisitDto>();
-
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
                                     try
@@ -120,20 +118,18 @@ namespace AdaBot
 
                                             PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
+                                            Stream imageStream = GetStreamFromUrl(uploadedImageUrl);
+                                            EmotionDto emotion = await dataService.recognizeEmotion(imageStream);
+
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
+
+                                            StringConstructor replytyest = new StringConstructor();
 
                                             foreach (PersonDto result in persons)
                                             {
-                                                if(result.FirstName != null)
-                                                {
-                                                    reply.Append("Je connais " + result.FirstName + ", cette personne a " + result.Age + "ans.");
-                                                }
-                                                else
-                                                {
-                                                    reply.Append("Je ne connais malheureusement pas cette personne mais elle a " + result.Age + "ans.");
-                                                }
+                                                reply.Append(replytyest.DescriptionPersonImage(result));
 
-                                                person.Add(await client.GetPersonByFaceId(result.PersonId));
+                                                
                                             }
                                         }
                                     }
@@ -144,7 +140,6 @@ namespace AdaBot
                                 }
                             }
                           
-
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);

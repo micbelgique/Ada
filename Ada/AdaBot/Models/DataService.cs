@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using TokenManagerService = AdaW10.Models.AuthenticationServices.TokenManagerService;
 using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
+using AdaSDK.Models;
 
 namespace AdaBot.Models
 {
@@ -17,6 +18,9 @@ namespace AdaBot.Models
     {
         public static readonly string ApiBasePath = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/api/person";
         public static readonly string PersonsRecognitionQuery = "recognizepersonsPicture";
+        public static readonly string EmotionPicture = "EmotionPicture";
+
+        private static string token;
 
         public static readonly string PersonUpdateInformationQuery = "updatepersoninformation";
 
@@ -24,7 +28,7 @@ namespace AdaBot.Models
 
         public DataService()
         {
-            _httpClient = new HttpClient(); 
+            _httpClient = new HttpClient();
         }
 
         public async Task<PersonDto[]> recognizepersonsPictureAsync(Stream picture)
@@ -39,13 +43,41 @@ namespace AdaBot.Models
                 formData.Add(streamContent, "file", $"{Guid.NewGuid()}.jpg");
 
                 // Get authorization token 
-                string token = (await TokenManagerService.NewToken());
+                token = (await TokenManagerService.NewToken());
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 HttpResponseMessage resp = await _httpClient.PostAsync(uri, formData);
 
                 if (resp.IsSuccessStatusCode)
+                {
                     return JsonConvert.DeserializeObject<PersonDto[]>(await resp.Content.ReadAsStringAsync());
+                }
+
+                var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());
+                Debug.WriteLine($"WebServiceError : {error.HttpStatus} - {error.ErrorCode} : {error.ErrorMessage}");
+                return null;
+            }
+        }
+
+        public async Task<EmotionDto> recognizeEmotion(Stream picture)
+        {
+            using (var streamContent = new StreamContent(picture))
+            using (var formData = new MultipartFormDataContent())
+            {
+                // Creates uri from configuration
+                var uri = new Uri($"{ApiBasePath}/{EmotionPicture}");
+
+                // Adds content to multipart form data 
+                formData.Add(streamContent, "file", $"{Guid.NewGuid()}.jpg");
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                HttpResponseMessage resp = await _httpClient.PostAsync(uri, formData);
+
+                if (resp.IsSuccessStatusCode)
+                {
+                    var test = JsonConvert.DeserializeObject<EmotionDto>(await resp.Content.ReadAsStringAsync());
+                    return test;
+                }
 
                 var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());
                 Debug.WriteLine($"WebServiceError : {error.HttpStatus} - {error.ErrorCode} : {error.ErrorMessage}");
