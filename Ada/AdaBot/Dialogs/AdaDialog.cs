@@ -204,7 +204,7 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url:($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -615,7 +615,7 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url:($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -1085,7 +1085,7 @@ namespace AdaBot.Dialogs
                         string buttonValue = treatment.GetValueButton(date1, date2, gender, age1, age2, glasses, beard, mustache);
 
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();

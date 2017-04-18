@@ -34,11 +34,11 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGVisitsDay"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGAverage"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGAboutMIC"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGBestFriend"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/VisitTodayMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/MoyFreqMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/APropos.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/BestFriend.jpg");
 
             for (int i = 0; i < pictures.Count(); i++)
             {
@@ -110,8 +110,8 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg");
 
             for (int i = 0; i < pictures.Count(); i++)
             {
@@ -170,18 +170,18 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGTwitter"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGLinkedin"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/FBMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/YoutubeMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/TwitterMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/LinkedinMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg");
 
             for (int i = 0; i < pictures.Count(); i++)
             {
                 if (pictures[i] == "")
                 {
-                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SiteMIC.jpg";
                 }
             }
 
@@ -263,13 +263,13 @@ namespace AdaBot.Dialogs
                     List<CardImage> cardImages = new List<CardImage>();
                     if (possiblePictures.Count == 0)
                     {
-                        if ($"{ConfigurationManager.AppSettings["IMGMIC"]}" == "")
+                        if ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg" == "")
                         {
-                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE%20MIC%20v4.jpg"));
+                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SiteMIC.jpg"));
                         }
                         else
                         {
-                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                            cardImages.Add(new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg")));
                         }
                     }
                     else

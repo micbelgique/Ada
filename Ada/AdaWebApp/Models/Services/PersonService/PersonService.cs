@@ -37,10 +37,10 @@ namespace AdaWebApp.Models.Services.PersonService
             _faceServiceClient = new FaceServiceClient(Global.OxfordFaceApiKey);
             _emotionServiceClient = new EmotionServiceClient(Global.OxfordEmotionApiKey);
             _unit = unit;
-            
+
             Directory.CreateDirectory(MapPath(Global.TemporaryUploadsFolder));
         }
-         
+
         /// <summary>
         /// Asynchronously saves the temporary picture and return its path
         /// </summary>
@@ -61,7 +61,7 @@ namespace AdaWebApp.Models.Services.PersonService
         {
             // Makes face detection
             Face[] faces = await _faceServiceClient.DetectAsync(UrlHelpers.Content(Global.Host, imagePath),
-                returnFaceAttributes: new[] { FaceAttributeType.Age, FaceAttributeType.Gender, FaceAttributeType.Glasses, FaceAttributeType.FacialHair});
+                returnFaceAttributes: new[] { FaceAttributeType.Age, FaceAttributeType.Gender, FaceAttributeType.Glasses, FaceAttributeType.FacialHair });
 
             // If there aren't at least one face in picture
             if (!faces.Any())
@@ -162,28 +162,28 @@ namespace AdaWebApp.Models.Services.PersonService
         /// </summary>
         public async Task<Person> CreatePerson(Face face)
         {
-            CreatePersonResult apiCreationResult = null; 
+            CreatePersonResult apiCreationResult = null;
 
             try
             {
                 // Creates person on oxford api
                 apiCreationResult = await _faceServiceClient.CreatePersonAsync(Global.OxfordPersonGroupId, $"{Guid.NewGuid()}");
-                return _unit.PersonRepository.CreatePerson(apiCreationResult.PersonId, face); 
+                return _unit.PersonRepository.CreatePerson(apiCreationResult.PersonId, face);
             }
-            catch(FaceAPIException e)
+            catch (FaceAPIException e)
             {
                 LogManager.GetLogger(GetType()).Info("Error occured during creation of person on oxford api", e);
-                return null; 
+                return null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // FallBack: Remove person on oxford to avoid ambiguous person in api database
-                await PersonCreationFallBack(apiCreationResult?.PersonId); 
+                await PersonCreationFallBack(apiCreationResult?.PersonId);
 
                 LogManager.GetLogger(GetType()).Info("General error occured during creation of person. See exception for more details", e);
-                return null; 
+                return null;
             }
-            
+
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace AdaWebApp.Models.Services.PersonService
         /// </summary>
         public async Task PersonCreationFallBack(Guid? personApiId)
         {
-            if (personApiId == null) return; 
+            if (personApiId == null) return;
 
             try
             {
@@ -212,22 +212,22 @@ namespace AdaWebApp.Models.Services.PersonService
         /// </summary>
         public async Task<bool> AddFaceToPersonInOxford(Person person, ProfilePicture picture, Face face, string temporaryImage)
         {
-            Guid faceApiId = default(Guid); 
+            Guid faceApiId = default(Guid);
 
             try
             {
                 // if the person has reached the limit of 64 faces in oxford
-                if(person.HasReachedMaxLimitOfFaces()) await RemoveFaceFromOxford(person);
+                if (person.HasReachedMaxLimitOfFaces()) await RemoveFaceFromOxford(person);
 
-                AddPersistedFaceResult result =  await _faceServiceClient.AddPersonFaceAsync(Global.OxfordPersonGroupId,
-                    person.PersonApiId, UrlHelpers.Content(Global.Host, temporaryImage), targetFace:face.FaceRectangle);
+                AddPersistedFaceResult result = await _faceServiceClient.AddPersonFaceAsync(Global.OxfordPersonGroupId,
+                    person.PersonApiId, UrlHelpers.Content(Global.Host, temporaryImage), targetFace: face.FaceRectangle);
 
                 faceApiId = result.PersistedFaceId;
 
                 // Link profile picture with face on oxford api
                 picture.FaceApiId = faceApiId;
 
-                return true; 
+                return true;
             }
             catch (FaceAPIException e)
             {
@@ -238,10 +238,10 @@ namespace AdaWebApp.Models.Services.PersonService
                 {
                     await PersonCreationFallBack(person.PersonApiId);
                     File.Delete(MapPath(temporaryImage));
-                    return false; 
+                    return false;
                 }
 
-                return true; 
+                return true;
             }
         }
 
@@ -390,7 +390,7 @@ namespace AdaWebApp.Models.Services.PersonService
 
                 // Adds picture to oxford, update information and clean temporary folder
                 // If an erorr occured during addind face for a new person, stops process and rollback
-                if(!await AddFaceToPersonInOxford(person, picture, item.Face, item.ImageUrl)) return null;
+                if (!await AddFaceToPersonInOxford(person, picture, item.Face, item.ImageUrl)) return null;
                 picture.EmotionScores = await emotionTask;
 
                 // Clean temporary image file
@@ -402,7 +402,7 @@ namespace AdaWebApp.Models.Services.PersonService
 
                 // Creates person is it's new
                 if (person.Id == 0) _unit.PersonRepository.Insert(person);
-               
+
                 await _unit.SaveAsync();
             }
 
