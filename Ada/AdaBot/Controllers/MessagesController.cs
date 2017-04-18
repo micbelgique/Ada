@@ -15,14 +15,11 @@ using System.Diagnostics;
 using System.IO;
 using AdaBot.Services;
 using Microsoft.ProjectOxford.Vision.Contract;
-using Newtonsoft.Json;
-using System.Web.Http;
-using Microsoft.ProjectOxford.Face;
 using System.Collections.Generic;
 using AdaBot.Models;
 using System.Text;
 
-using Yam.Microsoft.Translator.TranslatorService;
+
 namespace AdaBot
 {
     [BotAuthentication]
