@@ -14,14 +14,16 @@ namespace AdaBot.Models.FormFlows
 
         public static IForm<MessageFlow> BuildForm()
         {
-            return new FormBuilder<MessageFlow>() 
+            var builder = new FormBuilder<MessageFlow>()
                 .Field(nameof(Message))
                 .Confirm(async (state) =>
                {
                    return new PromptAttribute($"Êtes-vous sûr de vouloir envoyer ce message: {state.Message.ToString()}");
+               });
+            builder.Configuration.Yes = new string[] { "Yes", "yes", "Oui", "oui" };
+            builder.Configuration.No = new string[] { "No", "no", "Non", "non" };
 
-                   })
-                    .Build();
+            return builder.Build();
         }
     }
 }

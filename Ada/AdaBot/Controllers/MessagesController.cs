@@ -89,8 +89,6 @@ namespace AdaBot
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
                     {
-                        StringBuilder reply = new StringBuilder();
-
                         try
                         {
                             VisionService visionService = new VisionService(activity);
@@ -100,6 +98,7 @@ namespace AdaBot
                                         VisualFeature.Description //generate image caption
                                         };
                             AnalysisResult analysisResult = null;
+                            StringBuilder reply = new StringBuilder();
                             string description = "";
                             GoogleTranslatorService translator = new GoogleTranslatorService();
                             //If the user uploaded an image, read it, and send it to the Vision API
@@ -115,14 +114,14 @@ namespace AdaBot
                                     try
                                     {
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                        reply.Append("Je vois: " + analysisResult.Description.Captions.First().Text + ". ");
-
+                                        reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
+                                        
                                         if (analysisResult.Description.Tags.Contains("person"))                                          
                                         {
                                             imageFileStream.Seek(0, SeekOrigin.Begin);
 
                                             PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
-
+                                            
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 
                                             foreach (PersonDto result in persons)
@@ -139,7 +138,7 @@ namespace AdaBot
                                                 person.Add(await client.GetPersonByFaceId(result.PersonId));
                                             }
                                         }
-                                        description = translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr");
+                                        
                                     }
                                     catch (Exception e)
                                     {
@@ -147,8 +146,6 @@ namespace AdaBot
                                     }
                                 }
                             }
-                            var reply = activity.CreateReply(description);
-
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
