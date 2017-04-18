@@ -18,7 +18,7 @@ using Person = AdaWebApp.Models.Entities.Person;
 
 namespace AdaWebApp.Controllers.API
 {
-    [Authorize(Roles = "martineobot")]
+    //[Authorize(Roles = "martineobot")]
     [RoutePrefix("api/person")]
     public class PersonController : ApiController
     {
