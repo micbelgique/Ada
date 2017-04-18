@@ -254,7 +254,6 @@ namespace AdaBot.Dialogs
                     //Récupération du lien image
                     possiblePictures.Clear();
 
-                    //foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     foreach (Match m in Regex.Matches(meetup.Description, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
                         string src = m.Groups[1].Value;

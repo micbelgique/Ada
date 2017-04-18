@@ -109,6 +109,9 @@
       <HintPath>..\packages\Microsoft.Rest.ClientRuntime.2.3.2\lib\net45\Microsoft.Rest.ClientRuntime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Translator, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Translator.0.1.2\lib\Microsoft.Translator.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -154,6 +157,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -180,6 +184,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TranslatorService, Version=1.0.4.33151, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TranslatorService.1.0.4\lib\netstandard1.1\TranslatorService.dll</HintPath>
+    </Reference>
     <Reference Include="Windows.Foundation.UniversalApiContract">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\References\Windows.Foundation.UniversalApiContract\1.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
     </Reference>
@@ -188,6 +195,7 @@
     <Content Include="default.htm" />
     <Content Include="Fonts\PlusButton.png" />
     <Content Include="Global.asax" />
+    <Content Include="Translator.exe" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -217,6 +225,7 @@
     <Compile Include="Models\FormFlows\FormInfo.cs" />
     <Compile Include="Models\FormFlows\MessageFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GoogleTranslatorService.cs" />
     <Compile Include="Services\VisionService.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
@@ -225,6 +234,7 @@
     <Content Include="AppSettings.config" />
     <None Include="Properties\PublishProfiles\AdaDevBot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaDevBot - Web Deploy.pubxml" />
+    <Content Include="Translator.exe.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

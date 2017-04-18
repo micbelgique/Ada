@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 using Microsoft.Bot.Builder.Dialogs;
 using AdaBot.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using System.Configuration;
 using AdaSDK;
 using AdaSDK.Models;
-using Newtonsoft.Json.Linq;
-using AdaBot.Models.FormFlows;
-using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
 using System.IO;
 using AdaBot.Services;
 using Microsoft.ProjectOxford.Vision.Contract;
-
+using Yam.Microsoft.Translator.TranslatorService;
 
 namespace AdaBot
 { 
@@ -95,6 +89,8 @@ namespace AdaBot
                                         VisualFeature.Description //generate image caption
                                         };
                             AnalysisResult analysisResult = null;
+                            string description = "";
+                            GoogleTranslatorService translator = new GoogleTranslatorService();
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
@@ -106,6 +102,7 @@ namespace AdaBot
                                     try
                                     {
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
+                                        description = translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr");
                                     }
                                     catch (Exception e)
                                     {
@@ -113,7 +110,7 @@ namespace AdaBot
                                     }
                                 }
                             }
-                            var reply = activity.CreateReply("Je vois: " + analysisResult.Description.Captions.First().Text);
+                            var reply = activity.CreateReply(description);
 
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(reply);
