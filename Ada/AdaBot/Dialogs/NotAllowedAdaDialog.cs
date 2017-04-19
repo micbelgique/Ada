@@ -81,62 +81,6 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        [LuisIntent("GetHelp")]
-        public async Task GetHelp(IDialogContext context, LuisResult result)
-        {
-            if (result.TopScoringIntent.Score > 0.70)
-            {
-                var form = MakeInfo();
-                context.Call(form, ResumeAfterInfo);
-            }
-            else
-            {
-                Activity replyToConversation;
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.None.Spintax()}");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-                await context.PostAsync(replyToConversation);
-            }
-        }
-
-        private async Task ResumeAfterInfo(IDialogContext context, IAwaitable<FormInfo> result)
-        {
-            try
-            {
-                var ourResult = await result;
-                TreatmentDialog treatment = new TreatmentDialog();
-                string question = "";
-                if (ourResult.QuestionDev.ToString() != "test")
-                {
-                    question = ourResult.QuestionDev.ToString();
-                }
-                else if (ourResult.QuestionProject.ToString() != "test")
-                {
-                    question = ourResult.QuestionProject.ToString();
-                }
-                else if (ourResult.QuestionStudent.ToString() != "test")
-                {
-                    question = ourResult.QuestionStudent.ToString();
-                }
-                else if (ourResult.QuestionVisit.ToString() != "test")
-                {
-                    question = ourResult.QuestionVisit.ToString();
-                }
-                string response = treatment.getResponseToInfo(question);
-                await context.PostAsync(response);
-            }
-            catch (FormCanceledException<FormInfo> e)
-            {
-                Debug.WriteLine(e.Message);
-                context.Done(true);
-            }
-        }
-
-        internal static IDialog<FormInfo> MakeInfo()
-        {
-            return Chain.From(() => FormDialog.FromForm(FormInfo.BuildForm, options: FormOptions.PromptInStart));
-        }
-
         private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
         {
             context.Wait(this.MessageReceived);

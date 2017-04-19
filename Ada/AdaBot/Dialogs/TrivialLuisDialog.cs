@@ -263,9 +263,10 @@ namespace AdaBot.Dialogs
         [LuisIntent("")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.None.Spintax()}";
+            FAQDialog faqDialog = new FAQDialog();
+            string response = faqDialog.AskSomething(result.Query.ToString());
             Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation = ((Activity)context.Activity).CreateReply(response);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
             await context.PostAsync(replyToConversation);
