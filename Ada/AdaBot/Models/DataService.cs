@@ -16,13 +16,9 @@ namespace AdaBot.Models
 {
     public class DataService
     {
-        public static readonly string ApiBasePath = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/api/person";
+        public static readonly string ApiBasePath = $"{ConfigurationManager.AppSettings["WebAppUrl"]}/api/person";
         public static readonly string PersonsRecognitionQuery = "recognizepersonsPicture";
         public static readonly string EmotionPicture = "EmotionPicture";
-
-        private static string token;
-
-        public static readonly string PersonUpdateInformationQuery = "updatepersoninformation";
 
         private HttpClient _httpClient;
 
@@ -31,7 +27,7 @@ namespace AdaBot.Models
             _httpClient = new HttpClient();
         }
 
-        public async Task<PersonDto[]> recognizepersonsPictureAsync(Stream picture)
+        public async Task<FullPersonDto[]> recognizepersonsPictureAsync(Stream picture)
         {
             using (var streamContent = new StreamContent(picture))
             using (var formData = new MultipartFormDataContent())
@@ -42,15 +38,11 @@ namespace AdaBot.Models
                 // Adds content to multipart form data 
                 formData.Add(streamContent, "file", $"{Guid.NewGuid()}.jpg");
 
-                // Get authorization token 
-                token = (await TokenManagerService.NewToken());
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage resp = await _httpClient.PostAsync(uri, formData);
+                var resp = await _httpClient.PostAsync(uri, formData);
 
                 if (resp.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<PersonDto[]>(await resp.Content.ReadAsStringAsync());
+                    return JsonConvert.DeserializeObject<FullPersonDto[]>(await resp.Content.ReadAsStringAsync());
                 }
 
                 var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());
@@ -70,13 +62,11 @@ namespace AdaBot.Models
                 // Adds content to multipart form data 
                 formData.Add(streamContent, "file", $"{Guid.NewGuid()}.jpg");
 
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage resp = await _httpClient.PostAsync(uri, formData);
+                var resp = await _httpClient.PostAsync(uri, formData);
 
                 if (resp.IsSuccessStatusCode)
                 {
-                    var test = JsonConvert.DeserializeObject<EmotionDto>(await resp.Content.ReadAsStringAsync());
-                    return test;
+                    return JsonConvert.DeserializeObject<EmotionDto>(await resp.Content.ReadAsStringAsync());   
                 }
 
                 var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());

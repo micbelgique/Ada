@@ -114,20 +114,20 @@ namespace AdaBot
 
                                         if (analysisResult.Description.Tags.Contains("person"))                                          
                                         {
-                                            imageFileStream.Seek(0, SeekOrigin.Begin);
+                                            imageFileStream.Seek(0,SeekOrigin.Begin);
 
-                                            PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
+                                            FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
                                             Stream imageStream = GetStreamFromUrl(uploadedImageUrl);
-                                            EmotionDto emotion = await dataService.recognizeEmotion(imageStream);
+                                            EmotionDto emotion = await dataService.recognizeEmotion(imageFileStream);
 
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 
                                             StringConstructor replytyest = new StringConstructor();
 
-                                            foreach (PersonDto result in persons)
+                                            foreach (FullPersonDto result in persons)
                                             {
-                                                reply.Append(replytyest.DescriptionPersonImage(result));
+                                                reply.Append(replytyest.DescriptionPersonImage(result, emotion));
 
                                                 
                                             }

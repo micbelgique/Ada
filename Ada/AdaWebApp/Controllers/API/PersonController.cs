@@ -14,7 +14,7 @@ using AdaWebApp.Models.Services.PersonService;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 using Person = AdaWebApp.Models.Entities.Person;
-
+using AdaSDK.Models;
 
 namespace AdaWebApp.Controllers.API
 {
@@ -22,60 +22,22 @@ namespace AdaWebApp.Controllers.API
     [RoutePrefix("api/person")]
     public class PersonController : ApiController
     {
-        private UnitOfWork _unit; 
+        private UnitOfWork _unit;
         private readonly PersonService _personService;
         private readonly ILog _logger;
 
         public PersonController()
         {
-            _unit = new UnitOfWork(); 
-            _personService = new PersonService(_unit); 
+            _unit = new UnitOfWork();
+            _personService = new PersonService(_unit);
 
             log4net.Config.XmlConfigurator.Configure();
-            _logger = LogManager.GetLogger(GetType()); 
+            _logger = LogManager.GetLogger(GetType());
         }
 
         [HttpPost]
         [Route("recognizepersons")]
         public async Task<HttpResponseMessage> RecognizePersonsAsync()
-        {
-            if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0){
-                return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
-            }
-
-            try
-            {
-                // Get uploaded file
-                HttpPostedFile file = HttpContext.Current.Request.Files[0];
-
-                // Save the temporary file and get its path
-                string filePath = await _personService.SaveTemporaryFileAsync(file);
-
-                // Detect faces into picture
-                Face[] faces = await _personService.DetectFacesFromPictureAsync(filePath);
-
-                List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
-
-                // Add items to queue
-                await _personService.Enqueue(recogItems);
-                
-                return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
-            }
-            catch (FaceAPIException e)
-            {
-                _logger.Error($"Exception : {e.ErrorCode} : {e.Message}", e);
-                return GetWebServiceError(e.ErrorCode, e.ErrorMessage);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Exception : {e.Message}", e);
-                return GetWebServiceError("InternalError", e.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("recognizepersonsPicture")]
-        public async Task<HttpResponseMessage> RecognizePersonsPictureAsync()
         {
             if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0)
             {
@@ -95,7 +57,47 @@ namespace AdaWebApp.Controllers.API
 
                 List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
 
+                // Add items to queue
+                await _personService.Enqueue(recogItems);
+
                 return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
+            }
+            catch (FaceAPIException e)
+            {
+                _logger.Error($"Exception : {e.ErrorCode} : {e.Message}", e);
+                return GetWebServiceError(e.ErrorCode, e.ErrorMessage);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Exception : {e.Message}", e);
+                return GetWebServiceError("InternalError", e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost] 
+        [Route("recognizepersonsPicture")]
+        public async Task<HttpResponseMessage> RecognizePersonsPictureAsync()
+        {
+            if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0)
+            {
+                return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
+            }
+
+            try
+            {
+                // Get uploaded file
+                HttpPostedFile file = HttpContext.Current.Request.Files[0];
+
+                // Save the temporary file and get its path
+                string filePath = await _personService.SaveTemporaryFileAsync(file);
+
+                // Detect faces into picture
+                Face[] faces = await _personService.DetectFacesFromPictureAsync(filePath);
+
+                List<FullPersonDto> recogItems = await _personService.RecognizeFullPersonsAsync(faces, filePath);
+
+                return Request.CreateResponse(HttpStatusCode.OK, recogItems);
             }
             catch (FaceAPIException e)
             {
@@ -117,7 +119,7 @@ namespace AdaWebApp.Controllers.API
         {
             await _personService.ProcessQueue();
             _logger.Info("Process of queue started at " + DateTime.UtcNow);
-            return Request.CreateResponse(HttpStatusCode.OK);  
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [AllowAnonymous]
@@ -125,18 +127,7 @@ namespace AdaWebApp.Controllers.API
         [Route("EmotionPicture")]
         public async Task<EmotionScores> EmotionPicture()
         {
-            // Get uploaded file
-            HttpPostedFile file = HttpContext.Current.Request.Files[0];
-
-            // Save the temporary file and get its path
-            string filePath = await _personService.SaveTemporaryFileAsync(file);
-
-            // Detect faces into picture
-            EmotionScores emotion = await _personService.EmotionPictureAsync(filePath);
-
-            //List<RecognitionItem> recogItems = await _personService.RecognizePersonsAsync(faces, filePath);
-
-            //return Request.CreateResponse(HttpStatusCode.OK, recogItems.Select(r => r.ToPersonDto()));
+            EmotionScores emotion = await _personService.ProcessRecognitionItemPicture();
 
             return emotion;
         }
@@ -152,11 +143,13 @@ namespace AdaWebApp.Controllers.API
 
                 Person person;
 
-                if (personUpdateDto.PersonId == default(Guid)){
+                if (personUpdateDto.PersonId == default(Guid))
+                {
                     person = await _personService.ProcessRecognitionItem(personUpdateDto.RecognitionId);
                 }
-                else{
-                    person = _unit.PersonRepository.GetByApiId(personUpdateDto.PersonId); 
+                else
+                {
+                    person = _unit.PersonRepository.GetByApiId(personUpdateDto.PersonId);
                 }
 
                 if (person != null)
@@ -169,13 +162,13 @@ namespace AdaWebApp.Controllers.API
                         if (lastOrDefault != null) lastOrDefault.Reason = personUpdateDto.ReasonOfVisit;
                     }
 
-                    await _unit.SaveAsync(); 
+                    await _unit.SaveAsync();
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, GetWebServiceError("BadRequest", "Recognition id must be specified")); 
+            return Request.CreateResponse(HttpStatusCode.BadRequest, GetWebServiceError("BadRequest", "Recognition id must be specified"));
         }
 
         [HttpGet]
@@ -204,7 +197,7 @@ namespace AdaWebApp.Controllers.API
                 if (_unit != null)
                 {
                     _unit.Dispose();
-                    _unit = null; 
+                    _unit = null;
                 }
             }
             base.Dispose(disposing);

@@ -1,4 +1,5 @@
 ﻿using AdaSDK;
+using AdaSDK.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace AdaBot.Services
 {
     public class StringConstructor
     {
-        public StringBuilder DescriptionPersonImage(PersonDto person)
+        public StringBuilder DescriptionPersonImage(FullPersonDto person, EmotionDto emotion)
         {
             StringBuilder reply = new StringBuilder();
 
@@ -27,7 +28,7 @@ namespace AdaBot.Services
             return reply;
         }
 
-        public StringBuilder DescriptionGender(PersonDto person)
+        public StringBuilder DescriptionGender(FullPersonDto person)
         {
             StringBuilder reply = new StringBuilder();
 

@@ -3,6 +3,7 @@ using AdaWebApp.Helpers;
 using AdaWebApp.Models.Entities;
 using Microsoft.ProjectOxford.Face.Contract;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static System.Web.Hosting.HostingEnvironment;
 
