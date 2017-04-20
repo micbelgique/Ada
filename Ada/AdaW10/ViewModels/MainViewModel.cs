@@ -103,14 +103,14 @@ namespace AdaW10.ViewModels
 
                     PersonDto person = null;
 
-                    if(WebcamService.FaceDetectionEffect != null)
+                    if (WebcamService.FaceDetectionEffect != null)
                     {
                         await WebcamService.StopFaceDetectionAsync();
                         person = (await MakeRecognition())?.FirstOrDefault();
-                    }                 
+                    }
 
                     if (person != null)
-                    {                      
+                    {
                         PersonUpdateDto updateDto = new PersonUpdateDto
                         {
                             PersonId = person.PersonId,
@@ -154,7 +154,7 @@ namespace AdaW10.ViewModels
             int timeout = 10;
             var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
             await Task.WhenAny(task, Task.Delay(timeout));
-            
+
 
             // Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
@@ -190,7 +190,7 @@ namespace AdaW10.ViewModels
             await WebcamService.StartCameraPreviewAsync();
 
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-            {           
+            {
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
             }
         }
@@ -218,8 +218,13 @@ namespace AdaW10.ViewModels
             {
                 await TtsService.SayAsync("au revoir");
 
+                if (WebcamService.FaceDetectionEffect != null)
+                {
+                    await WebcamService.StopFaceDetectionAsync();
+                }
+
                 if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-                { 
+                {
                     WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
                 }
 
@@ -230,7 +235,7 @@ namespace AdaW10.ViewModels
                 activity.Text = (activity.Text).Replace('.', ' ');
                 activity.Text = (activity.Text).ToLower();
 
-                if(activity.Text == "oui ")
+                if (activity.Text == "oui ")
                 {
                     activity.Text = "yes";
                 }
@@ -274,12 +279,12 @@ namespace AdaW10.ViewModels
                            await GoToCarouselPageExecute(attachments);
                        }
                        );
-                    } 
+                    }
                     LogHelper.Log(text);
                     await TtsService.SayAsync(text);
                 }
 
-                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count()-1].Name != "NotFinish")
+                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count() - 1].Name != "NotFinish")
                 {
                     await SolicitExecute();
                 }
