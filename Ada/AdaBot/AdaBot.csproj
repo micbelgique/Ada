@@ -72,6 +72,9 @@
       <HintPath>..\packages\Microsoft.Bot.Builder.3.5.5\lib\net46\Microsoft.Bot.Builder.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Bot.Builder.CognitiveServices.QnAMaker, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bot.Builder.CognitiveServices.1.0.3\lib\net46\Microsoft.Bot.Builder.CognitiveServices.QnAMaker.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bot.Builder.FormFlow.Json, Version=3.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bot.Builder.FormFlow.Json.3.1.2\lib\net46\Microsoft.Bot.Builder.FormFlow.Json.dll</HintPath>
       <Private>True</Private>
@@ -209,6 +212,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AdaDialog.cs" />
+    <Compile Include="Dialogs\FAQDialog.cs" />
     <Compile Include="Dialogs\NotAllowedAdaDialog.cs" />
     <Compile Include="Dialogs\CreateDialog.cs" />
     <Compile Include="Dialogs\TreatmentDialog.cs" />
@@ -218,6 +222,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EntityRecognizer.cs" />
+    <Compile Include="Models\AnswersFAQ.cs" />
     <Compile Include="Models\AuthenticationServices\TokenManagerException.cs" />
     <Compile Include="Models\AuthenticationServices\TokenManagerService.cs" />
     <Compile Include="Models\DataService.cs" />
@@ -225,7 +230,6 @@
     <Compile Include="Models\EventsLoaderServices\EventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\IEventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\MeetupEvent.cs" />
-    <Compile Include="Models\FormFlows\FormInfo.cs" />
     <Compile Include="Models\FormFlows\MessageFlow.cs" />
     <Compile Include="Models\Interface\IDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
