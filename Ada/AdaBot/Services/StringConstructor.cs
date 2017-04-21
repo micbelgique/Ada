@@ -10,7 +10,7 @@ namespace AdaBot.Services
 {
     public class StringConstructor
     {
-        public StringBuilder DescriptionPersonImage(FullPersonDto person, EmotionDto emotion)
+        public StringBuilder DescriptionPersonImage(FullPersonDto person)
         {
             StringBuilder reply = new StringBuilder();
 

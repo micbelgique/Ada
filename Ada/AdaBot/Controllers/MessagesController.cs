@@ -24,7 +24,7 @@ using System.Text;
 namespace AdaBot
 {
     [BotAuthentication]
-    public class MessagesController : ApiController 
+    public class MessagesController : ApiController
     {
         string visionApiKey;
 
@@ -74,7 +74,7 @@ namespace AdaBot
                 }
             }
 
-            if(activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
+            if (activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
             {
                 answer = false;
             }
@@ -112,14 +112,14 @@ namespace AdaBot
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
                                         reply.Append("Je vois: " + analysisResult.Description.Captions.First().Text + ". ");
 
-                                        if (analysisResult.Description.Tags.Contains("person"))                                          
+                                        if (analysisResult.Description.Tags.Contains("person"))
                                         {
-                                            imageFileStream.Seek(0,SeekOrigin.Begin);
+                                            imageFileStream.Seek(0, SeekOrigin.Begin);
 
                                             FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
                                             Stream imageStream = GetStreamFromUrl(uploadedImageUrl);
-                                            EmotionDto emotion = await dataService.recognizeEmotion(imageFileStream);
+                                            List<EmotionDto> emotion = await dataService.recognizeEmotion(imageStream);
 
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 
@@ -127,9 +127,9 @@ namespace AdaBot
 
                                             foreach (FullPersonDto result in persons)
                                             {
-                                                reply.Append(replytyest.DescriptionPersonImage(result, emotion));
+                                                reply.Append(replytyest.DescriptionPersonImage(result));
 
-                                                
+
                                             }
                                         }
                                     }
@@ -139,16 +139,16 @@ namespace AdaBot
                                     }
                                 }
                             }
-                          
+
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }
-                        catch(ClientException e)
+                        catch (ClientException e)
                         {
                             Debug.WriteLine(e.Error.Message);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Debug.WriteLine(e.Message);
                         }

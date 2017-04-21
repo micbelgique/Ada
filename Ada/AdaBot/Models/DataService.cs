@@ -11,6 +11,7 @@ using TokenManagerService = AdaW10.Models.AuthenticationServices.TokenManagerSer
 using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using AdaSDK.Models;
+using System.Collections.Generic;
 
 namespace AdaBot.Models
 {
@@ -51,7 +52,7 @@ namespace AdaBot.Models
             }
         }
 
-        public async Task<EmotionDto> recognizeEmotion(Stream picture)
+        public async Task<List<EmotionDto>> recognizeEmotion(Stream picture)
         {
             using (var streamContent = new StreamContent(picture))
             using (var formData = new MultipartFormDataContent())
@@ -66,7 +67,7 @@ namespace AdaBot.Models
 
                 if (resp.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<EmotionDto>(await resp.Content.ReadAsStringAsync());   
+                    return JsonConvert.DeserializeObject<List<EmotionDto>>(await resp.Content.ReadAsStringAsync());   
                 }
 
                 var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());
