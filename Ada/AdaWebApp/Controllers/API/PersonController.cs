@@ -122,15 +122,6 @@ namespace AdaWebApp.Controllers.API
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("EmotionPicture")]
-        public async Task<EmotionScores> EmotionPicture()
-        {
-            EmotionScores emotion = await _personService.ProcessRecognitionItemPicture();
-
-            return emotion;
-        }
 
         [HttpPost]
         [Route("updatepersoninformation")]

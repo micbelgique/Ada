@@ -65,6 +65,10 @@ namespace AdaBot.Models
 
                 var resp = await _httpClient.PostAsync(uri, formData);
 
+                //List<EmotionDto> result = null;
+
+                var test = await resp.Content.ReadAsStringAsync();
+
                 if (resp.IsSuccessStatusCode)
                 {
                     return JsonConvert.DeserializeObject<List<EmotionDto>>(await resp.Content.ReadAsStringAsync());   

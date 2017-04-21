@@ -104,6 +104,8 @@ namespace AdaWebApp.Models.Services.PersonService
                     person = recognizedPersons.FirstOrDefault(p => p.PersonApiId == identifyResult.Candidates[0].PersonId);
                 }
 
+                EmotionScores emotionTask = await ProcessRecognitionItemPicture(imagePath, face);
+
                 persons.Add(new FullPersonDto
                 {
                     PersonId = face.FaceId,
@@ -112,7 +114,15 @@ namespace AdaWebApp.Models.Services.PersonService
                     Gender = face.FaceAttributes.Gender,
                     Beard = face.FaceAttributes.FacialHair.Beard,
                     Glasses = face.FaceAttributes.Glasses,
-                    Mustache = face.FaceAttributes.FacialHair.Moustache
+                    Mustache = face.FaceAttributes.FacialHair.Moustache,
+                    Anger = emotionTask.Anger,
+                    Contempt = emotionTask.Contempt,
+                    Disgust = emotionTask.Disgust,
+                    Fear = emotionTask.Fear,
+                    Happiness = emotionTask.Happiness,
+                    Neutral = emotionTask.Neutral,
+                    Sadness = emotionTask.Sadness,
+                    Surprise = emotionTask.Surprise
                 });
             }
 
@@ -390,9 +400,9 @@ namespace AdaWebApp.Models.Services.PersonService
             }
         }
 
-        public Task<EmotionScores> ProcessRecognitionItemPicture(RecognitionItem item)
+        public async Task<EmotionScores> ProcessRecognitionItemPicture(string url,Face faceRect)
         {
-            Task<EmotionScores> emotionTask = RecognizeEmotions(item.ImageUrl, item.Face.FaceRectangle);
+            EmotionScores emotionTask = await RecognizeEmotions(url, faceRect.FaceRectangle);
 
             return emotionTask;
         }
@@ -481,18 +491,6 @@ namespace AdaWebApp.Models.Services.PersonService
             return null;
         }
 
-        public async Task<EmotionScores> ProcessRecognitionItemPicture()
-        {
-            RecognitionItem item;
-
-            if ((item = _unit.RecognitionItemsRepository.Pop()) != null)
-            {
-                var result = await ProcessRecognitionItemPicture(item);
-                return result;
-            }
-
-            return null;
-        }
 
         /// <summary>
         /// Asynchronously process queue items

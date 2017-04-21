@@ -29,6 +29,7 @@ namespace AdaBot
         string visionApiKey;
 
         VisionServiceClient visionClient;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -97,45 +98,32 @@ namespace AdaBot
                                         VisualFeature.Categories, //recognize image features
                                         VisualFeature.Description //generate image caption
                                         };
-                            AnalysisResult analysisResult = null;
+
+
+                            AnalysisResult analysisResult;
 
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
                             {
                                 //stores image url (parsed from attachment or message)
                                 string uploadedImageUrl = activity.Attachments.First().ContentUrl;
-
+                                StringConstructor stringConstructor = new StringConstructor();
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
-                                    try
-                                    {
-                                        analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                        reply.Append("Je vois: " + analysisResult.Description.Captions.First().Text + ". ");
+                                    analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
 
-                                        if (analysisResult.Description.Tags.Contains("person"))
+                                    if (analysisResult.Description.Tags.Contains("person"))
+                                    {
+                                        imageFileStream.Seek(0, SeekOrigin.Begin);
+
+                                        FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
+
+                                        reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo.");
+
+                                        foreach (FullPersonDto result in persons)
                                         {
-                                            imageFileStream.Seek(0, SeekOrigin.Begin);
-
-                                            FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
-
-                                            Stream imageStream = GetStreamFromUrl(uploadedImageUrl);
-                                            List<EmotionDto> emotion = await dataService.recognizeEmotion(imageStream);
-
-                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
-
-                                            StringConstructor replytyest = new StringConstructor();
-
-                                            foreach (FullPersonDto result in persons)
-                                            {
-                                                reply.Append(replytyest.DescriptionPersonImage(result));
-
-
-                                            }
+                                            reply.Append(stringConstructor.DescriptionPersonImage(result));
                                         }
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        analysisResult = null; //on error, reset analysis result to null
                                     }
                                 }
                             }
