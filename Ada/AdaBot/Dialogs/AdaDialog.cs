@@ -18,7 +18,7 @@ using AdaBot.Bot.Utils;
 using AdaBot.Models.FormFlows;
 using Microsoft.Bot.Builder.FormFlow;
 using System.Diagnostics;
- 
+
 namespace AdaBot.Dialogs
 {
     [Serializable]
@@ -66,7 +66,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
-            
+
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -77,7 +77,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = await createCarousel.GetEvent(context);
-            
+
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -85,136 +85,8 @@ namespace AdaBot.Dialogs
         [LuisIntent("SeeNow")]
         public async Task SeeNow(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-            List<VisitDto> visits = await client.GetVisitsNow();
-
-            Activity replyToConversation;
-
-            if (visits.Count == 0)
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyNow.Spintax()}");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-            }
-            else
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.See.Spintax()} " + visits.Count + $" personnes en ce moment ;)");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-                replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
-
-                int compteurCarrousel = 1;
-                foreach (var visit in visits)
-                {
-                    if (compteurCarrousel <= 9 && result.Query != "GetVisitsTodayMoreResult")
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-
-                        //Calcul la bonne année et la bonne heure.
-                        DateTime today = DateTime.Today;
-                        int yearVisit = visit.Date.Year;
-                        int wrongDate = visit.PersonVisit.DateVisit.Year;
-                        int goodDate = DateTime.Today.Year - wrongDate;
-                        string messageDate = "";
-                        string firstname;
-                        DateTime visitDate = visit.PersonVisit.DateVisit;
-
-                        //Recherche du prénom de la personne
-                        if (visit.PersonVisit.FirstName == null)
-                        {
-                            firstname = "une personne inconnue";
-                        }
-                        else
-                        {
-                            firstname = visit.PersonVisit.FirstName;
-                        }
-
-                        var customDialog = new CreateDialog();
-                        messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = firstname,
-                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(2).AddYears(goodDate)) + ")",
-                            Images = cardImages
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                        compteurCarrousel += 1;
-                    }
-                    else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url:($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
-                        cardImages.Add(img);
-
-                        List<CardAction> cardButtons = new List<CardAction>();
-
-                        CardAction plButtonChoice = new CardAction()
-                        {
-
-                            Value = "GetVisitsTodayMoreResult",
-                            Type = "postBack",
-                            Title = "J'en veux plus"
-                        };
-                        cardButtons.Add(plButtonChoice);
-
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Images = cardImages,
-                            Buttons = cardButtons
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                        compteurCarrousel += 1;
-                    }
-                    else if (result.Query == "GetVisitsTodayMoreResult")
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-
-                        //Calcul la bonne année et la bonne heure.
-                        DateTime today = DateTime.Today;
-                        int yearVisit = visit.Date.Year;
-                        int wrongDate = visit.PersonVisit.DateVisit.Year;
-                        int goodDate = DateTime.Today.Year - wrongDate;
-                        string messageDate = "";
-                        string firstname;
-                        DateTime visitDate = visit.PersonVisit.DateVisit;
-
-                        //Recherche du prénom de la personne
-                        if (visit.PersonVisit.FirstName == null)
-                        {
-                            firstname = "une personne inconnue";
-                        }
-                        else
-                        {
-                            firstname = visit.PersonVisit.FirstName;
-                        }
-
-                        var customDialog = new CreateDialog();
-                        messageDate = customDialog.GetVisitsMessage(firstname, visitDate.AddYears(goodDate));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = firstname,
-                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(2).AddYears(goodDate)) + ")",
-                            Images = cardImages
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                        compteurCarrousel += 1;
-                    }
-                }
-            }
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
+            //string url = "https://directline.botframework.com/v3/directline/conversations/" + context.Activity.Conversation.Id 
+            //    + "/stream?t=" + ConfigurationManager.AppSettings["DirectLineKey"];
         }
 
         private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
@@ -559,7 +431,7 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url:($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
+                        CardImage img = new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -970,7 +842,7 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson+ " " + genderReturn + emotionReturn + glassesReturn + ageReturn + beardReturn + mustacheReturn + dateReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + emotionReturn + glassesReturn + ageReturn + beardReturn + mustacheReturn + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
@@ -1246,7 +1118,7 @@ namespace AdaBot.Dialogs
         public async Task GetAverageVisits(IDialogContext context, LuisResult result)
         {
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-            
+
             GenderValues? gender;
             int? age1 = null;
             string ageReturn1 = "null";

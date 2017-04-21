@@ -190,6 +190,9 @@
     <Reference Include="TranslatorService, Version=1.0.4.33151, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\TranslatorService.1.0.4\lib\netstandard1.1\TranslatorService.dll</HintPath>
     </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="Windows.Foundation.UniversalApiContract">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\References\Windows.Foundation.UniversalApiContract\1.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
     </Reference>
@@ -239,7 +242,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="AppSettings.config" />
+    <Content Include="AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\AdaDevBot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaDevBot - Web Deploy.pubxml" />
     <Content Include="Translator.exe.config" />
