@@ -22,9 +22,9 @@ namespace AdaWebApp.Controllers.API
     [RoutePrefix("api/person")]
     public class PersonController : ApiController
     {
-        private UnitOfWork _unit; 
-        private readonly PersonService _personService;
-        private readonly ILog _logger;
+         private UnitOfWork _unit; 
+         private readonly PersonService _personService;
+         private readonly ILog _logger;
 
         public PersonController()
         {
@@ -39,8 +39,9 @@ namespace AdaWebApp.Controllers.API
         [Route("recognizepersons")]
         public async Task<HttpResponseMessage> RecognizePersonsAsync()
         {
-            if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0){
-                return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
+            if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0)
+            {
+                 return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
             }
 
             try
@@ -79,7 +80,7 @@ namespace AdaWebApp.Controllers.API
         {
             if (!Request.Content.IsMimeMultipartContent() || HttpContext.Current.Request.Files.Count == 0)
             {
-                return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
+                 return GetWebServiceError("BadRequest", "Request must be multipart and contains one picture file");
             }
 
             try
@@ -123,7 +124,7 @@ namespace AdaWebApp.Controllers.API
 
         [HttpPost]
         [Route("updatepersoninformation")]
-        public async Task<HttpResponseMessage> UpdatePersonInformation(PersonUpdateDto personUpdateDto)
+        public async Task<HttpResponseMessage> UpdatePersonInformation(PersonUpdateDto personUpdateDto) 
         {
             if (personUpdateDto.RecognitionId != 0)
             {
