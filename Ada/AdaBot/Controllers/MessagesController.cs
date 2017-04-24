@@ -23,13 +23,15 @@ using System.Text;
 namespace AdaBot
 {
     [BotAuthentication]
-    public class MessagesController : ApiController 
+    public class MessagesController : ApiController
     {
         string visionApiKey;
 
         VisionServiceClient visionClient;
         public static string serviceUrl;
         public static ChannelAccount from;
+        public static ChannelAccount botAccount;
+        public static ConversationAccount conversation;
 
         /// <summary>
         /// POST: api/Messages
@@ -75,24 +77,27 @@ namespace AdaBot
                     var respond = await client.AddNewUserIndentified(userIndentified);
                 }
             }
-            
-            if(activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
+
+            if (activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
             {
                 answer = false;
             }
 
-            if(activity.Type == ActivityTypes.Event)
+            if (activity.Type == ActivityTypes.Message)
             {
-                if(activity.Text == "RegisterApp")
+                if (activity.Text == "RegisterApp")
                 {
                     // persist this information
                     serviceUrl = activity.ServiceUrl;
                     from = activity.From;
+                    botAccount = activity.Recipient;
+                    conversation = activity.Conversation;
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                 }
-            }
 
-            if (activity.Type == ActivityTypes.Message)
-            {
+
                 DataService dataService = new DataService();
 
                 if (activity.Attachments?.Count() >= 1)
@@ -125,18 +130,18 @@ namespace AdaBot
                                     {
                                         analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
                                         reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
-                                        
-                                        if (analysisResult.Description.Tags.Contains("person"))                                          
+
+                                        if (analysisResult.Description.Tags.Contains("person"))
                                         {
                                             imageFileStream.Seek(0, SeekOrigin.Begin);
 
                                             PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
-                                            
+
                                             reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
 
                                             foreach (PersonDto result in persons)
                                             {
-                                                if(result.FirstName != null)
+                                                if (result.FirstName != null)
                                                 {
                                                     reply.Append("Je connais " + result.FirstName + ", cette personne a " + result.Age + "ans.");
                                                 }
@@ -148,7 +153,7 @@ namespace AdaBot
                                                 person.Add(await client.GetPersonByFaceId(result.PersonId));
                                             }
                                         }
-                                        
+
                                     }
                                     catch (Exception e)
                                     {
@@ -160,11 +165,11 @@ namespace AdaBot
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }
-                        catch(ClientException e)
+                        catch (ClientException e)
                         {
                             Debug.WriteLine(e.Error.Message);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Debug.WriteLine(e.Message);
                         }
