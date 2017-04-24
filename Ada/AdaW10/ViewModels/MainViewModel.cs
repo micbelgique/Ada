@@ -150,6 +150,13 @@ namespace AdaW10.ViewModels
             _client = new DirectLineClient(AppConfig.DirectLine);
             _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
 
+            //Register the UWP as a Client UWP in database
+            var response = _client.Conversations.PostActivity(_conversation.ConversationId, new Activity("message")
+            {
+                From = new ChannelAccount("AdaUWP"),
+                Text = "RegisterApp",
+            });
+
             //WEBSOCKET HERE
             _webSocket = new WebSocketClient();
             _webSocket.Setup(_client, _conversation);

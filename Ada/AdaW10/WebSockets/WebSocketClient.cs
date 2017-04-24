@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Connector.DirectLine;
 using Websockets.Universal;
 using Newtonsoft.Json;
+using Windows.UI.Popups;
 
 namespace AdaW10.WebSockets
 {
@@ -36,12 +37,6 @@ namespace AdaW10.WebSockets
         private void Connection_OnOpened()
         {
             Debug.WriteLine("Opened !");
-
-            _client.Conversations.PostActivity(_conversation.ConversationId, new Activity("message")
-            {
-                From = new ChannelAccount("AdaUWP"),
-                Text = "bonjour!",
-            });
         }
 
         async void Timeout()
@@ -53,13 +48,21 @@ namespace AdaW10.WebSockets
 
         private void Connection_OnMessage(string obj)
         {
-            Activity activity = JsonConvert.DeserializeObject<Activity>(obj);
+            if (string.IsNullOrWhiteSpace(obj))
+                return;
 
-            switch (activity.Text)
+            ActivitySet activitySet = JsonConvert.DeserializeObject<ActivitySet>(obj);
+
+            foreach (var activity in activitySet.Activities)
             {
-                case "take picture":
-                default:
-                    return;
+                switch (activity.Text)
+                {
+                    case "take picture":
+                        new MessageDialog("yeah").ShowAsync();
+                        return;
+                    default:
+                        return;
+                }
             }
         }
 
