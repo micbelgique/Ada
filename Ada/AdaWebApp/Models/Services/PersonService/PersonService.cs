@@ -18,6 +18,7 @@ using Microsoft.ProjectOxford.Face.Contract;
 using Person = AdaWebApp.Models.Entities.Person;
 using static System.Web.Hosting.HostingEnvironment;
 using Rectangle = Microsoft.ProjectOxford.Common.Rectangle;
+using AdaSDK.Models;
 
 namespace AdaWebApp.Models.Services.PersonService
 {
@@ -60,7 +61,8 @@ namespace AdaWebApp.Models.Services.PersonService
         public async Task<Face[]> DetectFacesFromPictureAsync(string imagePath)
         {
             // Makes face detection
-            Face[] faces = await _faceServiceClient.DetectAsync(UrlHelpers.Content(Global.Host, imagePath),
+            string url = (UrlHelpers.Content(Global.Host, imagePath));
+            Face[] faces = await _faceServiceClient.DetectAsync(url,
                 returnFaceAttributes: new[] { FaceAttributeType.Age, FaceAttributeType.Gender, FaceAttributeType.Glasses, FaceAttributeType.FacialHair });
 
             // If there aren't at least one face in picture
@@ -70,6 +72,61 @@ namespace AdaWebApp.Models.Services.PersonService
             }
 
             return faces;
+        }
+
+
+        public async Task<List<FullPersonDto>> RecognizeFullPersonsAsync(Face[] faces, string imagePath)
+        {
+            var selectedFaces = faces.Take(10).ToList();
+
+            List<FullPersonDto> persons = new List<FullPersonDto>();
+            IList<IdentifyResult> identifyResults = new List<IdentifyResult>();
+            IEnumerable<Person> recognizedPersons = new List<Person>();
+
+            try
+            {
+                identifyResults = (await _faceServiceClient.IdentifyAsync(Global.OxfordPersonGroupId, selectedFaces.Select(f => f.FaceId).ToArray())).ToList();
+                IList<Guid> candidatesId = identifyResults.Where(i => i.Candidates.Any()).Select(i => i.Candidates[0].PersonId).ToList();
+                recognizedPersons = _unit.PersonRepository.GetPersonsByCandidateIds(candidatesId);
+            }
+            catch (FaceAPIException e)
+            {
+                LogManager.GetLogger(GetType()).Info("Error during recognition", e);
+            }
+
+            foreach (Face face in selectedFaces)
+            {
+                Person person = null;
+                IdentifyResult identifyResult = identifyResults.FirstOrDefault(i => i.FaceId == face.FaceId);
+
+                if (identifyResult != null && identifyResult.Candidates.Any())
+                {
+                    person = recognizedPersons.FirstOrDefault(p => p.PersonApiId == identifyResult.Candidates[0].PersonId);
+                }
+
+                EmotionScores emotionTask = await ProcessRecognitionItemPicture(imagePath, face);
+
+                persons.Add(new FullPersonDto
+                {
+                    PersonId = face.FaceId,
+                    FirstName = person.FirstName,
+                    Age = face.FaceAttributes.Age,
+                    Gender = face.FaceAttributes.Gender,
+                    Beard = face.FaceAttributes.FacialHair.Beard,
+                    Glasses = face.FaceAttributes.Glasses,
+                    Mustache = face.FaceAttributes.FacialHair.Moustache,
+                    Anger = emotionTask.Anger,
+                    Contempt = emotionTask.Contempt,
+                    Disgust = emotionTask.Disgust,
+                    Fear = emotionTask.Fear,
+                    Happiness = emotionTask.Happiness,
+                    Neutral = emotionTask.Neutral,
+                    Sadness = emotionTask.Sadness,
+                    Surprise = emotionTask.Surprise
+                });
+            }
+
+            return persons;
         }
 
         /// <summary>
@@ -104,7 +161,7 @@ namespace AdaWebApp.Models.Services.PersonService
 
             int imageCounter = 0;
 
-            foreach (var face in selectedFaces)
+            foreach (Face face in selectedFaces)
             {
                 Person person = null;
 
@@ -127,7 +184,7 @@ namespace AdaWebApp.Models.Services.PersonService
                     ImageUrl = imagePath,
                     ImageCounter = imageCounter,
                     Confidence = confidence,
-                    DateOfRecognition = DateTime.UtcNow
+                    DateOfRecognition = DateTime.UtcNow,
                 });
             }
 
@@ -341,6 +398,13 @@ namespace AdaWebApp.Models.Services.PersonService
                 _unit.RecognitionItemsRepository.Insert(recognitionItem);
                 await _unit.SaveAsync();
             }
+        }
+
+        public async Task<EmotionScores> ProcessRecognitionItemPicture(string url,Face faceRect)
+        {
+            EmotionScores emotionTask = await RecognizeEmotions(url, faceRect.FaceRectangle);
+
+            return emotionTask;
         }
 
         /// <summary>

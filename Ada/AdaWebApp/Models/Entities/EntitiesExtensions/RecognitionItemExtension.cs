@@ -31,7 +31,7 @@ namespace AdaWebApp.Models.Entities
                 NbPasses = lastVisit?.NbPasses ?? 0,
                 ReasonOfVisit = lastVisit?.Reason,
                 Age = (int)age,
-                Gender = gender
+                Gender = gender,
             };
         }
 

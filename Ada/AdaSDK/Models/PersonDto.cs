@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ProjectOxford.Face.Contract;
+using System;
 
 namespace AdaSDK
 {
@@ -10,7 +11,6 @@ namespace AdaSDK
         public bool IsRecognized { get; set; }
         public int NbPasses { get; set; }
         public string ReasonOfVisit { get; set; }
-
         public int Age { get; set; }
         public GenderValues Gender { get; set; }
 

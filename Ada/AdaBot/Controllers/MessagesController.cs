@@ -23,11 +23,12 @@ using System.Text;
 namespace AdaBot
 {
     [BotAuthentication]
-    public class MessagesController : ApiController 
+    public class MessagesController : ApiController
     {
         string visionApiKey;
 
         VisionServiceClient visionClient;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -73,7 +74,7 @@ namespace AdaBot
                 }
             }
 
-            if(activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
+            if (activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
             {
                 answer = false;
             }
@@ -103,9 +104,7 @@ namespace AdaBot
                             {
                                 //stores image url (parsed from attachment or message)
                                 string uploadedImageUrl = activity.Attachments.First().ContentUrl;
-
-                                List<PersonVisitDto> person = new List<PersonVisitDto>();
-
+                                StringConstructor stringConstructor = new StringConstructor();
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
                                     try
@@ -117,41 +116,27 @@ namespace AdaBot
                                         {
                                             imageFileStream.Seek(0, SeekOrigin.Begin);
 
-                                            PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
-                                            
-                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
+                                        FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
-                                            foreach (PersonDto result in persons)
-                                            {
-                                                if(result.FirstName != null)
-                                                {
-                                                    reply.Append("Je connais " + result.FirstName + ", cette personne a " + result.Age + "ans.");
-                                                }
-                                                else
-                                                {
-                                                    reply.Append("Je ne connais malheureusement pas cette personne mais elle a " + result.Age + "ans.");
-                                                }
+                                        reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo.");
 
-                                                person.Add(await client.GetPersonByFaceId(result.PersonId));
-                                            }
+                                        foreach (FullPersonDto result in persons)
+                                        {
+                                            reply.Append(stringConstructor.DescriptionPersonImage(result));
                                         }
-                                        
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        analysisResult = null; //on error, reset analysis result to null
                                     }
                                 }
                             }
+
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }
-                        catch(ClientException e)
+                        catch (ClientException e)
                         {
                             Debug.WriteLine(e.Error.Message);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Debug.WriteLine(e.Message);
                         }
