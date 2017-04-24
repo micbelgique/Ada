@@ -107,14 +107,13 @@ namespace AdaBot
                                 StringConstructor stringConstructor = new StringConstructor();
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
-                                    try
+
+                                    analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
+                                    reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
+
+                                    if (analysisResult.Description.Tags.Contains("person"))
                                     {
-                                        analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                        reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
-                                        
-                                        if (analysisResult.Description.Tags.Contains("person"))                                          
-                                        {
-                                            imageFileStream.Seek(0, SeekOrigin.Begin);
+                                        imageFileStream.Seek(0, SeekOrigin.Begin);
 
                                         FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
@@ -126,11 +125,11 @@ namespace AdaBot
                                         }
                                     }
                                 }
-                            }
 
-                            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
-                            return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+                                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                                await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
+                                return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+                            }
                         }
                         catch (ClientException e)
                         {
@@ -140,26 +139,27 @@ namespace AdaBot
                         {
                             Debug.WriteLine(e.Message);
                         }
-                    }
-                }
 
-                if (answer)
-                {
-                    idUser = activity.From.Id;
-                    accessAllow = await client.GetAuthorizationFacebook(idUser);
-                    if (accessAllow == "false")
-                    {
-                        await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
-                        new LuisService(new LuisModelAttribute(
-                        ConfigurationManager.AppSettings["ModelId"],
-                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
                     }
-                    else
+
+                    if (answer)
                     {
-                        await Conversation.SendAsync(activity, () => new AdaDialog(
-                        new LuisService(new LuisModelAttribute(
-                        ConfigurationManager.AppSettings["ModelId"],
-                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                        idUser = activity.From.Id;
+                        accessAllow = await client.GetAuthorizationFacebook(idUser);
+                        if (accessAllow == "false")
+                        {
+                            await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
+                            new LuisService(new LuisModelAttribute(
+                            ConfigurationManager.AppSettings["ModelId"],
+                            ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                        }
+                        else
+                        {
+                            await Conversation.SendAsync(activity, () => new AdaDialog(
+                            new LuisService(new LuisModelAttribute(
+                            ConfigurationManager.AppSettings["ModelId"],
+                            ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                        }
                     }
                 }
             }
@@ -198,6 +198,7 @@ namespace AdaBot
             }
             return null;
         }
+
         private static Stream GetStreamFromUrl(string url)
         {
             byte[] imageData = null;
