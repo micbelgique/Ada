@@ -104,10 +104,15 @@ namespace AdaBot
                             {
                                 //stores image url (parsed from attachment or message)
                                 string uploadedImageUrl = activity.Attachments.First().ContentUrl;
+                                string OCR;
                                 StringConstructor stringConstructor = new StringConstructor();
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
                                     analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
+
+                                    imageFileStream.Seek(0, SeekOrigin.Begin);
+
+                                    OCR = await visionService.MakeOCRRequest(imageFileStream);
                                     reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
 
                                     if (analysisResult.Description.Tags.Contains("person"))
@@ -118,7 +123,7 @@ namespace AdaBot
 
                                         if (persons != null)
                                         {
-                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo.");
+                                            reply.Append("je vois : " + persons.Count() + " personne(s) sur la photo.");
 
 
                                             foreach (FullPersonDto result in persons)
@@ -127,10 +132,15 @@ namespace AdaBot
                                             }
                                         }
                                     }
+
+                                    reply.Append(" Et il me semble qu'il y a du texte sur la photo, le voici : ");
+                                    reply.Append(OCR);
+
                                 }
                             }
 
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                            
                             await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }

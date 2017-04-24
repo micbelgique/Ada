@@ -121,7 +121,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.0.0\lib\net46\System.AppContext.dll</HintPath>
@@ -232,6 +232,10 @@
     <Compile Include="Models\EventsLoaderServices\MeetupEvent.cs" />
     <Compile Include="Models\FormFlows\MessageFlow.cs" />
     <Compile Include="Models\Interface\IDataService.cs" />
+    <Compile Include="Models\Lines.cs" />
+    <Compile Include="Models\OCRModel.cs" />
+    <Compile Include="Models\Regions.cs" />
+    <Compile Include="Models\Words.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GoogleTranslatorService.cs" />
     <Compile Include="Services\StringConstructor.cs" />
