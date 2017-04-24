@@ -7,14 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:AdaW10.Controls"
     mc:Ignorable="d"
-    >
+    DataContext="{Binding Main, Mode=OneWay, Source={StaticResource ViewModelLocator}}" >
 
-
-    <Page.Resources>
-        <vm:MainViewModel x:Key="ViewModel"/>
-    </Page.Resources>
-
-    <Grid DataContext="{StaticResource ViewModel}">
+    <Grid >
         <Grid.Background>
             <ImageBrush Stretch="Fill" ImageSource="/Images/screenvideo.png" AlignmentY="Top" AlignmentX="Left"/>
         </Grid.Background>

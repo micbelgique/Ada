@@ -50,7 +50,7 @@ namespace AdaW10.ViewModels
         {
             var navigationService = new Views.NavigationService();
             navigationService.Configure(MainPage, typeof(Views.MainPage));
-            navigationService.Configure(MenuPage, typeof (Views.MenuPage));
+            navigationService.Configure(MenuPage, typeof(Views.MenuPage));
             navigationService.Configure(EventPage, typeof(Views.EventPage));
             navigationService.Configure(CarouselPage, typeof(Views.CarouselPage));
             return navigationService;
@@ -61,6 +61,14 @@ namespace AdaW10.ViewModels
             get
             {
                 return ServiceLocator.Current.GetInstance<CarouselViewModel>();
+            }
+        }
+
+        public MainViewModel Main
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
     }

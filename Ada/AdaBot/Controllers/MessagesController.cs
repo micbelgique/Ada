@@ -92,11 +92,11 @@ namespace AdaBot
                     from = activity.From;
                     botAccount = activity.Recipient;
                     conversation = activity.Conversation;
+
                     ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                     await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
                     return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                 }
-
 
                 DataService dataService = new DataService();
 
