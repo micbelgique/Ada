@@ -85,8 +85,15 @@ namespace AdaBot.Dialogs
         [LuisIntent("SeeNow")]
         public async Task SeeNow(IDialogContext context, LuisResult result)
         {
-            //string url = "https://directline.botframework.com/v3/directline/conversations/" + context.Activity.Conversation.Id 
-            //    + "/stream?t=" + ConfigurationManager.AppSettings["DirectLineKey"];
+            string url = "https://directline.botframework.com/v3/directline/conversations/" + context.Activity.Conversation.Id
+            + "/stream?t=" + ConfigurationManager.AppSettings["DirectLineKey"];
+
+            var connector = new ConnectorClient(new Uri(MessagesController.serviceUrl));
+            IMessageActivity newMessage = Activity.CreateMessageActivity();
+            newMessage.Type = ActivityTypes.Message;
+            newMessage.Recipient = MessagesController.from;
+            newMessage.Text = "take picture";
+            await connector.Conversations.SendToConversationAsync((Activity)newMessage);
         }
 
         private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)

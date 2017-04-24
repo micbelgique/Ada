@@ -28,6 +28,9 @@ namespace AdaBot
         string visionApiKey;
 
         VisionServiceClient visionClient;
+        public static string serviceUrl;
+        public static ChannelAccount from;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -72,10 +75,20 @@ namespace AdaBot
                     var respond = await client.AddNewUserIndentified(userIndentified);
                 }
             }
-
+            
             if(activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
             {
                 answer = false;
+            }
+
+            if(activity.Type == ActivityTypes.Event)
+            {
+                if(activity.Text == "RegisterApp")
+                {
+                    // persist this information
+                    serviceUrl = activity.ServiceUrl;
+                    from = activity.From;
+                }
             }
 
             if (activity.Type == ActivityTypes.Message)

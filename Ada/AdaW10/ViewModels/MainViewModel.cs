@@ -23,6 +23,7 @@ using GalaSoft.MvvmLight.Command;
 using Windows.UI.Core;
 using System.Threading;
 using AdaSDK.Models;
+using AdaW10.WebSockets;
 
 namespace AdaW10.ViewModels
 {
@@ -30,6 +31,7 @@ namespace AdaW10.ViewModels
     {
         private DirectLineClient _client;
         private Conversation _conversation;
+        private WebSocketClient _webSocket;
 
         public MainViewModel()
         {
@@ -148,11 +150,16 @@ namespace AdaW10.ViewModels
             _client = new DirectLineClient(AppConfig.DirectLine);
             _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
 
-            int timeout = 10;
-            var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
-            await Task.WhenAny(task, Task.Delay(timeout));
+            //WEBSOCKET HERE
+            _webSocket = new WebSocketClient();
+            _webSocket.Setup(_client, _conversation);
+            _webSocket.DoTest(_conversation.StreamUrl.ToString());
 
-            // Prepares capture element to camera feed and load camera
+            //int timeout = 10;
+            //var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
+            //await Task.WhenAny(task, Task.Delay(timeout));
+
+            //// Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
             await CameraLoadExecute();
         }
