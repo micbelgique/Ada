@@ -97,7 +97,7 @@ namespace AdaBot
                                         };
                             AnalysisResult analysisResult = null;
                             StringBuilder reply = new StringBuilder();
-                           
+
                             GoogleTranslatorService translator = new GoogleTranslatorService();
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
@@ -108,8 +108,7 @@ namespace AdaBot
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
                                     analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                    //reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
-                                    reply.Append(analysisResult.Description.Captions[0].Text.ToString() + ". ");
+                                    reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
 
                                     if (analysisResult.Description.Tags.Contains("person"))
                                     {
@@ -132,8 +131,8 @@ namespace AdaBot
                             }
 
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                                await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
-                                return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+                            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
+                            return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                         }
                         catch (ClientException e)
                         {
@@ -145,27 +144,28 @@ namespace AdaBot
                         }
 
                     }
+                }
 
-                    if (answer)
+                if (answer)
+                {
+                    idUser = activity.From.Id;
+                    accessAllow = await client.GetAuthorizationFacebook(idUser);
+                    if (accessAllow == "false")
                     {
-                        idUser = activity.From.Id;
-                        accessAllow = await client.GetAuthorizationFacebook(idUser);
-                        if (accessAllow == "false")
-                        {
-                            await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
-                            new LuisService(new LuisModelAttribute(
-                            ConfigurationManager.AppSettings["ModelId"],
-                            ConfigurationManager.AppSettings["SubscriptionKey"]))));
-                        }
-                        else
-                        {
-                            await Conversation.SendAsync(activity, () => new AdaDialog(
-                            new LuisService(new LuisModelAttribute(
-                            ConfigurationManager.AppSettings["ModelId"],
-                            ConfigurationManager.AppSettings["SubscriptionKey"]))));
-                        }
+                        await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    }
+                    else
+                    {
+                        await Conversation.SendAsync(activity, () => new AdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
                     }
                 }
+
             }
             else
             {
