@@ -97,7 +97,7 @@ namespace AdaBot
                                         };
                             AnalysisResult analysisResult = null;
                             StringBuilder reply = new StringBuilder();
-                            string description = "";
+                           
                             GoogleTranslatorService translator = new GoogleTranslatorService();
                             //If the user uploaded an image, read it, and send it to the Vision API
                             if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
@@ -107,9 +107,9 @@ namespace AdaBot
                                 StringConstructor stringConstructor = new StringConstructor();
                                 using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
                                 {
-
                                     analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                    reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
+                                    //reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
+                                    reply.Append(analysisResult.Description.Captions[0].Text.ToString() + ". ");
 
                                     if (analysisResult.Description.Tags.Contains("person"))
                                     {
@@ -117,19 +117,23 @@ namespace AdaBot
 
                                         FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
 
-                                        reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo.");
-
-                                        foreach (FullPersonDto result in persons)
+                                        if (persons != null)
                                         {
-                                            reply.Append(stringConstructor.DescriptionPersonImage(result));
+                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo.");
+
+
+                                            foreach (FullPersonDto result in persons)
+                                            {
+                                                reply.Append(stringConstructor.DescriptionPersonImage(result));
+                                            }
                                         }
                                     }
                                 }
+                            }
 
-                                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                                 await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
                                 return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
-                            }
                         }
                         catch (ClientException e)
                         {
