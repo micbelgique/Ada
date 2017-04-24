@@ -92,6 +92,8 @@ namespace AdaBot.Dialogs
             IMessageActivity newMessage = Activity.CreateMessageActivity();
             newMessage.Type = ActivityTypes.Message;
             newMessage.Recipient = MessagesController.from;
+            newMessage.Conversation = MessagesController.conversation;
+            newMessage.From = MessagesController.botAccount;
             newMessage.Text = "take picture";
             await connector.Conversations.SendToConversationAsync((Activity)newMessage);
         }
