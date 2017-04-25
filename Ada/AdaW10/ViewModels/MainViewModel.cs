@@ -34,6 +34,10 @@ namespace AdaW10.ViewModels
     {
         private DirectLineClient _client;
         private Conversation _conversation;
+        private CaptureElement _captureElement;
+        private IWebSocketConnection connection;
+        private bool _isDirectLineInitialized;
+        private string _logMessage;
 
         public MainViewModel()
         {
@@ -70,7 +74,6 @@ namespace AdaW10.ViewModels
         }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }
-
         public async Task GoToCarouselPageExecute(IList<Attachment> attachments)
         {
             await RunTaskAsync(async () =>
@@ -88,16 +91,11 @@ namespace AdaW10.ViewModels
         public VoiceInterface VoiceInterface { get; }
 
         // Properties
-        private string _logMessage;
         public string LogMessage
         {
             get { return _logMessage; }
             set { Set(() => LogMessage, ref _logMessage, value); }
         }
-
-        private CaptureElement _captureElement;
-        private IWebSocketConnection connection;
-        private bool _isDirectLineInitialized;
 
         public CaptureElement CaptureElement
         {
