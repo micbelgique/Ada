@@ -242,11 +242,7 @@ namespace AdaW10.ViewModels
             LogHelper.Log(text);
             await TtsService.SayAsync(text);
 
-            if (activity.Name != "NotFinish")
-            {
-                await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
-            }
-            else if (activity.Name == "End")
+            if (activity.Name == "End")
             {
                 connection.OnMessage -= Connection_OnMessage;
 
@@ -261,6 +257,10 @@ namespace AdaW10.ViewModels
                 }
 
                 await VoiceInterface.ListeningHelloAda();
+            }
+            else if (activity.Name != "NotFinish")
+            {
+                await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
             }
         }
 
