@@ -1,15 +1,92 @@
-﻿using AdaSDK;
+﻿using AdaBot.Models;
+using AdaSDK;
 using AdaSDK.Models;
+using Microsoft.Bot.Connector;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.ProjectOxford.Vision;
+using Microsoft.ProjectOxford.Vision.Contract;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace AdaBot.Services
 {
     public class StringConstructor
     {
+
+       
+
+        public async Task PictureAnalyseAsync(Activity activity)
+        {
+            VisionServiceClient visionClient;
+
+            string visionApiKey;
+            visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
+
+            visionClient = new VisionServiceClient(visionApiKey);
+
+            DataService dataService = new DataService();
+
+            VisionService visionService = new VisionService(activity);
+            VisualFeature[] visualFeatures = new VisualFeature[] {
+                                        VisualFeature.Adult, //recognize adult content
+                                        VisualFeature.Categories, //recognize image features
+                                        VisualFeature.Description //generate image caption
+                                        };
+            AnalysisResult analysisResult = null;
+            StringBuilder reply = new StringBuilder();
+
+            GoogleTranslatorService translator = new GoogleTranslatorService();
+            //If the user uploaded an image, read it, and send it to the Vision API
+            if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
+            {
+                //stores image url (parsed from attachment or message)
+                string uploadedImageUrl = activity.Attachments.First().ContentUrl;
+                string OCR;
+                StringConstructor stringConstructor = new StringConstructor();
+                using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
+                {
+                    analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
+
+                    imageFileStream.Seek(0, SeekOrigin.Begin);
+
+                    OCR = await visionService.MakeOCRRequest(imageFileStream);
+                    reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
+
+                    if (analysisResult.Description.Tags.Contains("person"))
+                    {
+                        imageFileStream.Seek(0, SeekOrigin.Begin);
+
+                        FullPersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
+
+                        if (persons != null)
+                        {
+                            reply.Append("je vois : " + persons.Count() + " personne(s) sur la photo.");
+
+
+                            foreach (FullPersonDto result in persons)
+                            {
+                                reply.Append(stringConstructor.DescriptionPersonImage(result));
+                            }
+                        }
+                    }
+
+                    reply.Append(" Et il me semble qu'il y a du texte sur la photo, le voici : ");
+                    reply.Append(OCR);
+                }
+            }
+
+            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+
+            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
+        }
+
         public StringBuilder DescriptionPersonImage(FullPersonDto person)
         {
             StringBuilder reply = new StringBuilder();
@@ -172,6 +249,16 @@ namespace AdaBot.Services
             }
 
             return reply;
+        }
+
+        private static Stream GetStreamFromUrl(string url)
+        {
+            byte[] imageData = null;
+
+            using (var wc = new System.Net.WebClient())
+                imageData = wc.DownloadData(url);
+
+            return new MemoryStream(imageData);
         }
     }
 }
