@@ -103,6 +103,8 @@ And deploy the 2 Luis in azure :
 [![](/doc/assets/LuisAddKey.PNG)]()
 [![](/doc/assets/LuisBuyAzure.PNG)]()
 
+And you need to make a QnA Maker and get keys. (https://qnamaker.ai/)
+
 
 # Step 2
 
@@ -129,16 +131,25 @@ You need to register your bot on the bot framework website : https://dev.botfram
  	<add key="MicrosoftAppPassword" value="" />
  
  	<!-- Keys for LUIS Ada-->
-  <add key="ModelId" value=""/>  
+  	<add key="ModelId" value=""/>  
  	<add key="SubscriptionKey" value=""/> 
 
 	<!-- Keys for LUIS trivial-->
-  
 	<add key="ModelIdTrivial" value=""/>  
  	<add key="SubscriptionKeyTrivial" value=""/>
- 
- 	<!-- URI for bot --> 
- 	<add key="WebAppUrl" value="" /> <!--Use for the picture--> 
+	
+ 	<!-- URI for bot -->
+  	<add key="WebAppUrl" value="" /> <!--Use for the picture-->
+  	<add key="Username" value =""/>
+  	<add key="Password" value =""/>
+	
+	<!-- Key for Computer Vision-->
+  	<add key="VisionApiKey" value="" />
+  	<add key="FaceApiKey" value="" />
+
+  	<!-- Key for qna Maker FAQ-->
+  	<add key="QnASubscriptionKey" value="" />
+  	<add key="QnAKnowledgebaseId" value="" />
    
  	<add key="FaceBook" value="" /> <!--Link to the Facebook page-->
  	<add key="Youtube" value="" /> <!--Link to the youtube page-->  
@@ -146,9 +157,6 @@ You need to register your bot on the bot framework website : https://dev.botfram
  	<add key="Linkedin" value="" /> <!--Link to the linkedin page-->
  	<add key="Twitter" value/> <!--Link to the twitter page-->
  	<add key="Site" value="" /> <!--Link to the website-->   
-	
-	<!-- Key for Computer Vision-->
-  	<add key="VisionApiKey" value="3d2303a053b64a4d9ebca07cad01b7aa" />
  </appSettings>
  ```
 
