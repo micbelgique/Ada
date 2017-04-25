@@ -298,6 +298,7 @@
     <Compile Include="Areas\Admin\ViewModels\StatsViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModels\UnavailabilityViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\API\IndicatePassageController.cs" />
     <Compile Include="Controllers\API\MessageController.cs" />
     <Compile Include="Controllers\API\PersonController.cs" />
     <Compile Include="Controllers\API\UserIndentifiedController.cs" />
@@ -326,6 +327,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\IndicatePassageRepository.cs" />
     <Compile Include="Models\DAL\Repositories\MessageRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
     <Compile Include="Models\DAL\Repositories\ProfilePictureRepository.cs" />
@@ -341,6 +343,7 @@
     <Compile Include="Models\Entities\EntitiesExtensions\EmotionScoresExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\PersonExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\StaffMemberExtensions.cs" />
+    <Compile Include="Models\Entities\IndicatePassage.cs" />
     <Compile Include="Models\Entities\Message.cs" />
     <Compile Include="Models\Entities\ProfilePicture.cs" />
     <Compile Include="Models\Entities\RecognitionItem.cs" />

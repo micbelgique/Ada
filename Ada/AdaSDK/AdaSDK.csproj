@@ -40,6 +40,7 @@
     <Compile Include="Models\EmotionDto.cs" />
     <Compile Include="Models\FullPersonDto.cs" />
     <Compile Include="Models\GenderValues.cs" />
+    <Compile Include="Models\IndicatePassageDto.cs" />
     <Compile Include="Models\MessageDto.cs" />
     <Compile Include="Models\PersonVisitDto.cs" />
     <Compile Include="Models\PersonDto.cs" />
