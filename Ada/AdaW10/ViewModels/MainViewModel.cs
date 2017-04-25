@@ -244,7 +244,11 @@ namespace AdaW10.ViewModels
             LogHelper.Log(text);
             await TtsService.SayAsync(text);
 
-            await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+
+            if (activity.Name != "NotFinish")
+            {
+                await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+            }
         }
 
         private void Connection_OnError(string obj)
@@ -315,6 +319,8 @@ namespace AdaW10.ViewModels
             {
                 await TtsService.SayAsync("au revoir");
 
+                connection.OnMessage -= Connection_OnMessage;
+
                 if (WebcamService.FaceDetectionEffect != null)
                 {
                     await WebcamService.StopFaceDetectionAsync();
@@ -331,15 +337,6 @@ namespace AdaW10.ViewModels
             {
                 activity.Text = (activity.Text).Replace('.', ' ');
                 activity.Text = (activity.Text).ToLower();
-
-                if (activity.Text == "oui ")
-                {
-                    activity.Text = "yes";
-                }
-                if (activity.Text == "non ")
-                {
-                    activity.Text = "no";
-                }
 
                 await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
             }

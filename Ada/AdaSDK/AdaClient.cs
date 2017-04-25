@@ -73,7 +73,7 @@ namespace AdaSDK
             }
         }
 
-        public async Task<HttpResponseMessage> PutMessage(MessageDto message)
+        public async Task PutMessage(MessageDto message)
         {
             try
             {
@@ -85,13 +85,11 @@ namespace AdaSDK
 
                 var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/Message/PutMessage/" + message.ID), byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                return result.EnsureSuccessStatusCode();
             }
             catch (Exception e)
             {
                 // TODO : Propagate exception to caller
-                return null;
+                throw;
             }
         }
 
