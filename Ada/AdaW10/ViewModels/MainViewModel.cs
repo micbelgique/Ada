@@ -19,12 +19,14 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Bot.Connector.DirectLine;
 using System.Collections.Generic;
 using System.Net;
-using GalaSoft.MvvmLight.Views;
-using AdaW10.Views;
 using GalaSoft.MvvmLight.Command;
 using Windows.UI.Core;
 using System.Threading;
 using AdaSDK.Models;
+using Websockets;
+using System.Diagnostics;
+using Newtonsoft.Json;
+using Websockets.Universal;
 
 namespace AdaW10.ViewModels
 {
@@ -35,6 +37,10 @@ namespace AdaW10.ViewModels
 
         private DirectLineClient _client;
         private Conversation _conversation;
+        private CaptureElement _captureElement;
+        private IWebSocketConnection connection;
+        private bool _isDirectLineInitialized;
+        private string _logMessage;
 
         public MainViewModel()
         {
@@ -42,24 +48,35 @@ namespace AdaW10.ViewModels
 
             WebcamService = ServiceLocator.Current.GetInstance<WebcamService>();
             VoiceInterface = ServiceLocator.Current.GetInstance<VoiceInterface>();
+
+            InitializeDirectLine();
         }
 
-        public static MainViewModel GetInstance()
+        private async void InitializeDirectLine()
         {
-            if (_instance == null)
-            {
-                lock (instanceLock)
-                {
-                    if (_instance == null)
-                        _instance = new MainViewModel();
-                }
-            }
+            _client = new DirectLineClient(AppConfig.DirectLine);
+            _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
 
-            return _instance;
+            //Register the UWP as a Client UWP in database
+            var response = _client.Conversations.PostActivity(_conversation.ConversationId, new Activity("message")
+            {
+                From = new ChannelAccount("Jean"),
+                Text = "RegisterApp",
+            });
+
+            //WEBSOCKET HERE
+            WebsocketConnection.Link();
+            connection = WebSocketFactory.Create();
+            connection.OnLog += Connection_OnLog;
+            connection.OnError += Connection_OnError;
+            connection.OnOpened += Connection_OnOpened;
+
+            connection.Open(_conversation.StreamUrl);
+
+            _isDirectLineInitialized = true;
         }
 
         public RelayCommand GoToCarouselPageCommand { get; set; }
-
         public async Task GoToCarouselPageExecute(IList<Attachment> attachments)
         {
             await RunTaskAsync(async () =>
@@ -77,14 +94,11 @@ namespace AdaW10.ViewModels
         public VoiceInterface VoiceInterface { get; }
 
         // Properties
-        private string _logMessage;
         public string LogMessage
         {
             get { return _logMessage; }
             set { Set(() => LogMessage, ref _logMessage, value); }
         }
-
-        private CaptureElement _captureElement;
 
         public CaptureElement CaptureElement
         {
@@ -98,6 +112,10 @@ namespace AdaW10.ViewModels
 
         protected override async Task OnLoadedAsync()
         {
+            await Task.Run(() => { while (!_isDirectLineInitialized) { } });
+
+            connection.OnMessage += Connection_OnMessage;
+
             // Registers to messenger for on screen log messages
             Messenger.Default.Register<LogMessage>(this, async e => await DispatcherHelper.RunAsync(() => LogMessage += e.Message));
 
@@ -117,6 +135,7 @@ namespace AdaW10.ViewModels
 
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
+                    await TtsService.SayAsync("Message reçu, je suis à toi dans un instant");
 
                     PersonDto person = null;
 
@@ -154,28 +173,108 @@ namespace AdaW10.ViewModels
                                 person.FirstName = name;
                             }
                         }
-
-                        await TtsService.SayAsync("En quoi puis je t'aider ?");
                     }
                     else
                     {
-                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
+                        await TtsService.SayAsync("Bonjour");
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
             });
 
-            _client = new DirectLineClient(AppConfig.DirectLine);
-            _conversation = (await _client.Conversations.StartConversationWithHttpMessagesAsync()).Body;
-
-            int timeout = 10;
-            var task = ReadBotMessagesAsync(_client, _conversation.ConversationId);
-            await Task.WhenAny(task, Task.Delay(timeout));
-
-
-            // Prepares capture element to camera feed and load camera
+            //// Prepares capture element to camera feed and load camera
             CaptureElement = new CaptureElement();
             await CameraLoadExecute();
+        }
+
+        protected override async Task OnUnloadedAsync()
+        {
+            connection.OnMessage -= Connection_OnMessage;
+            Messenger.Default.Unregister(this);
+        }
+
+        private void Connection_OnOpened()
+        {
+            Debug.WriteLine("Opened !");
+        }
+
+        private void Connection_OnMessage(string obj)
+        {
+            if (string.IsNullOrWhiteSpace(obj))
+                return;
+
+            ActivitySet activitySet = JsonConvert.DeserializeObject<ActivitySet>(obj);
+
+            foreach (var activity in activitySet.Activities)
+            {
+                if (activity.From.Id == "Jean")
+                    continue;
+
+                switch (activity.Text)
+                {
+                    case "take picture":
+                        // do something
+                        return;
+                    case "registered":
+                        return;
+                    default:
+                        HandleActivity(activity);
+                        return;
+                }
+            }
+        }
+
+        private async void HandleActivity(Activity activity)
+        {
+            var text = WebUtility.HtmlDecode(activity.Text);
+            var attachments = activity.Attachments;
+
+            if (attachments?.Count > 0)
+            {
+                var token = new CancellationTokenSource();
+
+                await VoiceInterface.StopListening();
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                 async () =>
+                 {
+                     await WebcamService.CleanUpAsync();
+                     await GoToCarouselPageExecute(attachments);
+                 }
+               );
+            }
+            LogHelper.Log(text);
+            await TtsService.SayAsync(text);
+
+            if (activity.Name == "End")
+            {
+                connection.OnMessage -= Connection_OnMessage;
+
+                if (WebcamService.FaceDetectionEffect != null)
+                {
+                    await WebcamService.StopFaceDetectionAsync();
+                }
+
+                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
+                {
+                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+                }
+
+                await VoiceInterface.ListeningHelloAda();
+            }
+            else if (activity.Name != "NotFinish")
+            {
+                await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+            }
+        }
+
+        private void Connection_OnError(string obj)
+        {
+            Debug.Write("ERROR " + obj);
+        }
+
+        private void Connection_OnLog(string obj)
+        {
+            Debug.Write(obj);
         }
 
         private async void OnFaceDetected(FaceDetectionEffect sender, FaceDetectedEventArgs args)
@@ -219,7 +318,8 @@ namespace AdaW10.ViewModels
                 await WebcamService.StopFaceDetectionAsync();
             }
 
-            LogHelper.Log("Que puis-je faire pour toi ?");
+            LogHelper.Log("Que puis-je faire pour toi?");
+            await TtsService.SayAsync("Que puis-je faire pour toi?");
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
@@ -234,6 +334,8 @@ namespace AdaW10.ViewModels
             if (activity.Text == "")
             {
                 await TtsService.SayAsync("au revoir");
+
+                connection.OnMessage -= Connection_OnMessage;
 
                 if (WebcamService.FaceDetectionEffect != null)
                 {
@@ -252,59 +354,7 @@ namespace AdaW10.ViewModels
                 activity.Text = (activity.Text).Replace('.', ' ');
                 activity.Text = (activity.Text).ToLower();
 
-                if (activity.Text == "oui ")
-                {
-                    activity.Text = "yes";
-                }
-                if (activity.Text == "non ")
-                {
-                    activity.Text = "no";
-                }
-
                 await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
-            }
-        }
-
-        private async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId)
-        {
-            string watermark = null;
-
-            while (true)
-            {
-                ActivitySet activitySet = await client.Conversations.GetActivitiesAsync(conversationId, watermark);
-
-                watermark = activitySet?.Watermark;
-
-                var activities = from x in activitySet.Activities
-                                 where x.From.Id != "Jean"
-                                 select x;
-                var enumerable = activities as IList<Activity> ?? activities.ToList();
-                foreach (Activity activity in enumerable)
-                {
-                    var text = WebUtility.HtmlDecode(activity.Text);
-                    var attachments = activity.Attachments;
-
-                    if (attachments.Count > 0)
-                    {
-                        var token = new CancellationTokenSource();
-
-                        await VoiceInterface.StopListening();
-                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                         async () =>
-                       {
-                           await WebcamService.CleanUpAsync();
-                           await GoToCarouselPageExecute(attachments);
-                       }
-                       );
-                    }
-                    LogHelper.Log(text);
-                    await TtsService.SayAsync(text);
-                }
-
-                if (enumerable.Count > 0 && activitySet.Activities[activitySet.Activities.Count() - 1].Name != "NotFinish")
-                {
-                    await SolicitExecute();
-                }
             }
         }
 

@@ -4,7 +4,8 @@
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
     "Microsoft.Rest.ClientRuntime": "2.3.2",
     "MvvmLight": "5.2.0",
-    "Newtonsoft.Json": "10.0.1"
+    "Newtonsoft.Json": "10.0.1",
+    "Websockets.Pcl": "1.1.9"
   },
   "frameworks": {
     "uap10.0": {}

@@ -110,7 +110,8 @@ namespace AdaW10.Models
 
                 await StopCameraPreviewAsync();
                 MediaCapture.Dispose();
-                MediaCapture = null; 
+                MediaCapture = null;
+                IsInitialized = false;
             }
         }
 

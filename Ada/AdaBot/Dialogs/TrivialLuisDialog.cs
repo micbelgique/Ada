@@ -122,6 +122,7 @@ namespace AdaBot.Dialogs
             replyToConversation = ((Activity)context.Activity).CreateReply(message);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";
+            replyToConversation.Name = "End";
             await context.PostAsync(replyToConversation);
             context.Done<object>(null);
         }
@@ -266,6 +267,12 @@ namespace AdaBot.Dialogs
             FAQDialog faqDialog = new FAQDialog();
             string response = faqDialog.AskSomething(result.Query.ToString());
             Activity replyToConversation;
+
+            if(response == "No good match found in the KB")
+            {
+                response = $"{Dialog.None.Spintax()}";
+            }
+
             replyToConversation = ((Activity)context.Activity).CreateReply(response);
             replyToConversation.Recipient = context.Activity.From;
             replyToConversation.Type = "message";

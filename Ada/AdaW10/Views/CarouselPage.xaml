@@ -10,7 +10,7 @@
     xmlns:controls="using:AdaW10.Controls"
     xmlns:debug="clr-AdaW10.Views:System.Diagnostics;assembly=System"
     mc:Ignorable="d"
-    DataContext="{Binding Source={StaticResource ViewModelLocator}, Path= Carousel}">
+    DataContext="{Binding Carousel, Mode=OneWay, Source={StaticResource ViewModelLocator}}">
 
     <Page.Resources>
         <vm:CarouselViewModel x:Key="ViewModel"/>

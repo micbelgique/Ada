@@ -34,6 +34,6 @@ namespace AdaW10.Views
             ((CarouselViewModel)DataContext).OnNavigatedTo(e);
         }
 
-        private CarouselViewModel ViewModel => (CarouselViewModel)Resources["ViewModel"];
+        private CarouselViewModel ViewModel => (CarouselViewModel) DataContext;
     }
 }

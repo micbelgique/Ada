@@ -25,6 +25,14 @@ namespace AdaBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        string visionApiKey;
+
+        VisionServiceClient visionClient;
+        public static string serviceUrl;
+        public static ChannelAccount from;
+        public static ChannelAccount botAccount;
+        public static ConversationAccount conversation;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -72,6 +80,19 @@ namespace AdaBot
 
             if (activity.Type == ActivityTypes.Message)
             {
+                if (activity.Text == "RegisterApp")
+                {
+                    // persist this information
+                    serviceUrl = activity.ServiceUrl;
+                    from = activity.From;
+                    botAccount = activity.Recipient;
+                    conversation = activity.Conversation;
+
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+                }
+
                 DataService dataService = new DataService();
 
                 if (activity.Attachments?.Count() >= 1)
