@@ -132,6 +132,7 @@ namespace AdaW10.ViewModels
 
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
+                    await TtsService.SayAsync("Message reçu, je suis à toi dans un instant");
 
                     PersonDto person = null;
 
@@ -170,11 +171,11 @@ namespace AdaW10.ViewModels
                             }
                         }
 
-                        await TtsService.SayAsync("En quoi puis je t'aider ?");
+                        await TtsService.SayAsync("En quoi puis je t'aider?");
                     }
                     else
                     {
-                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider ?");
+                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider?");
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
@@ -297,7 +298,8 @@ namespace AdaW10.ViewModels
                 await WebcamService.StopFaceDetectionAsync();
             }
 
-            LogHelper.Log("Que puis-je faire pour toi ?");
+            LogHelper.Log("Que puis-je faire pour toi?");
+            await TtsService.SayAsync("Que puis-je faire pour toi?");
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
