@@ -150,6 +150,9 @@ You need to register your bot on the bot framework website : https://dev.botfram
   	<!-- Key for qna Maker FAQ-->
   	<add key="QnASubscriptionKey" value="" />
   	<add key="QnAKnowledgebaseId" value="" />
+	
+	<!-- Key for DirectLine-->
+  	<add key="DirectLineKey" value="6uKJqzI_1zs.cwA.wXA.5rIOFgP9EsTrV8PTnWbF2Rfs7w5uNVGRwCiizuT7ux4" />
    
  	<add key="FaceBook" value="" /> <!--Link to the Facebook page-->
  	<add key="Youtube" value="" /> <!--Link to the youtube page-->  
