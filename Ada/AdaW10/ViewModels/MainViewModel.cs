@@ -170,12 +170,10 @@ namespace AdaW10.ViewModels
                                 person.FirstName = name;
                             }
                         }
-
-                        await TtsService.SayAsync("En quoi puis je t'aider?");
                     }
                     else
                     {
-                        await TtsService.SayAsync("Bonjour, en quoi puis je t'aider?");
+                        await TtsService.SayAsync("Bonjour");
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
@@ -244,10 +242,25 @@ namespace AdaW10.ViewModels
             LogHelper.Log(text);
             await TtsService.SayAsync(text);
 
-
             if (activity.Name != "NotFinish")
             {
                 await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+            }
+            else if (activity.Name == "End")
+            {
+                connection.OnMessage -= Connection_OnMessage;
+
+                if (WebcamService.FaceDetectionEffect != null)
+                {
+                    await WebcamService.StopFaceDetectionAsync();
+                }
+
+                if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
+                {
+                    WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+                }
+
+                await VoiceInterface.ListeningHelloAda();
             }
         }
 
