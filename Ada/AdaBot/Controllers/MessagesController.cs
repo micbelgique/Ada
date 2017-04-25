@@ -25,10 +25,6 @@ namespace AdaBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        string visionApiKey;
-
-        VisionServiceClient visionClient;
-
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -38,11 +34,6 @@ namespace AdaBot
             bool answer = true;
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-
-            visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
-
-            //Vision SDK classes
-            visionClient = new VisionServiceClient(visionApiKey);
 
             string accessAllow;
             string idUser;
@@ -160,16 +151,6 @@ namespace AdaBot
             {
             }
             return null;
-        }
-
-        private static Stream GetStreamFromUrl(string url)
-        {
-            byte[] imageData = null;
-
-            using (var wc = new System.Net.WebClient())
-                imageData = wc.DownloadData(url);
-
-            return new MemoryStream(imageData);
         }
     }
 }
