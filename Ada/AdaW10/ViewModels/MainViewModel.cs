@@ -195,7 +195,7 @@ namespace AdaW10.ViewModels
             Debug.WriteLine("Opened !");
         }
 
-        private void Connection_OnMessage(string obj)
+        private async void Connection_OnMessage(string obj)
         {
             if (string.IsNullOrWhiteSpace(obj))
                 return;
@@ -210,7 +210,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        // do something
+                        await TakePicture();
                         return;
                     case "registered":
                         return;
@@ -295,7 +295,7 @@ namespace AdaW10.ViewModels
 
         private async Task CameraLoadExecute()
         {
-            LogHelper.Log<WebcamService>("Je me mets au travail !");
+            LogHelper.Log<WebcamService>("Je me mets au travail!");
 
             await WebcamService.InitializeCameraAsync();
             WebcamService.CaptureElement = CaptureElement;
@@ -305,6 +305,39 @@ namespace AdaW10.ViewModels
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+            }
+        }
+
+        private async Task TakePicture()
+        {
+            if (!WebcamService.IsInitialized)
+            {
+                await WebcamService.InitializeCameraAsync();
+                await WebcamService.StartCameraPreviewAsync();
+            }
+
+            using (var stream = new InMemoryRandomAccessStream())
+            {
+                await WebcamService.MediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreateJpeg(), stream);
+                await stream.FlushAsync();
+                stream.Seek(0);
+
+                try
+                {
+                    //PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
+                    var activity = new Activity
+                    {
+                        From = new ChannelAccount("Jean"),
+                        Text = "Picture from UWP",
+                        Type = ActivityTypes.Message,
+                        ChannelData = stream.AsStreamForRead()
+                    };
+                    await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+                }
+                catch (HttpRequestException)
+                {
+                    //Impossible to take picture
+                }
             }
         }
 
