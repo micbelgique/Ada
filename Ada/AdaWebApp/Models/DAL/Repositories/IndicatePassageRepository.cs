@@ -14,9 +14,9 @@ namespace AdaWebApp.Models.DAL.Repositories
         public ApplicationDbContext context = null;
         public IndicatePassageRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task PutMessageAsync(string id)
+        public async Task PutMessageAsync(int id)
         {
-            IndicatePassage message = await Table.FirstOrDefaultAsync(s => s.IdFacebookConversation == id);
+            IndicatePassage message = await Table.FirstOrDefaultAsync(s => s.Id == id);
 
             message.IsSend = true;
 

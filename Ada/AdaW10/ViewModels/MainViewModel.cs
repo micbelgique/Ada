@@ -382,6 +382,7 @@ namespace AdaW10.ViewModels
                             if (personMessage != null)
                             {
                                 List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
+                               
                                 foreach (MessageDto message in messages)
                                 {
                                     if (message.From != null)
@@ -397,6 +398,15 @@ namespace AdaW10.ViewModels
                                     message.Read = DateTime.Now;
 
                                     await client.PutMessage(message);
+                                }
+
+                                List<IndicatePassageDto> indicatePassages = await client.GetIndicatePassageByPerson(personMessage.PersonId);
+
+                                foreach (IndicatePassageDto indicatePassage in indicatePassages)
+                                {
+                                    // need to send message to the person on facebook
+                                    indicatePassage.IsSend = true;
+                                    await client.PutIndicatePassage(indicatePassage);
                                 }
                             }
                         }

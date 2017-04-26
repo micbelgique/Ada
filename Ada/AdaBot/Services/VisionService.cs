@@ -31,6 +31,13 @@ namespace AdaBot.Services
             //Vision SDK classes
             visionClient = new VisionServiceClient(visionApiKey);
         }
+        public VisionService()
+        {
+            visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
+
+            //Vision SDK classes
+            visionClient = new VisionServiceClient(visionApiKey);
+        }
 
         public async Task<AnalysisResult> CallVisionApiAsync()
         {

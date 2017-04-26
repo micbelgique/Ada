@@ -55,6 +55,7 @@ namespace AdaWebApp.Models.Entities
                 };
             }
         }
+
         public static IndicatePassageDto ToDto(this IndicatePassage indicatePassage)
         {
             if (indicatePassage == null)

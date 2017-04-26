@@ -365,40 +365,40 @@ namespace AdaSDK
                 throw;
             }
         }
-        public async Task<List<MessageDto>> GetIndicatePassageByPerson(int id)
+        public async Task<List<IndicatePassageDto>> GetIndicatePassageByPerson(int id)
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/Message/MessageReceiver/" + id));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/GetIndicatePassage/" + id));
                 var content = await response.Content.ReadAsStringAsync();
-                var messages = JsonConvert.DeserializeObject<List<MessageDto>>(content);
+                var messages = JsonConvert.DeserializeObject<List<IndicatePassageDto>>(content);
                 return messages;
             }
             catch (Exception e)
             {
                 // TODO : Propagate exception to caller
-                return new List<MessageDto>();
+                return new List<IndicatePassageDto>();
             }
         }
 
-        //public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
-        //{
-        //    try
-        //    {
-        //        var json = JsonConvert.SerializeObject(indicatePassage);
+        public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
 
-        //        var buffer = Encoding.UTF8.GetBytes(json);
-        //        var byteContent = new ByteArrayContent(buffer);
-        //        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-        //        var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/Message/PutMessage/" + indicatePassage.), byteContent);
-        //        result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        // TODO : Propagate exception to caller
-        //        throw;
-        //    }
-        //}
+                var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/PutIndicatePassage/" + indicatePassage.Id), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
     }
 }
