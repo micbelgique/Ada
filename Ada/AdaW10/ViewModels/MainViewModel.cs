@@ -28,6 +28,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Websockets.Universal;
 using Windows.Storage;
+using AdaSDK.Services;
 
 namespace AdaW10.ViewModels
 {
@@ -333,9 +334,9 @@ namespace AdaW10.ViewModels
                 await WebcamService.MediaCapture.CapturePhotoToStorageFileAsync(imgFormat, file);
 
                 FileStream fileStream = new FileStream(file.Path, FileMode.Open);
-                Stream test = fileStream.AsRandomAccessStream().AsStream();
+                Stream streamFinal = fileStream.AsRandomAccessStream().AsStream();
 
-                //SDK reference here
+                StringConstructorSDK client = new StringConstructorSDK() { WebAppUrl = $"{ AppConfig.WebUri}" };
 
                 try
                 {
@@ -345,7 +346,7 @@ namespace AdaW10.ViewModels
                         Text = "Picture from UWP",
                         Type = ActivityTypes.Message,
                         //Envoyer le stream
-                        ChannelData = file.FileType.ToString(),
+                        ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
                         Name = conversID
                     };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
