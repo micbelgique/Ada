@@ -31,7 +31,7 @@ namespace AdaWebApp.Controllers.API
         [Route("Api/IndicatePassageController/PostIndicatePassage")]
         public async void PostIndicatePassage(IndicatePassageDto indicatePassageDto)
         {
-            IndicatePassage indicatePassage = new IndicatePassage()
+            Models.Entities.IndicatePassage indicatePassage = new Models.Entities.IndicatePassage()
             {
                 IdFacebookConversation = indicatePassageDto.IdFacebookConversation,
                 Firtsname = indicatePassageDto.Firtsname,
