@@ -8,6 +8,7 @@ namespace AdaSDK.Models
 {
     public class IndicatePassageDto
     {
+        public int Id { get; set; }
         public string IdFacebookConversation { get; set; }
         public string Firtsname { get; set; }
         public bool IsSend { get; set; }

@@ -55,6 +55,24 @@ namespace AdaWebApp.Models.Entities
                 };
             }
         }
+        public static IndicatePassageDto ToDto(this IndicatePassage indicatePassage)
+        {
+            if (indicatePassage == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new IndicatePassageDto()
+                {
+                    Id = indicatePassage.Id,
+                    IdFacebookConversation = indicatePassage.IdFacebookConversation,
+                    Firtsname = indicatePassage.Firtsname,
+                    IsSend = indicatePassage.IsSend,
+                    To = indicatePassage.ToId
+                };
+            }
+        }
 
         public static VisitDto ToDto(this Visit visit)
         {

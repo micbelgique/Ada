@@ -45,11 +45,24 @@ namespace AdaWebApp.Controllers.API
 
         [HttpPut]
         [Route("Api/IndicatePassageController/PutIndicatePassage/{id}")]
-        public async void PutIndicatePassage(string id)
+        public async void PutIndicatePassage(int id)
         {
             await _unit.IndicatePassageRepository.PutMessageAsync(id);
 
             await _unit.SaveAsync();
         }
+
+        [HttpGet]
+        [Route("Api/IndicatePassageController/GetIndicatePassage/{id}")]
+        public async Task<IEnumerable<IndicatePassageDto>> GetIndicatePassage(int id)
+        {
+            var indicatePassage = _unit.IndicatePassageRepository.GetIndicatePassageByPerson(id);
+            if (indicatePassage == null)
+            {
+                return null;
+            }
+            return indicatePassage.Select(m => m.ToDto()).ToList();
+        }
+
     }
 }
