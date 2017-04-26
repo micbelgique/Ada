@@ -93,7 +93,7 @@ namespace AdaBot
                 {
                     answer = false;
                     activity.Conversation.Id = activity.Name;
-                    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Summary));
                     await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
 
