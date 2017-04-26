@@ -349,7 +349,7 @@ namespace AdaW10.ViewModels
                         ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
                         Name = conversID,
                         //Summary = serviceUrl
-                };
+                    };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
                 }
                 catch (HttpRequestException)
@@ -430,7 +430,7 @@ namespace AdaW10.ViewModels
                             if (personMessage != null)
                             {
                                 List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
-                               
+
                                 foreach (MessageDto message in messages)
                                 {
                                     if (message.From != null)
