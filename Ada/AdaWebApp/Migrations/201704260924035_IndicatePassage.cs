@@ -11,12 +11,13 @@ namespace AdaWebApp.Migrations
                 "dbo.IndicatePassages",
                 c => new
                     {
-                        IdFacebookConversation = c.String(nullable: false, maxLength: 128),
+                        Id = c.Int(nullable: false, identity: true),
+                        IdFacebookConversation = c.String(),
                         Firtsname = c.String(),
                         IsSend = c.Boolean(nullable: false),
                         ToId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.IdFacebookConversation)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.People", t => t.ToId, cascadeDelete: true)
                 .Index(t => t.ToId);
             

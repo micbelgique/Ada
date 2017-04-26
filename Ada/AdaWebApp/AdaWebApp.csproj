@@ -325,9 +325,9 @@
     <Compile Include="Migrations\201704030954337_Message.Designer.cs">
       <DependentUpon>201704030954337_Message.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704251452484_IndicatePassage.cs" />
-    <Compile Include="Migrations\201704251452484_IndicatePassage.Designer.cs">
-      <DependentUpon>201704251452484_IndicatePassage.cs</DependentUpon>
+    <Compile Include="Migrations\201704260924035_IndicatePassage.cs" />
+    <Compile Include="Migrations\201704260924035_IndicatePassage.Designer.cs">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
@@ -490,8 +490,8 @@
     <EmbeddedResource Include="Migrations\201704030954337_Message.resx">
       <DependentUpon>201704030954337_Message.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251452484_IndicatePassage.resx">
-      <DependentUpon>201704251452484_IndicatePassage.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704260924035_IndicatePassage.resx">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -22,5 +22,10 @@ namespace AdaWebApp.Models.DAL.Repositories
 
             this.Update(message);
         }
+
+        public List<IndicatePassage> GetIndicatePassageByPerson(int id)
+        {
+            return Table.Where(m => m.ToId == id && !m.IsSend).ToList();
+        }
     }
 }

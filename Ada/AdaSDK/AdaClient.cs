@@ -365,6 +365,21 @@ namespace AdaSDK
                 throw;
             }
         }
+        public async Task<List<MessageDto>> GetIndicatePassageByPerson(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/Message/MessageReceiver/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var messages = JsonConvert.DeserializeObject<List<MessageDto>>(content);
+                return messages;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<MessageDto>();
+            }
+        }
 
         //public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
         //{
