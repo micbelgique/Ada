@@ -1207,5 +1207,116 @@ namespace AdaBot.Dialogs
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
+
+        [LuisIntent("PassagePerson")]
+        public async Task PassagePerson(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation = null;
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+
+            IndicatePassageDto indicatePassage = new IndicatePassageDto();
+
+            CreateDialog createCarousel = new CreateDialog();
+
+            string firstname = null;
+
+            var splitResult = result.Query.Split('|');
+
+            if (splitResult[0] == "IndicatePassage ")
+            {
+                int personId = Convert.ToInt32(splitResult[1]);
+
+                indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
+                indicatePassage.To = personId;
+                indicatePassage.Firtsname = splitResult[2];
+                await client.AddIndicatePassage(indicatePassage);
+
+                replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else
+            {
+
+                int nbEntities = result.Entities.Count();
+                if (nbEntities == 0)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire le prénom de la personne.");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    for (int i = 0; i < nbEntities; i++)
+                    {
+                        if (result.Entities[i].Type == "Firstname")
+                        {
+                            firstname = result.Entities[i].Entity;
+                        }
+                    }
+
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "IndicatePassage |" + visit.PersonVisit.PersonId + "|" + visit.PersonVisit.FirstName,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                    }
+                    else
+                    {
+
+                        indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
+                        indicatePassage.To = visits[0].PersonVisit.PersonId;
+                        indicatePassage.Firtsname = visits[0].PersonVisit.FirstName;
+
+                        await client.AddIndicatePassage(indicatePassage);
+
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                }
+            }
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
     }
 }

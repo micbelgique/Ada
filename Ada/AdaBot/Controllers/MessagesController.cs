@@ -25,9 +25,6 @@ namespace AdaBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        string visionApiKey;
-
-        VisionServiceClient visionClient;
         public static string serviceUrl;
         public static ChannelAccount from;
         public static ChannelAccount botAccount;
@@ -42,11 +39,6 @@ namespace AdaBot
             bool answer = true;
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
-
-            visionApiKey = ConfigurationManager.AppSettings["VisionApiKey"];
-
-            //Vision SDK classes
-            visionClient = new VisionServiceClient(visionApiKey);
 
             string accessAllow;
             string idUser;
@@ -104,66 +96,11 @@ namespace AdaBot
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
                     {
+                        StringConstructor stringConstructor = new StringConstructor();
                         try
                         {
-                            VisionService visionService = new VisionService(activity);
-                            VisualFeature[] visualFeatures = new VisualFeature[] {
-                                        VisualFeature.Adult, //recognize adult content
-                                        VisualFeature.Categories, //recognize image features
-                                        VisualFeature.Description //generate image caption
-                                        };
-                            AnalysisResult analysisResult = null;
-                            StringBuilder reply = new StringBuilder();
-                            string description = "";
-                            GoogleTranslatorService translator = new GoogleTranslatorService();
-                            //If the user uploaded an image, read it, and send it to the Vision API
-                            if (activity.Attachments.Any() && activity.Attachments.First().ContentType.Contains("image"))
-                            {
-                                //stores image url (parsed from attachment or message)
-                                string uploadedImageUrl = activity.Attachments.First().ContentUrl;
-
-                                List<PersonVisitDto> person = new List<PersonVisitDto>();
-
-                                using (Stream imageFileStream = GetStreamFromUrl(uploadedImageUrl))
-                                {
-                                    try
-                                    {
-                                        analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
-                                        reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
-
-                                        if (analysisResult.Description.Tags.Contains("person"))
-                                        {
-                                            imageFileStream.Seek(0, SeekOrigin.Begin);
-
-                                            PersonDto[] persons = await dataService.recognizepersonsPictureAsync(imageFileStream);
-
-                                            reply.Append("Il y a " + persons.Count() + " personne(s) sur la photo. ");
-
-                                            foreach (PersonDto result in persons)
-                                            {
-                                                if (result.FirstName != null)
-                                                {
-                                                    reply.Append("Je connais " + result.FirstName + ", cette personne a " + result.Age + "ans.");
-                                                }
-                                                else
-                                                {
-                                                    reply.Append("Je ne connais malheureusement pas cette personne mais elle a " + result.Age + "ans.");
-                                                }
-
-                                                person.Add(await client.GetPersonByFaceId(result.PersonId));
-                                            }
-                                        }
-
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        analysisResult = null; //on error, reset analysis result to null
-                                    }
-                                }
-                            }
-                            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
-                            return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+                            await stringConstructor.PictureAnalyseAsync(activity);
+                            answer = false;
                         }
                         catch (ClientException e)
                         {
@@ -173,6 +110,7 @@ namespace AdaBot
                         {
                             Debug.WriteLine(e.Message);
                         }
+
                     }
                 }
 
@@ -195,6 +133,7 @@ namespace AdaBot
                         ConfigurationManager.AppSettings["SubscriptionKey"]))));
                     }
                 }
+
             }
             else
             {
@@ -230,15 +169,6 @@ namespace AdaBot
             {
             }
             return null;
-        }
-        private static Stream GetStreamFromUrl(string url)
-        {
-            byte[] imageData = null;
-
-            using (var wc = new System.Net.WebClient())
-                imageData = wc.DownloadData(url);
-
-            return new MemoryStream(imageData);
         }
     }
 }

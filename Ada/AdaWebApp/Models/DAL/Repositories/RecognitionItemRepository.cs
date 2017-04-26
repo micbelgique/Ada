@@ -1,4 +1,5 @@
 ﻿using AdaWebApp.Models.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdaWebApp.Models.DAL.Repositories

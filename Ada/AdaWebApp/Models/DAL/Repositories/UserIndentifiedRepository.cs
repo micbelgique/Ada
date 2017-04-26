@@ -21,7 +21,7 @@ namespace AdaWebApp.Models.DAL.Repositories
 
         public bool GetAuthorizationByIdFacebook(string idFacebook)
         {
-            return Table.Where(u => u.IdFacebook == idFacebook).Select(v => v.authorization).Single();
+            return Table.Where(u => u.IdFacebook == idFacebook).Select(v => v.Authorization).Single();
         }
     }
 }

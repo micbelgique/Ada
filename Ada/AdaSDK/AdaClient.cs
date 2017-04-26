@@ -326,6 +326,7 @@ namespace AdaSDK
                 return new int();
             }
         }
+
         public async Task<PersonVisitDto> GetPersonByFaceId(Guid id)
         {
             try
@@ -342,6 +343,61 @@ namespace AdaSDK
             {
                 // TODO : Propagate exception to caller
                 return new PersonVisitDto();
+            }
+        }
+
+        public async Task AddIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(WebAppUrl + "/api/IndicatePassageController/PostIndicatePassage", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+        public async Task<List<IndicatePassageDto>> GetIndicatePassageByPerson(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/GetIndicatePassage/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var messages = JsonConvert.DeserializeObject<List<IndicatePassageDto>>(content);
+                return messages;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<IndicatePassageDto>();
+            }
+        }
+
+        public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/PutIndicatePassage/" + indicatePassage.Id), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
             }
         }
     }

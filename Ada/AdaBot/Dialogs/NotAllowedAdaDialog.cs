@@ -173,5 +173,16 @@ namespace AdaBot.Dialogs
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
+
+        [LuisIntent("PassagePerson")]
+        public async Task PassagePerson(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ProjectOxford.Face.Contract;
+using System;
 
 namespace AdaSDK
 {

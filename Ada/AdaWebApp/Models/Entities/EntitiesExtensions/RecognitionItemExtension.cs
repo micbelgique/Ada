@@ -31,7 +31,7 @@ namespace AdaWebApp.Models.Entities
                 NbPasses = lastVisit?.NbPasses ?? 0,
                 ReasonOfVisit = lastVisit?.Reason,
                 Age = (int)age,
-                Gender = gender
+                Gender = gender,
             };
         }
 
@@ -52,6 +52,25 @@ namespace AdaWebApp.Models.Entities
                     Send = message.Send,
                     Read = message.Read,
                     To = message.ToId
+                };
+            }
+        }
+
+        public static IndicatePassageDto ToDto(this IndicatePassage indicatePassage)
+        {
+            if (indicatePassage == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new IndicatePassageDto()
+                {
+                    Id = indicatePassage.Id,
+                    IdFacebookConversation = indicatePassage.IdFacebookConversation,
+                    Firtsname = indicatePassage.Firtsname,
+                    IsSend = indicatePassage.IsSend,
+                    To = indicatePassage.ToId
                 };
             }
         }

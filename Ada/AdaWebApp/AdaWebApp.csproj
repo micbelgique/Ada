@@ -134,7 +134,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -298,6 +298,7 @@
     <Compile Include="Areas\Admin\ViewModels\StatsViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModels\UnavailabilityViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\API\IndicatePassageController.cs" />
     <Compile Include="Controllers\API\MessageController.cs" />
     <Compile Include="Controllers\API\PersonController.cs" />
     <Compile Include="Controllers\API\UserIndentifiedController.cs" />
@@ -324,8 +325,13 @@
     <Compile Include="Migrations\201704030954337_Message.Designer.cs">
       <DependentUpon>201704030954337_Message.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704260924035_IndicatePassage.cs" />
+    <Compile Include="Migrations\201704260924035_IndicatePassage.Designer.cs">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\IndicatePassageRepository.cs" />
     <Compile Include="Models\DAL\Repositories\MessageRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
     <Compile Include="Models\DAL\Repositories\ProfilePictureRepository.cs" />
@@ -341,6 +347,7 @@
     <Compile Include="Models\Entities\EntitiesExtensions\EmotionScoresExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\PersonExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\StaffMemberExtensions.cs" />
+    <Compile Include="Models\Entities\IndicatePassage.cs" />
     <Compile Include="Models\Entities\Message.cs" />
     <Compile Include="Models\Entities\ProfilePicture.cs" />
     <Compile Include="Models\Entities\RecognitionItem.cs" />
@@ -482,6 +489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704030954337_Message.resx">
       <DependentUpon>201704030954337_Message.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704260924035_IndicatePassage.resx">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

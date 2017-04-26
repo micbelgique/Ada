@@ -17,6 +17,6 @@ namespace AdaWebApp.Models.Entities
 
         public string IdFacebook { get; set; }
 
-        public bool authorization { get; set; }
+        public bool Authorization { get; set; }
     }
 }
