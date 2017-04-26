@@ -27,6 +27,7 @@ using Websockets;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Websockets.Universal;
+using Windows.Storage;
 
 namespace AdaW10.ViewModels
 {
@@ -198,7 +199,7 @@ namespace AdaW10.ViewModels
             Debug.WriteLine("Opened !");
         }
 
-        private void Connection_OnMessage(string obj)
+        private async void Connection_OnMessage(string obj)
         {
             if (string.IsNullOrWhiteSpace(obj))
                 return;
@@ -213,7 +214,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        // do something
+                        await TakePicture(activity.Conversation.Id);
                         return;
                     case "registered":
                         return;
@@ -298,7 +299,7 @@ namespace AdaW10.ViewModels
 
         private async Task CameraLoadExecute()
         {
-            LogHelper.Log<WebcamService>("Je me mets au travail !");
+            LogHelper.Log<WebcamService>("Je me mets au travail!");
 
             await WebcamService.InitializeCameraAsync();
             WebcamService.CaptureElement = CaptureElement;
@@ -308,6 +309,51 @@ namespace AdaW10.ViewModels
             if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
             {
                 WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+            }
+        }
+
+        private async Task TakePicture(string conversID)
+        {
+            if (!WebcamService.IsInitialized)
+            {
+                await WebcamService.InitializeCameraAsync();
+                await WebcamService.StartCameraPreviewAsync();
+            }
+
+            using (var stream = new InMemoryRandomAccessStream())
+            {
+                ImageEncodingProperties imgFormat = ImageEncodingProperties.CreatePng();
+
+                // create storage file in local app storage
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                    "AdaPhotoTMP.png",
+                    CreationCollisionOption.ReplaceExisting);
+
+                // take photo
+                await WebcamService.MediaCapture.CapturePhotoToStorageFileAsync(imgFormat, file);
+
+                FileStream fileStream = new FileStream(file.Path, FileMode.Open);
+                Stream test = fileStream.AsRandomAccessStream().AsStream();
+
+                //SDK reference here
+
+                try
+                {
+                    var activity = new Activity
+                    {
+                        From = new ChannelAccount("Jean"),
+                        Text = "Picture from UWP",
+                        Type = ActivityTypes.Message,
+                        //Envoyer le stream
+                        ChannelData = file.FileType.ToString(),
+                        Name = conversID
+                    };
+                    await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
+                }
+                catch (HttpRequestException)
+                {
+                    //Impossible to take picture
+                }
             }
         }
 

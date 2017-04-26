@@ -252,6 +252,7 @@
     <None Include="Properties\PublishProfiles\AdaDevBot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\AdaDevBot - Web Deploy.pubxml" />
     <Content Include="Translator.exe.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
