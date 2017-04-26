@@ -1207,5 +1207,16 @@ namespace AdaBot.Dialogs
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
+
+        //[LuisIntent("PassagePerson")]
+        //public async Task PassagePerson(IDialogContext context, LuisResult result)
+        //{
+        //    CreateDialog createCarousel = new CreateDialog();
+
+        //    Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
+
+        //    await context.PostAsync(replyToConversation);
+        //    context.Wait(MessageReceived);
+        //}
     }
 }

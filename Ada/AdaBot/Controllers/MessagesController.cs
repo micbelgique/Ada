@@ -25,9 +25,6 @@ namespace AdaBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        string visionApiKey;
-
-        VisionServiceClient visionClient;
         public static string serviceUrl;
         public static ChannelAccount from;
         public static ChannelAccount botAccount;
