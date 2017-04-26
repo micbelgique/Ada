@@ -30,8 +30,6 @@ namespace AdaBot.Services
 
             visionClient = new VisionServiceClient(visionApiKey);
 
-            DataService dataService = new DataService();
-
             StringBuilder reply = new StringBuilder();
 
             //If the user uploaded an image, read it, and send it to the Vision API

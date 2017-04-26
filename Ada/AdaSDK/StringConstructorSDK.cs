@@ -50,8 +50,8 @@ namespace AdaSDK.Services
             imageFileStream.Seek(0, SeekOrigin.Begin);
 
             OCR = await visionService.MakeOCRRequest(imageFileStream, visionApiKey);
-            //reply.Append(translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr") + ". ");
-            reply.Append(analysisResult.Description.Captions[0].Text.ToString() + ". ");
+            string translate = await translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr");
+            reply.Append(translate + ". ");
 
             if (analysisResult.Description.Tags.Contains("person"))
             {
