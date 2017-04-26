@@ -326,6 +326,7 @@ namespace AdaSDK
                 return new int();
             }
         }
+
         public async Task<PersonVisitDto> GetPersonByFaceId(Guid id)
         {
             try
@@ -344,5 +345,45 @@ namespace AdaSDK
                 return new PersonVisitDto();
             }
         }
+
+        public async Task AddIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(WebAppUrl + "/api/IndicatePassageController/PostIndicatePassage", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+
+        //public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
+        //{
+        //    try
+        //    {
+        //        var json = JsonConvert.SerializeObject(indicatePassage);
+
+        //        var buffer = Encoding.UTF8.GetBytes(json);
+        //        var byteContent = new ByteArrayContent(buffer);
+        //        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+        //        var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/Message/PutMessage/" + indicatePassage.), byteContent);
+        //        result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // TODO : Propagate exception to caller
+        //        throw;
+        //    }
+        //}
     }
 }

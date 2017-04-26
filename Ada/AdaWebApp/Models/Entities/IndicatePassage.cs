@@ -10,6 +10,7 @@ namespace AdaWebApp.Models.Entities
     public class IndicatePassage
     {
         [Key]
+        public int Id { get; set; }
         public string IdFacebookConversation { get; set; }
         public string Firtsname { get; set; }
         public bool IsSend { get; set; }
