@@ -347,7 +347,7 @@ namespace AdaW10.ViewModels
                         Type = ActivityTypes.Message,
                         //Envoyer le stream
                         ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
-                        Conversation = new ConversationAccount(id: conversID),
+                        Name = conversID,
                         ServiceUrl = serviceUrl
                 };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);

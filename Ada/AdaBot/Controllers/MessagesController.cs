@@ -92,6 +92,7 @@ namespace AdaBot
                 if (activity.Text == "Picture from UWP")
                 {
                     answer = false;
+                    activity.Conversation.Id = activity.Name;
                     ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                     await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
