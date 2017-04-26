@@ -27,6 +27,7 @@ using Websockets;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Websockets.Universal;
+using Windows.Storage;
 
 namespace AdaW10.ViewModels
 {
@@ -210,7 +211,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        await TakePicture();
+                        await TakePicture(activity.Conversation.Id);
                         return;
                     case "registered":
                         return;
@@ -308,7 +309,7 @@ namespace AdaW10.ViewModels
             }
         }
 
-        private async Task TakePicture()
+        private async Task TakePicture(string conversID)
         {
             if (!WebcamService.IsInitialized)
             {
@@ -318,19 +319,31 @@ namespace AdaW10.ViewModels
 
             using (var stream = new InMemoryRandomAccessStream())
             {
-                await WebcamService.MediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreateJpeg(), stream);
-                await stream.FlushAsync();
-                stream.Seek(0);
+                ImageEncodingProperties imgFormat = ImageEncodingProperties.CreatePng();
+
+                // create storage file in local app storage
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                    "AdaPhotoTMP.png",
+                    CreationCollisionOption.ReplaceExisting);
+
+                // take photo
+                await WebcamService.MediaCapture.CapturePhotoToStorageFileAsync(imgFormat, file);
+
+                FileStream fileStream = new FileStream(file.Path, FileMode.Open);
+                Stream test = fileStream.AsRandomAccessStream().AsStream();
+
+                //SDK reference here
 
                 try
                 {
-                    //PersonDto[] persons = await DataService.RecognizePersonsAsync(stream.AsStreamForRead());
                     var activity = new Activity
                     {
                         From = new ChannelAccount("Jean"),
                         Text = "Picture from UWP",
                         Type = ActivityTypes.Message,
-                        ChannelData = stream.AsStreamForRead()
+                        //Envoyer le stream
+                        ChannelData = file.FileType.ToString(),
+                        Name = conversID
                     };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
                 }
