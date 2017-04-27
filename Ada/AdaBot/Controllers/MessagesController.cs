@@ -97,8 +97,6 @@ namespace AdaBot
                     await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
 
-                DataService dataService = new DataService();
-
                 if (activity.Attachments?.Count() >= 1)
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
