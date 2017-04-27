@@ -465,7 +465,7 @@ namespace AdaW10.ViewModels
                                             Name = "Passage person from UWP"
                                         };
 
-                                        await _client.Conversations.PostActivityAsync(indicatePassage.IdFacebookConversation, activity);
+                                        //await _client.Conversations.PostActivityAsync(indicatePassage.IdFacebookConversation, activity);
 
                                     }
                                     catch (HttpRequestException)
