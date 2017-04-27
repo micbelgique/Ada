@@ -215,7 +215,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        await TakePicture(activity.Conversation.Id, activity.ServiceUrl);
+                        await TakePicture(activity.ChannelData.ToString());
                         return;
                     case "registered":
                         return;
@@ -313,7 +313,7 @@ namespace AdaW10.ViewModels
             }
         }
 
-        private async Task TakePicture(string conversID, string serviceUrl)
+        private async Task TakePicture(string conversID)
         {
             if (!WebcamService.IsInitialized)
             {
