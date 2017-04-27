@@ -347,6 +347,7 @@ namespace AdaW10.ViewModels
                         Type = ActivityTypes.Message,
                         //Envoyer le stream
                         ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
+                        //ATTENTION CONVERSID DIFFERENT!!!!!
                         Name = conversID,
                         //Summary = serviceUrl
                     };
