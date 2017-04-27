@@ -226,22 +226,13 @@
     </Compile>
     <Compile Include="Helpers\EntityRecognizer.cs" />
     <Compile Include="Models\AnswersFAQ.cs" />
-    <Compile Include="Models\AuthenticationServices\TokenManagerException.cs" />
-    <Compile Include="Models\AuthenticationServices\TokenManagerService.cs" />
-    <Compile Include="Models\DataService.cs" />
     <Compile Include="Models\EventsLoaderServices\EventsLoaderException.cs" />
     <Compile Include="Models\EventsLoaderServices\EventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\IEventsLoaderService.cs" />
     <Compile Include="Models\EventsLoaderServices\MeetupEvent.cs" />
     <Compile Include="Models\FormFlows\MessageFlow.cs" />
-    <Compile Include="Models\Interface\IDataService.cs" />
-    <Compile Include="Models\Lines.cs" />
-    <Compile Include="Models\OCRModel.cs" />
-    <Compile Include="Models\Regions.cs" />
-    <Compile Include="Models\Words.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StringConstructor.cs" />
-    <Compile Include="Services\VisionService.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

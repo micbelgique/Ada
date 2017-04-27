@@ -89,10 +89,15 @@ namespace AdaBot
                     await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
                     return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                 }
+                if (activity.Text == "Picture from UWP")
+                {
+                    answer = false;
+                    activity.Conversation.Id = activity.Name;
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Summary));
+                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                }
 
-                DataService dataService = new DataService();
-
-                if (activity.Attachments?.Count() >= 1 || activity.Text == "Picture from UWP")
+                if (activity.Attachments?.Count() >= 1)
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
                     {

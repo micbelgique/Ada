@@ -28,6 +28,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Websockets.Universal;
 using Windows.Storage;
+using AdaSDK.Services;
 
 namespace AdaW10.ViewModels
 {
@@ -214,7 +215,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        await TakePicture(activity.Conversation.Id);
+                        await TakePicture(activity.Conversation.Id, activity.ServiceUrl);
                         return;
                     case "registered":
                         return;
@@ -312,7 +313,7 @@ namespace AdaW10.ViewModels
             }
         }
 
-        private async Task TakePicture(string conversID)
+        private async Task TakePicture(string conversID, string serviceUrl)
         {
             if (!WebcamService.IsInitialized)
             {
@@ -333,9 +334,9 @@ namespace AdaW10.ViewModels
                 await WebcamService.MediaCapture.CapturePhotoToStorageFileAsync(imgFormat, file);
 
                 FileStream fileStream = new FileStream(file.Path, FileMode.Open);
-                Stream test = fileStream.AsRandomAccessStream().AsStream();
+                Stream streamFinal = fileStream.AsRandomAccessStream().AsStream();
 
-                //SDK reference here
+                StringConstructorSDK client = new StringConstructorSDK() { WebAppUrl = $"{ AppConfig.WebUri}" };
 
                 try
                 {
@@ -345,8 +346,9 @@ namespace AdaW10.ViewModels
                         Text = "Picture from UWP",
                         Type = ActivityTypes.Message,
                         //Envoyer le stream
-                        ChannelData = file.FileType.ToString(),
-                        Name = conversID
+                        ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
+                        Name = conversID,
+                        //Summary = serviceUrl
                     };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
                 }
@@ -428,7 +430,7 @@ namespace AdaW10.ViewModels
                             if (personMessage != null)
                             {
                                 List<MessageDto> messages = await client.GetMessageByReceiver(personMessage.PersonId);
-                               
+
                                 foreach (MessageDto message in messages)
                                 {
                                     if (message.From != null)
