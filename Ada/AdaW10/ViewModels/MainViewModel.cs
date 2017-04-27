@@ -453,6 +453,25 @@ namespace AdaW10.ViewModels
                                 foreach (IndicatePassageDto indicatePassage in indicatePassages)
                                 {
                                     // need to send message to the person on facebook
+                                    try
+                                    {
+                                        var activity = new Activity
+                                        {
+                                            From = new ChannelAccount("Jean"),
+                                            Type = ActivityTypes.Message,
+                                            Text = "Passage person from UWP",
+                                            ChannelData = indicatePassage.Firtsname,
+                                            Name = "Passage person from UWP"
+                                        };
+
+                                        await _client.Conversations.PostActivityAsync(indicatePassage.IdFacebookConversation, activity);
+
+                                    }
+                                    catch (HttpRequestException)
+                                    {
+                                        //Impossible to take picture
+                                    }
+
                                     indicatePassage.IsSend = true;
                                     await client.PutIndicatePassage(indicatePassage);
                                 }

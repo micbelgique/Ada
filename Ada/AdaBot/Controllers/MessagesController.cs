@@ -97,6 +97,14 @@ namespace AdaBot
                     await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
 
+                if (activity.Text == "Passage person from UWP")
+                {
+                    answer = false;
+                    activity.Conversation.Id = Convert.ToString(activity.ChannelData);
+                    ConnectorClient connector = new ConnectorClient(new Uri("https://facebook.botframework.com"));
+                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                }
+
                 if (activity.Attachments?.Count() >= 1)
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
