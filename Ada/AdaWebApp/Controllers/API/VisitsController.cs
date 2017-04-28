@@ -36,6 +36,19 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("LastVisit")]
+        // GET: get visits of the day
+        public VisitDto GetLastToday()
+        {
+            var visits = _unit.VisitsRepository.GetLastVisit();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.ToDto();
+        }
+
+        [HttpGet]
         [Route("VisitsToday")]
         // GET: get visits of the day
         public List<VisitDto> GetVisitsToday()
@@ -49,16 +62,43 @@ namespace AdaWebApp.Controllers.API
         }
 
         [HttpGet]
+        [Route("GetPersonByFaceId/{id}")]
+        public PersonVisitDto GetPersonByFaceId(Guid id)
+        {
+            Person person = _unit.PersonRepository.GetByApiId(id);
+
+            if (person == null)
+            {
+                return null;
+            }
+
+            return person.ToDto();
+        }
+
+        [HttpGet]
+        [Route("VisitsNow")]
+        // GET: get visits of the day
+        public List<VisitDto> GetVisitsNow()
+        {
+            var visits = _unit.VisitsRepository.GetVisitsNow();
+            if (visits == null)
+            {
+                return null;
+            }
+            return visits.Select(v => v.ToDto()).ToList();
+        }
+
+        [HttpGet]
         [Route("BestFriend")]
         // GET: get visits of the day
-        public VisitDto BestFriend()
+        public List<VisitDto> BestFriend()
         {
             var visits = _unit.VisitsRepository.GetBestFriend();
             if (visits == null)
             {
                 return null;
             }
-            return visits.ToDto();
+            return visits.Select(v => v.ToDto()).ToList();
         }
 
         [HttpGet]

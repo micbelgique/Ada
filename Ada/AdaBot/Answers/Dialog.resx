@@ -161,11 +161,17 @@
 - Euh... ben non, un citron ça n'a pas de pattes.
 - Ah ben c'est un poussin que j'ai pressé, alors.|Chuck Norris est en couleur sur les photos Noir et Blanc.|Les amnésiques se souviennent quand même de Chuck Norris.|Chuck Norris peut applaudir d´une seule main.|Si Chuck Norris est en retard, le temps a intérêt à ralentir.|Chuck Norris a terminé l´histoire sans fin.]</value>
   </data>
+  <data name="MessageSend" xml:space="preserve">
+    <value>[Je lui fais parvenir ce message au plus vite!|Je lui transmettrai dès que je le croiserai|Très bien, je le lui dirai]</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>[Je m'appelle Ada|Mon nom est Ada|Je suis Ada|Moi c'est Ada|Mes parents m'ont appelé Ada]</value>
   </data>
   <data name="Nobody" xml:space="preserve">
     <value>[Je n'ai encore vu personne aujourd'hui :'(|Personne n'est venu me dire bonjour...|Je n'ai vu personne aujourd'hui.]</value>
+  </data>
+  <data name="NobodyNow" xml:space="preserve">
+    <value>[Je ne vois personnes pour le moment.|Là, je ne vois personne.|Ils doivent être bien cachés car je ne vois personne.]</value>
   </data>
   <data name="NobodyStats" xml:space="preserve">
     <value>[Je n'ai croisé personne correspondant à ta description|Malheureusement je n'ai personne correspondant à ta demande]</value>
@@ -174,7 +180,7 @@
     <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Je ne comprends pas :)]</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
-    <value>[Tu n'as pas l'autorisation d'accéder à ces données.|Tu n'as pas accès a ce genre d'informations.|Je suis navré mais ces informations requièrent une autorisation.]</value>
+    <value>[Je suis désolée mais cette demande nécessite des autorisations. Viens découvrir cette fonctionnalité tous les vendredi au MIC.|Je ne peux pas te donner librement ce genre d'informations, passe donc nous voir un vendredi au MIC ;) |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC un vendredi? :) | Ces informations sont classées secrètes... (Mais si tu viens nous voir au MIC, il y a peut-être moyen de s'arranger... ;) ).]</value>
   </data>
   <data name="NotSureInsult" xml:space="preserve">
     <value>[Je n'ai pas bien compris ce que tu m'as dis]</value>

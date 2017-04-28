@@ -25,8 +25,8 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <ApplicationInsightsResourceId>/subscriptions/102acd85-0c2f-4a00-a401-c1e46b3223f2/resourcegroups/martineobot-resources/providers/microsoft.insights/components/martine-o-bot</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/102acd85-0c2f-4a00-a401-c1e46b3223f2/resourcegroups/martineobot-resources/providers/microsoft.insights/components/martine-o-bot</ApplicationInsightsAnnotationResourceId>
+    <ApplicationInsightsResourceId>/subscriptions/79528c3a-2c00-4560-8599-42b7c6fee323/resourcegroups/AdaWebApp/providers/microsoft.insights/components/AdaWebApp</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/79528c3a-2c00-4560-8599-42b7c6fee323/resourcegroups/AdaResources/providers/microsoft.insights/components/AdaApplicationInsignts</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -133,9 +133,8 @@
       <HintPath>..\packages\Microsoft.ProjectOxford.Vision.1.0.213\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Microsoft.ProjectOxford.Vision.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -152,6 +151,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -298,6 +298,8 @@
     <Compile Include="Areas\Admin\ViewModels\StatsViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModels\UnavailabilityViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\API\IndicatePassageController.cs" />
+    <Compile Include="Controllers\API\MessageController.cs" />
     <Compile Include="Controllers\API\PersonController.cs" />
     <Compile Include="Controllers\API\UserIndentifiedController.cs" />
     <Compile Include="Controllers\API\VisitsController.cs" />
@@ -319,8 +321,18 @@
     <Compile Include="Migrations\201703211120455_Beard.Designer.cs">
       <DependentUpon>201703211120455_Beard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704030954337_Message.cs" />
+    <Compile Include="Migrations\201704030954337_Message.Designer.cs">
+      <DependentUpon>201704030954337_Message.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704260924035_IndicatePassage.cs" />
+    <Compile Include="Migrations\201704260924035_IndicatePassage.Designer.cs">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DAL\Repositories\BaseRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\IndicatePassageRepository.cs" />
+    <Compile Include="Models\DAL\Repositories\MessageRepository.cs" />
     <Compile Include="Models\DAL\Repositories\PersonRepository.cs" />
     <Compile Include="Models\DAL\Repositories\ProfilePictureRepository.cs" />
     <Compile Include="Models\DAL\Repositories\RecognitionItemRepository.cs" />
@@ -335,6 +347,8 @@
     <Compile Include="Models\Entities\EntitiesExtensions\EmotionScoresExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\PersonExtensions.cs" />
     <Compile Include="Models\Entities\EntitiesExtensions\StaffMemberExtensions.cs" />
+    <Compile Include="Models\Entities\IndicatePassage.cs" />
+    <Compile Include="Models\Entities\Message.cs" />
     <Compile Include="Models\Entities\ProfilePicture.cs" />
     <Compile Include="Models\Entities\RecognitionItem.cs" />
     <Compile Include="Models\Entities\StaffMember.cs" />
@@ -359,7 +373,19 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\AdaSad.jpg" />
+    <Content Include="Images\APropos.jpg" />
+    <Content Include="Images\BestFriend.jpg" />
+    <Content Include="Images\EventMIC.jpg" />
+    <Content Include="Images\FBMIC.jpg" />
     <Content Include="Images\fork.png" />
+    <Content Include="Images\LinkedinMIC.jpg" />
+    <Content Include="Images\More.jpg" />
+    <Content Include="Images\MoyFreqMIC.jpg" />
+    <Content Include="Images\SiteMIC.jpg" />
+    <Content Include="Images\TwitterMIC.jpg" />
+    <Content Include="Images\VisitTodayMIC.jpg" />
+    <Content Include="Images\YoutubeMIC.jpg" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -460,6 +486,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703211120455_Beard.resx">
       <DependentUpon>201703211120455_Beard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704030954337_Message.resx">
+      <DependentUpon>201704030954337_Message.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704260924035_IndicatePassage.resx">
+      <DependentUpon>201704260924035_IndicatePassage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

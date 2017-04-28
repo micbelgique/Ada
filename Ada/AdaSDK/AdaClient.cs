@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,6 +13,7 @@ namespace AdaSDK
     public class AdaClient
     {
         public HttpClient HttpClient { get; set; }
+        public string WebAppUrl { get; set; }
 
         public AdaClient()
         {
@@ -23,7 +25,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/CheckIdFacebook/"+idfacebook));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/UserIndentified/CheckIdFacebook/" + idfacebook));
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
@@ -38,7 +40,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/GetAuthorization/" + idfacebook));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/UserIndentified/GetAuthorization/" + idfacebook));
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
@@ -46,6 +48,48 @@ namespace AdaSDK
             {
                 // TODO : Propagate exception to caller
                 return "false";
+            }
+        }
+
+        public async Task<HttpResponseMessage> AddNewMessage(MessageDto message)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(message);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(WebAppUrl + "/api/Message", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                return result.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return null;
+            }
+        }
+
+        public async Task PutMessage(MessageDto message)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(message);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/Message/PutMessage/" + message.ID), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
             }
         }
 
@@ -61,10 +105,10 @@ namespace AdaSDK
 
                 var client = new HttpClient();
 
-                var result = await HttpClient.PostAsync(new Uri("http://adawebapp.azurewebsites.net/Api/UserIndentified/AddUserIndentified"), byteContent);
+                var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "Api/UserIndentified/AddUserIndentified"), byteContent);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-               return result.EnsureSuccessStatusCode();
+                return result.EnsureSuccessStatusCode();
             }
             catch (Exception e)
             {
@@ -77,7 +121,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsToday"));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitsToday"));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -89,11 +133,11 @@ namespace AdaSDK
             }
         }
 
-        public async Task<VisitDto> GetBestFriend()
+        public async Task<VisitDto> GetLastVisit()
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/BestFriend"));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/LastVisit"));
                 var content = await response.Content.ReadAsStringAsync();
                 var visit = JsonConvert.DeserializeObject<VisitDto>(content);
                 return visit;
@@ -102,6 +146,38 @@ namespace AdaSDK
             {
                 // TODO : Propagate exception to caller
                 return new VisitDto();
+            }
+        }
+
+        public async Task<List<VisitDto>> GetVisitsNow()
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitsNow"));
+                var content = await response.Content.ReadAsStringAsync();
+                var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
+                return visits;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<VisitDto>();
+            }
+        }
+
+        public async Task<List<VisitDto>> GetBestFriend()
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/BestFriend"));
+                var content = await response.Content.ReadAsStringAsync();
+                var visit = JsonConvert.DeserializeObject<List<VisitDto>>(content);
+                return visit;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<VisitDto>();
             }
         }
 
@@ -124,7 +200,7 @@ namespace AdaSDK
                     tmp[0] = tmp[0].Replace('/', '-');
                     date1 = Convert.ToDateTime(tmp[0]);
                     tmp[0] = Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
-                    
+
                     if (date2 != null)
                     {
                         //Convertion date2
@@ -175,7 +251,7 @@ namespace AdaSDK
                     a2 = age2.ToString();
                 }
 
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2 + "/" + glasses + "/" + beard + "/" + mustache));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitsForStats/" + d1 + "/" + d2 + "/" + gend + "/" + a1 + "/" + a2 + "/" + glasses + "/" + beard + "/" + mustache));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -191,7 +267,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/LastVisitByFirstname/" + firstname));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/LastVisitByFirstname/" + firstname));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -207,7 +283,7 @@ namespace AdaSDK
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/VisitPersonById/" + id + "/" + nbVisit));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/VisitPersonById/" + id + "/" + nbVisit));
                 var content = await response.Content.ReadAsStringAsync();
                 var visits = JsonConvert.DeserializeObject<List<VisitDto>>(content);
                 return visits;
@@ -219,11 +295,27 @@ namespace AdaSDK
             }
         }
 
+        public async Task<List<MessageDto>> GetMessageByReceiver(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/Message/MessageReceiver/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var messages = JsonConvert.DeserializeObject<List<MessageDto>>(content);
+                return messages;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<MessageDto>();
+            }
+        }
+
         public async Task<int> GetNbVisits(string gender, string age1, string age2)
         {
             try
             {
-                var response = await HttpClient.GetAsync(new Uri("http://adawebapp.azurewebsites.net/Api/Visits/GetNbVisits/" + gender + "/" + age1 + "/" + age2));
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "Api/Visits/GetNbVisits/" + gender + "/" + age1 + "/" + age2));
                 var content = await response.Content.ReadAsStringAsync();
                 var nbVisitsAge = JsonConvert.DeserializeObject<int>(content);
                 return nbVisitsAge;
@@ -234,5 +326,100 @@ namespace AdaSDK
                 return new int();
             }
         }
+
+        public async Task<PersonVisitDto> GetPersonByFaceId(Guid id)
+        {
+            try
+            {
+                string url = (WebAppUrl + "/Api/Visits/GetPersonByFaceId/" + id);
+                url = url.Replace("{", "");
+                url = url.Replace("}", "");
+                var response = await HttpClient.GetAsync(url);
+                var content = await response.Content.ReadAsStringAsync();
+                var person = JsonConvert.DeserializeObject<PersonVisitDto>(content);
+                return person;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new PersonVisitDto();
+            }
+        }
+
+        public async Task AddIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(WebAppUrl + "/api/IndicatePassageController/PostIndicatePassage", byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+        public async Task<List<IndicatePassageDto>> GetIndicatePassageByPerson(int id)
+        {
+            try
+            {
+                var response = await HttpClient.GetAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/GetIndicatePassage/" + id));
+                var content = await response.Content.ReadAsStringAsync();
+                var messages = JsonConvert.DeserializeObject<List<IndicatePassageDto>>(content);
+                return messages;
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                return new List<IndicatePassageDto>();
+            }
+        }
+
+        public async Task PutIndicatePassage(IndicatePassageDto indicatePassage)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(indicatePassage);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PutAsync(new Uri(WebAppUrl + "/Api/IndicatePassageController/PutIndicatePassage/" + indicatePassage.Id), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+
+        public async Task PutPerson(PersonUpdateDto person)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(person);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "/api/person/updatepersoninformation"), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+
     }
 }

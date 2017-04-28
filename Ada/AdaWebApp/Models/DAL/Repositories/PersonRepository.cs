@@ -32,6 +32,11 @@ namespace AdaWebApp.Models.DAL.Repositories
             return Table.FirstOrDefault(p => p.PersonApiId == personApiId);
         }
 
+        public Entities.Person GetById(int id)
+        {
+            return Table.FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<Entities.Person> GetPersonsByCandidateIds(IList<Guid> candidateIds)
         {
             return Table.Where(p => candidateIds.Any(c => c.Equals(p.PersonApiId)));

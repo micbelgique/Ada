@@ -3,7 +3,6 @@ using System.Linq;
 using AdaSDK;
 using AdaWebApp.Helpers;
 using AdaSDK.Models;
-using AdaWebApp.Models.Entities;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
@@ -32,21 +31,68 @@ namespace AdaWebApp.Models.Entities
                 NbPasses = lastVisit?.NbPasses ?? 0,
                 ReasonOfVisit = lastVisit?.Reason,
                 Age = (int)age,
-                Gender = gender
+                Gender = gender,
             };
+        }
+
+        public static MessageDto ToDto(this Message message)
+        {
+            if (message == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new MessageDto()
+                {
+                    ID = message.Id,
+                    From = message.From,
+                    Contenu = message.Contenu,
+                    IsRead = message.IsRead,
+                    Send = message.Send,
+                    Read = message.Read,
+                    To = message.ToId
+                };
+            }
+        }
+
+        public static IndicatePassageDto ToDto(this IndicatePassage indicatePassage)
+        {
+            if (indicatePassage == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new IndicatePassageDto()
+                {
+                    Id = indicatePassage.Id,
+                    IdFacebookConversation = indicatePassage.IdFacebookConversation,
+                    Firtsname = indicatePassage.Firtsname,
+                    IsSend = indicatePassage.IsSend,
+                    To = indicatePassage.ToId
+                };
+            }
         }
 
         public static VisitDto ToDto(this Visit visit)
         {
-            List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
-            return new VisitDto()
+            if (visit == null)
             {
-                ID = visit.Id,
-                Date = visit.Date,
-                NbPasses = visit.NbPasses,
-                ProfilePicture = tmp.Last().ToDto(),
-                PersonVisit = visit.Person.ToDto()
-            };
+                return null;
+            }
+            else
+            {
+                List<ProfilePicture> tmp = visit.ProfilePictures.ToList();
+                return new VisitDto()
+                {
+                    ID = visit.Id,
+                    Date = visit.Date,
+                    NbPasses = visit.NbPasses,
+                    ProfilePicture = tmp.Last().ToDto(),
+                    PersonVisit = visit.Person.ToDto()
+                };
+            }
         }
         public static VisitDto ToDtoListPicture(this Visit visit)
         {

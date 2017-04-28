@@ -1,73 +1,152 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 using Microsoft.Bot.Builder.Dialogs;
 using AdaBot.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using System.Configuration;
 using AdaSDK;
 using AdaSDK.Models;
-using Newtonsoft.Json.Linq;
+using Microsoft.ProjectOxford.Vision;
+using System.Diagnostics;
+using System.IO;
+using AdaBot.Services;
+using Microsoft.ProjectOxford.Vision.Contract;
+using System.Collections.Generic;
+using AdaBot.Models;
+using System.Text;
+
 
 namespace AdaBot
-{ 
+{
     [BotAuthentication]
-    public class MessagesController : ApiController 
+    public class MessagesController : ApiController
     {
+        public static string serviceUrl;
+        public static ChannelAccount from;
+        public static ChannelAccount botAccount;
+        public static ConversationAccount conversation;
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary> 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            AdaClient client = new AdaClient();
-            var idUser = activity.From.Id;
-            var accessAllow = await client.CheckIdFacebook(idUser);
+            bool answer = true;
 
-            if(accessAllow == "false")
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+
+            string accessAllow;
+            string idUser;
+
+            if (activity.ServiceUrl == "https://facebook.botframework.com")
             {
-                UserIndentifiedDto userIndentified = new UserIndentifiedDto();
-                string nameUser = activity.From.Name + " ";
-                string[] nameUserSplit;
-                nameUserSplit  = nameUser.Split(' ');
+                idUser = activity.From.Id;
+                accessAllow = await client.CheckIdFacebook(idUser);
 
-                userIndentified.IdFacebook = idUser;
-                userIndentified.Firtsname = nameUserSplit[0];
-                var nbNameSplit = nameUserSplit.Count();
-                string lastName ="";
-                for(int i = 1; i < nbNameSplit ; i++)
+                if (accessAllow == "false")
                 {
-                    lastName +=nameUserSplit[i]+ " ";
-                }
-                userIndentified.LastName = lastName;
-                userIndentified.authorization = false;
+                    UserIndentifiedDto userIndentified = new UserIndentifiedDto();
+                    string nameUser = activity.From.Name + " ";
+                    string[] nameUserSplit;
+                    nameUserSplit = nameUser.Split(' ');
 
-                var respond = await client.AddNewUserIndentified(userIndentified);
+                    userIndentified.IdFacebook = idUser;
+                    userIndentified.Firtsname = nameUserSplit[0];
+                    var nbNameSplit = nameUserSplit.Count();
+                    string lastName = "";
+                    for (int i = 1; i < nbNameSplit; i++)
+                    {
+                        lastName += nameUserSplit[i] + " ";
+                    }
+                    userIndentified.LastName = lastName;
+                    userIndentified.authorization = false;
+
+                    var respond = await client.AddNewUserIndentified(userIndentified);
+                }
+            }
+
+            if (activity.ServiceUrl == "https://slack.botframework.com" && !activity.Text.Contains("ada"))
+            {
+                answer = false;
             }
 
             if (activity.Type == ActivityTypes.Message)
             {
-                accessAllow = await client.GetAuthorizationFacebook(idUser);
-                if (accessAllow == "false")
+                if (activity.Text == "RegisterApp")
                 {
-                    await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
-                    new LuisService(new LuisModelAttribute(
-                    ConfigurationManager.AppSettings["ModelId"],
-                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    // persist this information
+                    serviceUrl = activity.ServiceUrl;
+                    from = activity.From;
+                    botAccount = activity.Recipient;
+                    conversation = activity.Conversation;
+
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
+                    return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                 }
-                else
+                if (activity.Text == "Picture from UWP")
                 {
-                    await Conversation.SendAsync(activity, () => new AdaDialog(
-                    new LuisService(new LuisModelAttribute(
-                    ConfigurationManager.AppSettings["ModelId"],
-                    ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    answer = false;
+                    activity.Conversation.Id = activity.Name;
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Name));
+                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
+
+                if (activity.Text == "Passage person from UWP")
+                {
+                    answer = false;
+                    activity.Conversation.Id = Convert.ToString(activity.ChannelData);
+                    ConnectorClient connector = new ConnectorClient(new Uri("https://facebook.botframework.com"));
+                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                }
+
+                if (activity.Attachments?.Count() >= 1)
+                {
+                    if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
+                    {
+                        StringConstructor stringConstructor = new StringConstructor();
+                        try
+                        {
+                            await stringConstructor.PictureAnalyseAsync(activity);
+                            answer = false;
+                        }
+                        catch (ClientException e)
+                        {
+                            Debug.WriteLine(e.Error.Message);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e.Message);
+                        }
+
+                    }
+                }
+
+                if (answer)
+                {
+                    idUser = activity.From.Id;
+                    accessAllow = await client.GetAuthorizationFacebook(idUser);
+                    if (accessAllow == "false")
+                    {
+                        await Conversation.SendAsync(activity, () => new NotAllowedAdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    }
+                    else
+                    {
+                        await Conversation.SendAsync(activity, () => new AdaDialog(
+                        new LuisService(new LuisModelAttribute(
+                        ConfigurationManager.AppSettings["ModelId"],
+                        ConfigurationManager.AppSettings["SubscriptionKey"]))));
+                    }
+                }
+
             }
             else
             {
@@ -102,7 +181,6 @@ namespace AdaBot
             else if (message.Type == ActivityTypes.Ping)
             {
             }
-
             return null;
         }
     }

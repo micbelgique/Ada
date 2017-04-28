@@ -31,8 +31,8 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <StackPanel Margin="20, 10">
-                            <TextBlock Text="{Binding Time, Converter={StaticResource LongToDateStringConverter}}" />
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding Title, Converter={StaticResource LongToDateStringConverter}}" />
+                            <TextBlock Text="{Binding Text}" />
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

@@ -26,6 +26,14 @@ namespace AdaWebApp.Models.DAL
         private readonly Lazy<VisitRepository> _visitsRepository;
         public VisitRepository VisitsRepository => _visitsRepository.Value;
 
+        // Repository for Message entity
+        private readonly Lazy<MessageRepository> _messagesRepository;
+        public MessageRepository MessagesRepository => _messagesRepository.Value;
+
+        // Repository for IndicatePassage entity
+        private readonly Lazy<IndicatePassageRepository> _indicatePassageRepository;
+        public IndicatePassageRepository IndicatePassageRepository => _indicatePassageRepository.Value;
+
         // Repository for Unavailability entity
         private readonly Lazy<BaseRepository<Unavailability>> _unavRepository;
         public BaseRepository<Unavailability> UnavailabilitieRepository => _unavRepository.Value;
@@ -57,6 +65,8 @@ namespace AdaWebApp.Models.DAL
             _recognitionItemsRepository = new Lazy<RecognitionItemRepository>(() => new RecognitionItemRepository(context));
             _statRepository = new Lazy<StatRepository>(() => new StatRepository(context));
             _userIndentifiedRepository = new Lazy<UserIndentifiedRepository>(() => new UserIndentifiedRepository(context));
+            _messagesRepository = new Lazy<MessageRepository>(() => new MessageRepository(context));
+            _indicatePassageRepository = new Lazy<IndicatePassageRepository>(() => new IndicatePassageRepository(context));
         }
 
         public async Task SaveAsync(){

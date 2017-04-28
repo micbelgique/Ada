@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using AdaW10.Messages;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using AdaSDK;
 using AdaW10.Models;
+using Microsoft.Bot.Connector.DirectLine;
 
 namespace AdaW10.ViewModels
 {
@@ -65,8 +65,9 @@ namespace AdaW10.ViewModels
                 {
                     switch (e.Result.Constraint.Tag)
                     {
-                        case "constraint_events": await GoToEventPageExecute();
-                        break;
+                        case "constraint_events":
+                              await GoToEventPageExecute();
+                              break;
 
                         case "constraint_description":
                             await DescribeExecute();

@@ -34,11 +34,19 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGVisitsDay"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGAverage"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGAboutMIC"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGBestFriend"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/VisitTodayMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/MoyFreqMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/APropos.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/BestFriend.jpg");
+
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                }
+            }
 
             List<string> btnAction = new List<string>();
             btnAction.Add("Liste visite jour");
@@ -102,8 +110,16 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg");
+
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SITE MIC v4.jpg";
+                }
+            }
 
             List<string> btnAction = new List<string>();
             btnAction.Add("On fait un truc?");
@@ -154,12 +170,20 @@ namespace AdaBot.Dialogs
             replyToConversation.Attachments = new List<Attachment>();
 
             List<string> pictures = new List<string>();
-            pictures.Add(ConfigurationManager.AppSettings["IMGFacebook"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMeetup"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGYoutube"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGTwitter"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGLinkedin"]);
-            pictures.Add(ConfigurationManager.AppSettings["IMGMIC"]);
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/FBMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/EventMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/YoutubeMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/TwitterMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/LinkedinMIC.jpg");
+            pictures.Add($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg");
+
+            for (int i = 0; i < pictures.Count(); i++)
+            {
+                if (pictures[i] == "")
+                {
+                    pictures[i] = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SiteMIC.jpg";
+                }
+            }
 
             List<string> btnAction = new List<string>();
             btnAction.Add(ConfigurationManager.AppSettings["FaceBookMIC"]);
@@ -217,6 +241,7 @@ namespace AdaBot.Dialogs
             replyToConversation.Type = "message";
             replyToConversation.AttachmentLayout = "carousel";
             replyToConversation.Attachments = new List<Attachment>();
+            List<string> possiblePictures = new List<string>();
 
             foreach (var meetup in _eventList)
             {
@@ -227,35 +252,25 @@ namespace AdaBot.Dialogs
                         softLab = true;
                     }
                     //Récupération du lien image
-                    List<string> possiblePictures = new List<string>();
+                    possiblePictures.Clear();
 
-                    foreach (Match m in Regex.Matches(meetup.Description, "<a.+?href=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                    foreach (Match m in Regex.Matches(meetup.Description, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
                         string src = m.Groups[1].Value;
-                        //string tmp = treatment.getHtmlSourceCode(src);
-                        HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml(src);
-                        string tmp = "";
-                        try
-                        {
-                            tmp = treatment.getHtmlSourceCode(src);
-                        }
-                        catch (Exception e)
-                        {
-                            tmp = "";
-                        }
-
-                        foreach (Match m2 in Regex.Matches(tmp, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase | RegexOptions.Multiline))
-                        {
-                            string src2 = m2.Groups[1].Value;
-                            possiblePictures.Add(src2);
-                        }
+                        possiblePictures.Add(src);
                     }
 
                     List<CardImage> cardImages = new List<CardImage>();
                     if (possiblePictures.Count == 0)
                     {
-                        cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMIC"]}"));
+                        if ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg" == "")
+                        {
+                            cardImages.Add(new CardImage(url: $"{ConfigurationManager.AppSettings["WebAppUrl"] }/Images/SiteMIC.jpg"));
+                        }
+                        else
+                        {
+                            cardImages.Add(new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/SiteMIC.jpg")));
+                        }
                     }
                     else
                     {
@@ -296,23 +311,23 @@ namespace AdaBot.Dialogs
             string message;
 
             var diffDate = DateTime.Now - dateVisit;
-            if(diffDate.TotalMinutes < 1)
+            if (diffDate.TotalMinutes < 1)
             {
                 message = "Je vois " + firstname + " en ce moment. :)";
             }
-            else if(diffDate.TotalMinutes < 60)
+            else if (diffDate.TotalMinutes < 60)
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Minutes) + " minute(s)";
             }
-            else if(diffDate.TotalHours < 24)
-            { 
+            else if (diffDate.TotalHours < 24)
+            {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Hours) + " heure(s)";
             }
             else if (diffDate.TotalDays < 30)
             {
                 message = "J'ai croisé " + firstname + " il y a " + Convert.ToInt32(diffDate.Days) + " jour(s)";
             }
-            else if(diffDate.TotalDays < 366) 
+            else if (diffDate.TotalDays < 366)
             {
                 int nbMonth = Convert.ToInt32((diffDate.TotalDays) / 30);
 
@@ -329,11 +344,11 @@ namespace AdaBot.Dialogs
             return message;
         }
         public string getEmotion(EmotionDto emotion)
-        { 
+        {
             if (emotion != null)
             {
                 string result = "Neutral";
-                double value = 0.75 ;
+                double value = 0.75;
 
                 if (emotion.Sadness > value)
                 {

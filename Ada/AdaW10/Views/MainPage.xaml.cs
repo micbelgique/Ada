@@ -13,6 +13,6 @@ namespace AdaW10.Views
             Unloaded += async delegate { await ViewModel.CallOnUnloaded(); };
         }
 
-        private MainViewModel ViewModel => (MainViewModel) Resources["ViewModel"];
+        private MainViewModel ViewModel => (MainViewModel) DataContext;
     }
 }

@@ -30,19 +30,74 @@ namespace AdaWebApp.Models.DAL.Repositories
         {
             DateTime date = DateTime.Today;
             return Table.Include(v => v.Person).Where(v => v.Date >= date)
+                .OrderByDescending(v => DbFunctions.CreateDateTime(date.Year, date.Month, date.Day, v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second))
                 .ToList();
         }
 
-        public Visit GetBestFriend()
+        public Visit GetLastVisit()
+        {
+            DateTime date = DateTime.Today;
+            return Table.Include(v => v.Person).Where(v => v.Date >= date)
+                .OrderByDescending(v => DbFunctions.CreateDateTime(date.Year, date.Month, date.Day, v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second))
+                .FirstOrDefault();
+        }
+
+        public List<Visit> GetVisitsNow()
+        {
+            DateTime date = DateTime.Now;
+            date = date.AddMinutes(-1);
+
+            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(date)
+            && DbFunctions.CreateTime(
+                v.Person.DateOfBirth.Hour, v.Person.DateOfBirth.Minute, v.Person.DateOfBirth.Second
+                ) >= DbFunctions.CreateTime(
+                    date.Hour, date.Minute, date.Second
+                    )).ToList();
+        }
+
+        public List<Visit> GetBestFriend()
         {
             DateTime date2 = DateTime.Today;
-            DateTime date1 = date2.AddDays(-1);
-            int maxPasses = Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null).Max(v => v.NbPasses);
-            return Table.Include(v => v.Person).Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
-            && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
-            && v.Person.FirstName != null).First(v => v.NbPasses == maxPasses);
+            DateTime date1 = date2.AddDays(-2);
+            List<Visit> bestFriends = new List<Visit>();
+
+            //Best MALE friend
+
+            var bestMale = Table.Include(v => v.Person)
+                                .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                         && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                         && v.Person.FirstName != null
+                                         && v.Person.Gender == GenderValues.Male)
+                                .OrderByDescending(v => v.NbPasses)
+                                .FirstOrDefault();
+
+            bestFriends.Add(bestMale);
+
+            var bestFemale = Table.Include(v => v.Person)
+                                  .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                              && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                              && v.Person.FirstName != null
+                                              && v.Person.Gender == GenderValues.Female)
+                                  .OrderByDescending(v => v.NbPasses)
+                                  .FirstOrDefault();
+
+            bestFriends.Add(bestFemale);
+
+            var bestBeard = Table.Include(v => v.Person)
+                                 .Where(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(date1)
+                                          && DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(date2)
+                                          && v.Person.FirstName != null
+                                          && v.Person.Gender == GenderValues.Male
+                                          && v.ProfilePictures.Average(p => p.Beard) >= 0.5)
+                                 .OrderByDescending(v => v.NbPasses)
+                                 .FirstOrDefault();
+
+            bestFriends.Add(bestBeard);
+
+            // Get all PersonId from people who have on average a indice of 0.5 beard on their pictures.
+            // Context.Set<ProfilePicture>().GroupBy(p => p.Visit.PersonId).Select(g => new { Key = g.Key, Value = g.Average(p => p.Beard) }).Where(g => g.Value > 0.5);
+
+            return bestFriends;
         }
 
         public List<Visit> GetVisitsByDate(DateTime date1, DateTime? date2)
@@ -86,12 +141,15 @@ namespace AdaWebApp.Models.DAL.Repositories
             var predicate = PredicateBuilder.True<Visit>();
             if (searchCriteria.D1 != null && searchCriteria.D2 == null)
             {
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) == DbFunctions.TruncateTime(searchCriteria.D1));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                == DbFunctions.TruncateTime(searchCriteria.D1));
             }
             if (searchCriteria.D1 != null && searchCriteria.D2 != null)
             {
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) >= DbFunctions.TruncateTime(searchCriteria.D1));
-                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) <= DbFunctions.TruncateTime(searchCriteria.D2));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                >= DbFunctions.TruncateTime(searchCriteria.D1));
+                predicate = predicate.And(v => DbFunctions.TruncateTime(v.Date) 
+                <= DbFunctions.TruncateTime(searchCriteria.D2));
             }
             if (searchCriteria.D1 == null && searchCriteria.D2 == null)
             {
@@ -110,17 +168,20 @@ namespace AdaWebApp.Models.DAL.Repositories
                 predicate = predicate.And(v => v.Person.DateOfBirth.Year <= searchCriteria.A1);
                 predicate = predicate.And(v => v.Person.DateOfBirth.Year >= searchCriteria.A2);
             }
-            if (searchCriteria.Glasses == true)
+            if (searchCriteria.Glasses)
             {
-                predicate = predicate.And(v => glassesTest.Contains(v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Glasses));
+                predicate = predicate.And(v => glassesTest
+                .Contains(v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Glasses));
             }
-            if (searchCriteria.Beard == true)
+            if (searchCriteria.Beard)
             {
-                predicate = predicate.And(v => v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5);
+                predicate = predicate.And(v => v.ProfilePictures
+                .OrderByDescending(p => p.Id).FirstOrDefault().Beard >= 0.5);
             }
-            if (searchCriteria.Mustache == true)
+            if (searchCriteria.Mustache)
             {
-                predicate = predicate.And(v => v.ProfilePictures.OrderByDescending(p => p.Id).FirstOrDefault().Moustache >= 0.5);
+                predicate = predicate.And(v => v.ProfilePictures
+                .OrderByDescending(p => p.Id).FirstOrDefault().Moustache >= 0.5);
             }
             return Context.Visits.AsExpandable().Where(predicate).ToList();
         }

@@ -15,6 +15,9 @@ using AdaBot.Bot.Utils;
 using AdaBot.Models.EventsLoaderServices;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Microsoft.Bot.Builder.FormFlow;
+using System.Diagnostics;
+using AdaBot.Models.FormFlows;
 
 namespace AdaBot.Dialogs
 {
@@ -28,7 +31,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = context.Activity.From.Id;
 
             var accessAllow = await client.GetAuthorizationFacebook(idUser);
@@ -62,8 +65,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
-
-
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -74,20 +76,7 @@ namespace AdaBot.Dialogs
             CreateDialog createCarousel = new CreateDialog();
 
             Activity replyToConversation = await createCarousel.GetEvent(context);
-
-
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
-        }
-
-        [LuisIntent("GetHelp")]
-        public async Task GetHelp(IDialogContext context, LuisResult result)
-        {
-            CreateDialog createCarousel = new CreateDialog();
-
-            Activity replyToConversation = createCarousel.GetHelp(context);
-
-
+            
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -97,57 +86,102 @@ namespace AdaBot.Dialogs
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("SeeNow")]
+        public async Task SeeNow(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("SendMessage")]
+        public async Task SendMessage(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
         [LuisIntent("BestFriend")]
         public async Task BestFriend(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
-
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
-
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetLastVisitPerson")]
         public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
-
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetStatsVisits")]
         public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
-
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
-
-            await context.PostAsync(message);
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetAverageVisits")]
         public async Task GetAverageVisits(IDialogContext context, LuisResult result)
         {
-            string message = $"{Dialog.NotAllowed.Spintax()}";
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
 
-            await context.PostAsync(message);
+        [LuisIntent("PassagePerson")]
+        public async Task PassagePerson(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NotAllowed.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
     }

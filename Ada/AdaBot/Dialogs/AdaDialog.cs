@@ -11,16 +11,20 @@ using AdaSDK;
 using System.Net.Http;
 using System.Configuration;
 using AdaSDK.Models;
-using AdaBot.BotFrameworkHelpers; 
+using AdaBot.BotFrameworkHelpers;
 using System.Threading;
 using AdaBot.Answers;
 using AdaBot.Bot.Utils;
+using AdaBot.Models.FormFlows;
+using Microsoft.Bot.Builder.FormFlow;
+using System.Diagnostics;
 
 namespace AdaBot.Dialogs
 {
     [Serializable]
     public class AdaDialog : LuisDialog<object>
     {
+        public int PersonTo;
         public AdaDialog(params ILuisService[] services) : base(services)
         {
 
@@ -28,7 +32,7 @@ namespace AdaBot.Dialogs
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             var idUser = context.Activity.From.Id;
 
             var accessAllow = await client.GetAuthorizationFacebook(idUser);
@@ -56,6 +60,17 @@ namespace AdaBot.Dialogs
                    BasicCallback, context.Activity as Activity, CancellationToken.None);
         }
 
+        [LuisIntent("Possibilities")]
+        public async Task Possibilities(IDialogContext context, LuisResult result)
+        {
+            CreateDialog createCarousel = new CreateDialog();
+
+            Activity replyToConversation = createCarousel.CarouselPossibilitiesNotAllowed(context);
+
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
         [LuisIntent("What'sUp")]
         public async Task Event(IDialogContext context, LuisResult result)
         {
@@ -67,16 +82,21 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
-        [LuisIntent("GetHelp")]
-        public async Task GetHelp(IDialogContext context, LuisResult result)
+        [LuisIntent("SeeNow")]
+        public async Task SeeNow(IDialogContext context, LuisResult result)
         {
-            CreateDialog createCarousel = new CreateDialog();
+            string url = "https://directline.botframework.com/v3/directline/conversations/" + context.Activity.Conversation.Id
+            + "/stream?t=" + ConfigurationManager.AppSettings["DirectLineKey"];
 
-            Activity replyToConversation = createCarousel.GetHelp(context);
-
-
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
+            var connector = new ConnectorClient(new Uri(MessagesController.serviceUrl));
+            IMessageActivity newMessage = Activity.CreateMessageActivity();
+            newMessage.Type = ActivityTypes.Message;
+            newMessage.Recipient = MessagesController.from;
+            newMessage.Conversation = MessagesController.conversation;
+            newMessage.From = MessagesController.botAccount;
+            newMessage.Text = "take picture";
+            newMessage.ChannelData = context.Activity.Conversation.Id;
+            await connector.Conversations.SendToConversationAsync((Activity)newMessage);
         }
 
         private async Task BasicCallback(IDialogContext context, IAwaitable<object> result)
@@ -84,46 +104,263 @@ namespace AdaBot.Dialogs
             context.Wait(this.MessageReceived);
         }
 
-        [LuisIntent("Possibilities")]
-        public async Task Possibilities(IDialogContext context, LuisResult result)
+        [LuisIntent("Describe")]
+        public async Task Describe(IDialogContext context, LuisResult result)
         {
-            CreateDialog createCarousel = new CreateDialog();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+            TreatmentDialog treatment = new TreatmentDialog();
+            Activity replyToConversation;
+            VisitDto lastVisit = new VisitDto();
+            if (context.Activity.ServiceUrl == "https://facebook.botframework.com")
+            {
+                var splitResult = result.Query.Split(':');
+                if (splitResult[0] == "ConfirmationIdentityFace ")
+                {
+                    List<VisitDto> visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
+                    lastVisit = visits.Last();
+                    ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                    string response = treatment.describe(lastVisit, picture);
+                    replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    string name = context.Activity.From.Name;
+                    string[] firstNameUser = name.Split(' ');
+                    string firstname = firstNameUser[0];
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
-            Activity replyToConversation = createCarousel.CarouselPossibilities(context);
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("J'ai une petite hésitation, peux-tu me confirmer lequel de ces " + firstname + " es-tu? :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
 
-           
-            await context.PostAsync(replyToConversation);
-            context.Wait(MessageReceived);
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "ConfirmationIdentityFace :" + visit.PersonVisit.PersonId,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                    else
+                    {
+                        visits = await client.GetLastVisitPerson(firstname);
+                        lastVisit = visits.Last();
+                        ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                        string response = treatment.describe(lastVisit, picture);
+                        replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                }
+            }
+            else
+            {
+                lastVisit = await client.GetLastVisit();
+                ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                string response = treatment.describe(lastVisit, picture);
+                replyToConversation = ((Activity)context.Activity).CreateReply(response);
+                await context.PostAsync(replyToConversation);
+                context.Wait(MessageReceived);
+            }
+        }
+
+        [LuisIntent("SendMessage")]
+        public async Task SendMessage(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation = null;
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+
+            var splitResult = result.Query.Split(':');
+
+            if (splitResult[0] == "MessageTo ")
+            {
+                PersonTo = Convert.ToInt32(splitResult[1]);
+                var form = MakeMessage();
+                context.Call(form, ResumeAfterMessageSending);
+            }
+            else
+            {
+                string firstname = null;
+
+                int nbEntities = result.Entities.Count();
+                if (nbEntities == 0)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire à qui envoyer ton message.");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    for (int i = 0; i < nbEntities; i++)
+                    {
+                        if (result.Entities[i].Type == "Firstname")
+                        {
+                            firstname = result.Entities[i].Entity;
+                        }
+                    }
+
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "MessageTo :" + visit.PersonVisit.PersonId,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                        await context.PostAsync(replyToConversation);
+                        context.Wait(MessageReceived);
+                    }
+                    else
+                    {
+                        PersonTo = visits[0].PersonVisit.PersonId;
+                        var form = MakeMessage();
+                        context.Call(form, ResumeAfterMessageSending);
+                    }
+                }
+            }
+        }
+
+        private async Task ResumeAfterMessageSending(IDialogContext context, IAwaitable<MessageFlow> result)
+        {
+            try
+            {
+                var messageToSend = await result;
+
+                MessageDto message = new MessageDto();
+                message.From = context.Activity.From.Name;
+                message.To = PersonTo;
+                message.Send = DateTime.Now;
+                message.IsRead = false;
+                message.Contenu = messageToSend.Message;
+
+                AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+                await client.AddNewMessage(message);
+
+                await context.PostAsync($"{Dialog.MessageSend.Spintax()}");
+            }
+            catch (FormCanceledException<MessageFlow> e)
+            {
+                Debug.WriteLine(e.Message);
+                context.Done(true);
+            }
+        }
+
+        internal static IDialog<MessageFlow> MakeMessage()
+        {
+            return Chain.From(() => FormDialog.FromForm(MessageFlow.BuildForm, options: FormOptions.PromptInStart));
         }
 
         [LuisIntent("BestFriend")]
         public async Task BestFriend(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient();
-            VisitDto bestFriend = await client.GetBestFriend();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+            List<VisitDto> bestFriends = await client.GetBestFriend();
+            List<string> title = new List<string>();
+            title.Add("Mon meilleur ami");
+            title.Add("Ma meilleure amie");
+            title.Add("Mon meilleur ami barbu");
             Activity replyToConversation;
-            if (bestFriend == null)
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"Ca fait un moment que plus personne n'est venu me voir :'(");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-            }
-            else
-            {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Best.Spintax()} " + bestFriend.PersonVisit.FirstName + "!");
-                replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message";
-                replyToConversation.AttachmentLayout = "carousel";
-                replyToConversation.Attachments = new List<Attachment>();
 
-                List<CardImage> cardImages = new List<CardImage>();
-                cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(bestFriend.ProfilePicture.Last().Uri)}"));
+            replyToConversation = ((Activity)context.Activity).CreateReply("Voici mes meilleurs amis! :D");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            replyToConversation.AttachmentLayout = "carousel";
+            replyToConversation.Attachments = new List<Attachment>();
+            HeroCard plCard = new HeroCard();
 
-                HeroCard plCard = new HeroCard()
+            for (int i = 0; i < 3; i++)
+            {
+                if (bestFriends[i] != null)
                 {
-                    Title = bestFriend.PersonVisit.FirstName,
-                    Images = cardImages
-                };
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(bestFriends[i].ProfilePicture.Last().Uri)}"));
+
+                    plCard = new HeroCard()
+                    {
+                        Title = title[i],
+                        Text = $"{Dialog.Best.Spintax()} " + bestFriends[i].PersonVisit.FirstName + "!",
+                        Images = cardImages
+                    };
+                }
+                else
+                {
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }Images/AdaSad.jpg"));
+
+                    plCard = new HeroCard()
+                    {
+                        Title = title[i],
+                        Text = "On ne fait pas beaucoup attention à moi de ce côté là pour le moment...",
+                        Images = cardImages
+                    };
+                }
 
                 Attachment plAttachment = plCard.ToAttachment();
                 replyToConversation.Attachments.Add(plAttachment);
@@ -136,12 +373,15 @@ namespace AdaBot.Dialogs
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
-
-            AdaClient client = new AdaClient();
-            List<VisitDto> visits = await client.GetVisitsToday();
-
             Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+            List<VisitDto> visits = await client.GetVisitsToday();
 
             if (visits.Count == 0)
             {
@@ -153,7 +393,7 @@ namespace AdaBot.Dialogs
             {
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.See.Spintax()} " + visits.Count + $" personnes aujourd'hui! :D");
                 replyToConversation.Recipient = context.Activity.From;
-                replyToConversation.Type = "message"; 
+                replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
 
@@ -190,7 +430,7 @@ namespace AdaBot.Dialogs
                         HeroCard plCard = new HeroCard()
                         {
                             Title = firstname,
-                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(2).AddYears(goodDate)) + ")",
                             Images = cardImages
                         };
 
@@ -201,7 +441,7 @@ namespace AdaBot.Dialogs
                     else if (compteurCarrousel == 10 && result.Query != "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -226,7 +466,7 @@ namespace AdaBot.Dialogs
                         replyToConversation.Attachments.Add(plAttachment);
                         compteurCarrousel += 1;
                     }
-                    else if(result.Query == "GetVisitsTodayMoreResult")
+                    else if (result.Query == "GetVisitsTodayMoreResult")
                     {
                         List<CardImage> cardImages = new List<CardImage>();
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
@@ -256,7 +496,7 @@ namespace AdaBot.Dialogs
                         HeroCard plCard = new HeroCard()
                         {
                             Title = firstname,
-                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(2).AddYears(goodDate)) + ")",
                             Images = cardImages
                         };
 
@@ -266,7 +506,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -275,7 +514,7 @@ namespace AdaBot.Dialogs
         public async Task GetLastVisitPerson(IDialogContext context, LuisResult result)
         {
             string firstname = result.Entities[0].Entity;
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
             Activity replyToConversation;
@@ -316,7 +555,7 @@ namespace AdaBot.Dialogs
                         HeroCard plCard = new HeroCard()
                         {
                             Title = visit.PersonVisit.FirstName,
-                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(1).AddYears(goodDate)) + ")",
+                            Text = messageDate + " (" + Convert.ToString(visit.PersonVisit.DateVisit.AddHours(2).AddYears(goodDate)) + ")",
                             Images = cardImages
                         };
 
@@ -331,11 +570,9 @@ namespace AdaBot.Dialogs
 
                         HeroCard plCard = new HeroCard()
                         {
-                            Title = "Afficher plus (A venir)",
+                            Title = "Afficher plus",
                             Text = "",
-                            //Subtitle = 
                             Images = cardImages
-                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
@@ -348,19 +585,22 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("GetStatsVisits")]
-        public async Task GetLastVisGetStatsVisitsitPerson(IDialogContext context, LuisResult result)
+        public async Task GetStatsVisits(IDialogContext context, LuisResult result)
         {
             //Message d'attente
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
-
-            AdaClient client = new AdaClient();
             Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             CreateDialog customDialog = new CreateDialog();
             TreatmentDialog treatment = new TreatmentDialog();
             EntityRecognizer recog = new EntityRecognizer();
@@ -372,11 +612,11 @@ namespace AdaBot.Dialogs
 
             int nbEntities;
             int nbVisits = 0;
-            string genderReturn = "personne(s)";
+            string genderReturn = " personne(s) ";
             string ageReturn = "";
             string emotionReturn = "";
             string emotion = "";
-            string dateReturn = "aujourd'hui";
+            string dateReturn = " aujourd'hui";
             string glassesReturn = "";
             string beardReturn = "";
             string mustacheReturn = "";
@@ -396,14 +636,14 @@ namespace AdaBot.Dialogs
             {
                 if (splitResult[1] != "null")
                 {
-                   date1 = Convert.ToDateTime(splitResult[1]);
+                    date1 = Convert.ToDateTime(splitResult[1]);
 
                     dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
 
                     if (splitResult[2] != "null")
                     {
                         date2 = Convert.ToDateTime(splitResult[2]);
-                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                        dateReturn = " entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd") + " ";
                     }
                 }
                 if (splitResult[3] != "null")
@@ -411,12 +651,12 @@ namespace AdaBot.Dialogs
                     if (splitResult[3] == Convert.ToString(GenderValues.Female))
                     {
                         gender = GenderValues.Female;
-                        genderReturn = "femme(s)";
-                    } 
+                        genderReturn = " femme(s) ";
+                    }
                     else if (splitResult[3] == Convert.ToString(GenderValues.Male))
                     {
                         gender = GenderValues.Male;
-                        genderReturn = "homme(s)";
+                        genderReturn = " homme(s) ";
                     }
                 }
                 if (splitResult[4] != "null")
@@ -427,23 +667,23 @@ namespace AdaBot.Dialogs
                     if (splitResult[5] != "null")
                     {
                         age2 = Convert.ToInt32(splitResult[5]);
-                        ageReturn = "entre " + age1 + " et " + age2 + " ans";
+                        ageReturn = " entre " + age1 + " et " + age2 + " ans ";
                     }
                 }
-                if(splitResult[6] != "null")
+                if (splitResult[6] != "null")
                 {
                     glasses = true;
-                    glassesReturn = " avec des lunettes";
+                    glassesReturn = " avec des lunettes ";
                 }
                 if (splitResult[7] != "null")
                 {
                     beard = true;
-                    beardReturn = "avec une barbe";
+                    beardReturn = " avec une barbe ";
                 }
                 if (splitResult[8] != "null")
                 {
                     mustache = true;
-                    mustacheReturn = "et une moustache";
+                    mustacheReturn = " et une moustache ";
                 }
             }
             else
@@ -468,7 +708,7 @@ namespace AdaBot.Dialogs
                                     if (date1 == null)
                                     {
                                         date1 = date;
-                                        dateReturn = "le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd");
+                                        dateReturn = " le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " ";
                                     }
                                     else if (date1 != null)
                                     {
@@ -479,7 +719,7 @@ namespace AdaBot.Dialogs
                                             date1 = date2;
                                             date2 = tmpDate;
                                         }
-                                        dateReturn = "entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd");
+                                        dateReturn = " entre le " + Convert.ToDateTime(date1).ToString("yyyy-MM-dd") + " et le " + Convert.ToDateTime(date2).ToString("yyyy-MM-dd") + " ";
                                     }
                                 }
                             }
@@ -500,7 +740,7 @@ namespace AdaBot.Dialogs
                                 age1 = age2;
                                 age2 = ageTmp;
                             }
-                            ageReturn = "entre " + age1 + " et " + age2 + " ans";
+                            ageReturn = " entre " + age1 + " et " + age2 + " ans ";
                         }
                     }
                 }
@@ -516,11 +756,11 @@ namespace AdaBot.Dialogs
 
                         if (gender == GenderValues.Male)
                         {
-                            genderReturn = "homme(s)";
+                            genderReturn = " homme(s) ";
                         }
                         else
                         {
-                            genderReturn = "femme(s)";
+                            genderReturn = " femme(s) ";
                         }
                     }
 
@@ -535,14 +775,14 @@ namespace AdaBot.Dialogs
                         if (hair == "barbu" || hair == "barbus" || hair == "barbe")
                         {
                             beard = true;
-                            beardReturn = "avec une barbe";
+                            beardReturn = " avec une barbe ";
                         }
                         if (hair == "moustachu" || hair == "moustachus" || hair == "moustache")
                         {
                             mustache = true;
                             if (beardReturn != "")
                             {
-                                mustacheReturn = "et une moustache";
+                                mustacheReturn = " et une moustache ";
                             }
                         }
                     }
@@ -564,27 +804,27 @@ namespace AdaBot.Dialogs
                     if (emotion == "heureux" || emotion == "heureuse" || emotion == "heureuses" || emotion == "souriant" || emotion == "souriants" || emotion == "souriante" || emotion == "souriantes")
                     {
                         emotion = "Happiness";
-                        emotionReturn = "heureux(ses)";
+                        emotionReturn = " heureux(ses) ";
                     }
                     if (emotion == "neutre" || emotion == "neutres")
                     {
                         emotion = "Neutral";
-                        emotionReturn = "neutre(s)";
+                        emotionReturn = " neutre(s) ";
                     }
                     if (emotion == "triste" || emotion == "tristes")
                     {
-                        emotion = "Sadness";
-                        emotionReturn = "triste(s)";
+                        emotion = " Sadness ";
+                        emotionReturn = " triste(s) ";
                     }
                     if (emotion == "faché" || emotion == "fachés" || emotion == "fachée" || emotion == "fachées")
                     {
                         emotion = "Anger";
-                        emotionReturn = "faché(es)";
+                        emotionReturn = " faché(es) ";
                     }
                     if (emotion == "surpris" || emotion == "surprise" || emotion == "surprises")
                     {
                         emotion = "Surprise";
-                        emotionReturn = "surpris(es)";
+                        emotionReturn = " surpris(es) ";
                     }
 
                     for (int y = 0; y < nbVisits; y++)
@@ -612,13 +852,13 @@ namespace AdaBot.Dialogs
             //Return results
             if (nbPerson != 0)
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + " " + emotionReturn + " " + glassesReturn + " " + ageReturn + " " + beardReturn + " " + mustacheReturn + " " + dateReturn + ".");
+                replyToConversation = ((Activity)context.Activity).CreateReply("J'ai vu " + nbPerson + " " + genderReturn + emotionReturn + glassesReturn + ageReturn + beardReturn + mustacheReturn + dateReturn + ".");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
             }
             else
             {
-                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyStats.Spintax()} " + dateReturn + "... :/");
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.NobodyStats.Spintax()}" + dateReturn + "... :/");
             }
 
             if (visitsReturn.Count() != 0)
@@ -671,7 +911,7 @@ namespace AdaBot.Dialogs
                         string buttonValue = treatment.GetValueButton(date1, date2, gender, age1, age2, glasses, beard, mustache);
 
                         List<CardImage> cardImages = new List<CardImage>();
-                        CardImage img = new CardImage(url: $"{ConfigurationManager.AppSettings["IMGMore"]}");
+                        CardImage img = new CardImage(url: ($"{ConfigurationManager.AppSettings["WebAppUrl"]}/Images/More.jpg"));
                         cardImages.Add(img);
 
                         List<CardAction> cardButtons = new List<CardAction>();
@@ -740,10 +980,14 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync($"{Dialog.Waiting.Spintax()}");
-
-            Activity replyToConversation = null;
-            AdaClient client = new AdaClient();
+            //Message d'attente
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Name = "NotFinish";
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             int nbVisit = 10;
 
@@ -751,7 +995,6 @@ namespace AdaBot.Dialogs
 
             if (splitResult[0] == "ChoosePersonId ")
             {
-
                 int idPerson = Convert.ToInt32(splitResult[1]);
 
                 nbVisit = Convert.ToInt32(splitResult[3]);
@@ -770,7 +1013,7 @@ namespace AdaBot.Dialogs
                     cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
 
                     var customDialog = new CreateDialog();
-                    var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
+                    var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(2));
 
                     HeroCard plCard = new HeroCard()
                     {
@@ -827,7 +1070,7 @@ namespace AdaBot.Dialogs
                         cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
 
                         var customDialog = new CreateDialog();
-                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(1));
+                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(2));
 
                         HeroCard plCard = new HeroCard()
                         {
@@ -877,7 +1120,6 @@ namespace AdaBot.Dialogs
                     }
                 }
             }
-
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -885,7 +1127,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetAverageVisits")]
         public async Task GetAverageVisits(IDialogContext context, LuisResult result)
         {
-            AdaClient client = new AdaClient();
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             GenderValues? gender;
             int? age1 = null;
@@ -957,9 +1199,124 @@ namespace AdaBot.Dialogs
             {
                 genderReturn = "homme(s)";
             }
-
             string message = "Je vois en moyenne : " + nbVisits + " " + genderReturn + " " + ageReturn + " par jour.";
-            await context.PostAsync(message);
+
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("PassagePerson")]
+        public async Task PassagePerson(IDialogContext context, LuisResult result)
+        {
+            Activity replyToConversation = null;
+            AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
+
+            IndicatePassageDto indicatePassage = new IndicatePassageDto();
+
+            CreateDialog createCarousel = new CreateDialog();
+
+            string firstname = null;
+
+            var splitResult = result.Query.Split('|');
+
+            if (splitResult[0] == "IndicatePassage ")
+            {
+                int personId = Convert.ToInt32(splitResult[1]);
+
+                indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
+                indicatePassage.To = personId;
+                indicatePassage.Firtsname = splitResult[2];
+                await client.AddIndicatePassage(indicatePassage);
+
+                replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else
+            {
+
+                int nbEntities = result.Entities.Count();
+                if (nbEntities == 0)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire le prénom de la personne.");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    for (int i = 0; i < nbEntities; i++)
+                    {
+                        if (result.Entities[i].Type == "Firstname")
+                        {
+                            firstname = result.Entities[i].Entity;
+                        }
+                    }
+
+                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                    if (visits.Count == 0)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                    else if (visits.Count > 1)
+                    {
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                        replyToConversation.AttachmentLayout = "carousel";
+                        replyToConversation.Attachments = new List<Attachment>();
+
+                        foreach (var visit in visits)
+                        {
+                            List<CardImage> cardImages = new List<CardImage>();
+                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                            List<CardAction> cardButtons = new List<CardAction>();
+
+                            CardAction plButtonChoice = new CardAction()
+                            {
+                                Value = "IndicatePassage |" + visit.PersonVisit.PersonId + "|" + visit.PersonVisit.FirstName,
+                                Type = "postBack",
+                                Title = "Le voilà !"
+                            };
+                            cardButtons.Add(plButtonChoice);
+
+                            HeroCard plCard = new HeroCard()
+                            {
+                                Title = visit.PersonVisit.FirstName,
+                                Images = cardImages,
+                                Buttons = cardButtons
+                            };
+
+                            Attachment plAttachment = plCard.ToAttachment();
+                            replyToConversation.Attachments.Add(plAttachment);
+                        }
+                    }
+                    else
+                    {
+
+                        indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
+                        indicatePassage.To = visits[0].PersonVisit.PersonId;
+                        indicatePassage.Firtsname = visits[0].PersonVisit.FirstName;
+
+                        await client.AddIndicatePassage(indicatePassage);
+
+                        replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                        replyToConversation.Recipient = context.Activity.From;
+                        replyToConversation.Type = "message";
+                    }
+                }
+            }
+
+            await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
     }
