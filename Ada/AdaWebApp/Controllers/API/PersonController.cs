@@ -35,6 +35,7 @@ namespace AdaWebApp.Controllers.API
             _logger = LogManager.GetLogger(GetType());
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("recognizepersons")]
         public async Task<HttpResponseMessage> RecognizePersonsAsync()
@@ -122,7 +123,7 @@ namespace AdaWebApp.Controllers.API
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         [Route("updatepersoninformation")]
         public async Task<HttpResponseMessage> UpdatePersonInformation(PersonUpdateDto personUpdateDto) 

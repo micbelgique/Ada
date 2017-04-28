@@ -49,7 +49,10 @@ namespace AdaW10.Models
                 HttpResponseMessage resp = await _httpClient.PostAsync(uri, formData);
 
                 if (resp.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<PersonDto[]>(await resp.Content.ReadAsStringAsync());
+                {
+                    var test = JsonConvert.DeserializeObject<PersonDto[]>(await resp.Content.ReadAsStringAsync());
+                    return test;
+                }
 
                 var error = JsonConvert.DeserializeObject<WebServiceError>(await resp.Content.ReadAsStringAsync());
                 Debug.WriteLine($"WebServiceError : {error.HttpStatus} - {error.ErrorCode} : {error.ErrorMessage}");

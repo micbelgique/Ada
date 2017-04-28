@@ -173,6 +173,10 @@ namespace AdaW10.ViewModels
 
                                 updateDto.FirstName = name;
                                 person.FirstName = name;
+
+                                AdaClient client = new AdaClient() { WebAppUrl = AppConfig.WebUri };
+
+                                await client.PutPerson(updateDto);
                             }
                         }
                     }
