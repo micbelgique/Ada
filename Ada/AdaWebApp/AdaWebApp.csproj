@@ -479,6 +479,10 @@
       <Project>{5b83b8a9-2a06-4407-8774-ecad7106c760}</Project>
       <Name>AdaSDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TechOfficeSDK\TechOfficeSDK.csproj">
+      <Project>{5554ac70-589d-4dbd-a915-fe36d1b3a801}</Project>
+      <Name>TechOfficeSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703201549329_Glasses.resx">

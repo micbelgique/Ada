@@ -215,6 +215,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AdaDialog.cs" />
+    <Compile Include="Dialogs\BookRoomDialog.cs" />
     <Compile Include="Dialogs\FAQDialog.cs" />
     <Compile Include="Dialogs\NotAllowedAdaDialog.cs" />
     <Compile Include="Dialogs\CreateDialog.cs" />
@@ -255,6 +256,10 @@
     <ProjectReference Include="..\AdaSDK\AdaSDK.csproj">
       <Project>{5b83b8a9-2a06-4407-8774-ecad7106c760}</Project>
       <Name>AdaSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TechOfficeSDK\TechOfficeSDK.csproj">
+      <Project>{5554ac70-589d-4dbd-a915-fe36d1b3a801}</Project>
+      <Name>TechOfficeSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

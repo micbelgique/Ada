@@ -82,6 +82,12 @@ namespace AdaBot.Dialogs
             context.Wait(MessageReceived);
         }
 
+        [LuisIntent("BookRoom")]
+        public async Task BookRoom(IDialogContext context, LuisResult result)
+        {
+            context.Call(new BookRoomDialog(result), BasicCallback);
+        }
+
         [LuisIntent("SeeNow")]
         public async Task SeeNow(IDialogContext context, LuisResult result)
         {
