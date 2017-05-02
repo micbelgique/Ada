@@ -400,5 +400,26 @@ namespace AdaSDK
                 throw;
             }
         }
+
+        public async Task PutPerson(PersonUpdateDto person)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(person);
+
+                var buffer = Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var result = await HttpClient.PostAsync(new Uri(WebAppUrl + "/api/person/updatepersoninformation"), byteContent);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            catch (Exception e)
+            {
+                // TODO : Propagate exception to caller
+                throw;
+            }
+        }
+
     }
 }

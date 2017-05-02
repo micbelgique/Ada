@@ -173,6 +173,10 @@ namespace AdaW10.ViewModels
 
                                 updateDto.FirstName = name;
                                 person.FirstName = name;
+
+                                AdaClient client = new AdaClient() { WebAppUrl = AppConfig.WebUri };
+
+                                await client.PutPerson(updateDto);
                             }
                         }
                     }
@@ -215,7 +219,7 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        await TakePicture(activity.Conversation.Id, activity.ServiceUrl);
+                        await TakePicture(activity.ChannelData.ToString());
                         return;
                     case "registered":
                         return;
@@ -313,7 +317,7 @@ namespace AdaW10.ViewModels
             }
         }
 
-        private async Task TakePicture(string conversID, string serviceUrl)
+        private async Task TakePicture(string conversID)
         {
             if (!WebcamService.IsInitialized)
             {
@@ -347,6 +351,7 @@ namespace AdaW10.ViewModels
                         Type = ActivityTypes.Message,
                         //Envoyer le stream
                         ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
+                        //ATTENTION CONVERSID DIFFERENT!!!!!
                         Name = conversID,
                         //Summary = serviceUrl
                     };
@@ -453,6 +458,25 @@ namespace AdaW10.ViewModels
                                 foreach (IndicatePassageDto indicatePassage in indicatePassages)
                                 {
                                     // need to send message to the person on facebook
+                                    try
+                                    {
+                                        var activity = new Activity
+                                        {
+                                            From = new ChannelAccount("Jean"),
+                                            Type = ActivityTypes.Message,
+                                            Text = "Passage person from UWP",
+                                            ChannelData = indicatePassage.Firtsname,
+                                            Name = "Passage person from UWP"
+                                        };
+
+                                        //await _client.Conversations.PostActivityAsync(indicatePassage.IdFacebookConversation, activity);
+
+                                    }
+                                    catch (HttpRequestException)
+                                    {
+                                        //Impossible to take picture
+                                    }
+
                                     indicatePassage.IsSend = true;
                                     await client.PutIndicatePassage(indicatePassage);
                                 }

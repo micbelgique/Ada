@@ -93,7 +93,15 @@ namespace AdaBot
                 {
                     answer = false;
                     activity.Conversation.Id = activity.Name;
-                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Summary));
+                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Name));
+                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                }
+
+                if (activity.Text == "Passage person from UWP")
+                {
+                    answer = false;
+                    activity.Conversation.Id = Convert.ToString(activity.ChannelData);
+                    ConnectorClient connector = new ConnectorClient(new Uri("https://facebook.botframework.com"));
                     await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
 
