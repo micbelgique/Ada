@@ -357,7 +357,6 @@ namespace AdaSDK
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 var result = await HttpClient.PostAsync(WebAppUrl + "/api/IndicatePassageController/PostIndicatePassage", byteContent);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             }
             catch (Exception e)
             {

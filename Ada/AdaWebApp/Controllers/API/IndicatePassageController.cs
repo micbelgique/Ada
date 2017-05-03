@@ -36,6 +36,9 @@ namespace AdaWebApp.Controllers.API
                 IdFacebookConversation = indicatePassageDto.IdFacebookConversation,
                 Firtsname = indicatePassageDto.Firtsname,
                 IsSend = indicatePassageDto.IsSend,
+                Channel = indicatePassageDto.Channel,
+                FromId = indicatePassageDto.FromId,
+                RecipientID = indicatePassageDto.RecipientID,
                 ToId = indicatePassageDto.To
             };
 

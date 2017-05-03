@@ -1239,6 +1239,9 @@ namespace AdaBot.Dialogs
                 indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
                 indicatePassage.To = personId;
                 indicatePassage.Firtsname = splitResult[2];
+                indicatePassage.FromId = context.Activity.From.Id;
+                indicatePassage.RecipientID = context.Activity.Recipient.Id;
+                indicatePassage.Channel = context.Activity.ChannelId;
                 await client.AddIndicatePassage(indicatePassage);
 
                 replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
@@ -1315,6 +1318,9 @@ namespace AdaBot.Dialogs
                         indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
                         indicatePassage.To = visits[0].PersonVisit.PersonId;
                         indicatePassage.Firtsname = visits[0].PersonVisit.FirstName;
+                        indicatePassage.FromId = context.Activity.From.Id;
+                        indicatePassage.RecipientID = context.Activity.Recipient.Id;
+                        indicatePassage.Channel = context.Activity.ChannelId;
 
                         await client.AddIndicatePassage(indicatePassage);
 

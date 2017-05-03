@@ -14,6 +14,9 @@ namespace AdaWebApp.Models.Entities
         public string IdFacebookConversation { get; set; }
         public string Firtsname { get; set; }
         public bool IsSend { get; set; }
+        public string FromId { get; set; }
+        public string RecipientID { get; set; }
+        public string Channel { get; set; }
 
         [ForeignKey("To")]
         public int ToId { get; set; }
