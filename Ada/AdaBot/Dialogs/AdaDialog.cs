@@ -95,7 +95,7 @@ namespace AdaBot.Dialogs
             newMessage.Conversation = MessagesController.conversation;
             newMessage.From = MessagesController.botAccount;
             newMessage.Text = "take picture";
-            newMessage.ChannelData = context.Activity.Conversation.Id;
+            newMessage.ChannelData = context.Activity.Conversation.Id + "|" + context.Activity.From.Id + "|" + context.Activity.Recipient.Id;
             await connector.Conversations.SendToConversationAsync((Activity)newMessage);
         }
 

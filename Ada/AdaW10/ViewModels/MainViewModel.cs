@@ -219,7 +219,8 @@ namespace AdaW10.ViewModels
                 switch (activity.Text)
                 {
                     case "take picture":
-                        await TakePicture(activity.ChannelData.ToString());
+                        string[] listID = activity.ChannelData.ToString().Split('|');
+                        await TakePicture(listID[0], listID[1], listID[2]);
                         return;
                     case "registered":
                         return;
@@ -317,7 +318,7 @@ namespace AdaW10.ViewModels
             }
         }
 
-        private async Task TakePicture(string conversID)
+        private async Task TakePicture(string conversID, string fromId, string recipientID)
         {
             if (!WebcamService.IsInitialized)
             {
@@ -352,8 +353,7 @@ namespace AdaW10.ViewModels
                         //Envoyer le stream
                         ChannelData = await client.PictureAnalyseAsync(AppConfig.Vision, streamFinal),
                         //ATTENTION CONVERSID DIFFERENT!!!!!
-                        Name = conversID,
-                        //Summary = serviceUrl
+                        Name = conversID + "|" + fromId + "|" + recipientID,
                     };
                     await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
                 }
