@@ -466,10 +466,10 @@ namespace AdaW10.ViewModels
                                             Type = ActivityTypes.Message,
                                             Text = "Passage person from UWP",
                                             ChannelData = indicatePassage.Firtsname,
-                                            Name = "Passage person from UWP"
+                                            Name = indicatePassage.IdFacebookConversation
                                         };
 
-                                        //await _client.Conversations.PostActivityAsync(indicatePassage.IdFacebookConversation, activity);
+                                        await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
 
                                     }
                                     catch (HttpRequestException)
