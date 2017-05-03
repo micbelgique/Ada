@@ -12,12 +12,7 @@ using AdaSDK;
 using AdaSDK.Models;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
-using System.IO;
 using AdaBot.Services;
-using Microsoft.ProjectOxford.Vision.Contract;
-using System.Collections.Generic;
-using AdaBot.Models;
-using System.Text;
 
 
 namespace AdaBot
