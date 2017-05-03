@@ -87,8 +87,8 @@ namespace AdaBot
                 if (activity.Text == "Picture from UWP")
                 {
                     CommunicationService communicationLine = new CommunicationService();
-                    string[] logs = activity.ChannelData.ToString().Split('|');
-                    await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.Text.ToString());
+                    string[] logs = activity.Name.ToString().Split('|');
+                    await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
                 }
 
                 if (activity.Text == "Passage person from UWP")
