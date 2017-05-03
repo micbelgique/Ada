@@ -86,10 +86,9 @@ namespace AdaBot
                 }
                 if (activity.Text == "Picture from UWP")
                 {
-                    answer = false;
-                    activity.Conversation.Id = activity.Name;
-                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Name));
-                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                    CommunicationService communicationLine = new CommunicationService();
+                    string[] logs = activity.ChannelData.ToString().Split('|');
+                    await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.Text.ToString());
                 }
 
                 if (activity.Text == "Passage person from UWP")
