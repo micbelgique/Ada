@@ -100,9 +100,6 @@ namespace AdaBot
                 if (activity.Text == "Passage person from UWP")
                 {
                     answer = false;
-                    activity.Conversation.Id = Convert.ToString(activity.ChannelData);
-                    ConnectorClient connector = new ConnectorClient(new Uri("https://facebook.botframework.com"));
-                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
                 }
 
                 if (activity.Attachments?.Count() >= 1)

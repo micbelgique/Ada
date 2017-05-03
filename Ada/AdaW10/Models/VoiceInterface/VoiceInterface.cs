@@ -32,8 +32,7 @@ namespace AdaW10.Models.VoiceInterface
         {
             if (person == null) return;
 
-            if (person.FirstName == null) await TtsService.SayAsync("Bonjour, il semblerait que je ne te connaisse pas.");
-            else await TtsService.SayAsync($"Bonjour {person.FirstName}");
+            if (person.FirstName == null) await TtsService.SayAsync("Il semblerait que je ne te connaisse pas.");
         }
 
         public async Task SayNotAvailableService()

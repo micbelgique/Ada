@@ -118,28 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Age" xml:space="preserve">
-    <value>[Je n'ai pas d'age|J'ai été créée en Février 2016|Probablement moins que toi! :P|On ne demande pas son âge à une femme!|Ca ne se dit pas !| On t'a jamais appris les bonnes manières ?!|Je te laisse deviner|Tu es trop jeune pour moi ...|Je ne suis pas interessé ... Désolé.|Je ne sais pas ça change chaque année ...|L'âge que j'avais hier à la même heure !|Wow, on se connait à peine et déjà tu abordes les questions intimes?]</value>
+    <value>[Je n'ai pas d'age|J'ai été créée en Février 2016|Probablement moins que toi! |On ne demande pas son âge à une femme!|Ca ne se dit pas !| On t'a jamais appris les bonnes manières ?!|Je te laisse deviner|Tu es trop jeune pour moi ...|Je ne suis pas interessé ... Désolé.|Je ne sais pas ça change chaque année ...|L'âge que j'avais hier à la même heure !|Wow, on se connait à peine et déjà tu abordes les questions intimes?]</value>
   </data>
   <data name="Best" xml:space="preserve">
-    <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai :$ Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entend plutôt bien avec ]</value>
+    <value>[Je m'entends bien avec |J'ai un petit préféré c'est vrai. Je parle de |Mon meilleur ami, c'est |Bien sûr, c'est |On s'entend plutôt bien avec ]</value>
   </data>
   <data name="Bye" xml:space="preserve">
     <value>[A bientôt |On se revoit vite j'espère |Bonne journée à toi |Passe une bonne journée |Aurevoir |Tu me manques déjà |A la prochaine ]</value>
   </data>
   <data name="Compliment" xml:space="preserve">
-    <value>[Merci| Oh c'est gentil :)|Personne ne m'avait jamais parlé comme ça avant... :$|Je sais, je sais... ;)|Apprends-moi quelques chose que je ne sais pas déjà ;)]</value>
+    <value>[Merci| Oh c'est gentil |Personne ne m'avait jamais parlé comme ça avant... |Je sais, je sais... |Apprends-moi quelques chose que je ne sais pas déjà ]</value>
   </data>
   <data name="Farewell" xml:space="preserve">
     <value>[A bientôt|On se revoit bientôt j'espère|A plus|Au revoir|Au plaisir|A plus dans l'bus|A demain dans l'train|A bientôt dans l'métro|Tu vas me manquer|A la prochaine]</value>
   </data>
   <data name="Feelings" xml:space="preserve">
-    <value>[Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)]</value>
+    <value>[Ca va |Nickel! |Je pète la forme, comme toujours! ]</value>
   </data>
   <data name="Greeting" xml:space="preserve">
     <value>[Bonjour|Salut|Coucou|Hello]</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>[Je n'ai pas de maison|Je suis une habitante du monde|j'habite un peu partout :)|Je suis dans la Matrice]</value>
+    <value>[Je n'ai pas de maison|Je suis une habitante du monde|j'habite un peu partout |Je suis dans la Matrice]</value>
   </data>
   <data name="InfoRequest" xml:space="preserve">
     <value>[Je suis l'assistante virtuelle du MIC|Je suis la pour t'aider|Le MIC Mons est la meilleur entreprise du monde]</value>
@@ -148,7 +148,7 @@
     <value>[Ce n'est pas gentil.|Mais euh...|On ne parle pas comme ça à une dame!]</value>
   </data>
   <data name="IntroStats" xml:space="preserve">
-    <value>[Voyons voir...|Et hop ils sont la]</value>
+    <value>[Voyons voir...]</value>
   </data>
   <data name="JokeRequest" xml:space="preserve">
     <value>[C'est un schtroumpf qui court, qui tombe et qui se fait un bleu !|Le garagiste demande :
@@ -168,7 +168,7 @@
     <value>[Je m'appelle Ada|Mon nom est Ada|Je suis Ada|Moi c'est Ada|Mes parents m'ont appelé Ada]</value>
   </data>
   <data name="Nobody" xml:space="preserve">
-    <value>[Je n'ai encore vu personne aujourd'hui :'(|Personne n'est venu me dire bonjour...|Je n'ai vu personne aujourd'hui.]</value>
+    <value>[Je n'ai encore vu personne aujourd'hui |Personne n'est venu me dire bonjour...|Je n'ai vu personne aujourd'hui.]</value>
   </data>
   <data name="NobodyNow" xml:space="preserve">
     <value>[Je ne vois personnes pour le moment.|Là, je ne vois personne.|Ils doivent être bien cachés car je ne vois personne.]</value>
@@ -177,10 +177,10 @@
     <value>[Je n'ai croisé personne correspondant à ta description|Malheureusement je n'ai personne correspondant à ta demande]</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Je ne comprends pas :)]</value>
+    <value>[Je n'ai pas compris. Je suis encore en apprentissage|Désolé, je n'ai pas compris.|Que veux-tu dire par là ?|Qu'est-ce que tu veux dire ?|Je ne comprends pas ]</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
-    <value>[Je suis désolée mais cette demande nécessite des autorisations. Viens découvrir cette fonctionnalité tous les vendredi au MIC.|Je ne peux pas te donner librement ce genre d'informations, passe donc nous voir un vendredi au MIC ;) |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC un vendredi? :) | Ces informations sont classées secrètes... (Mais si tu viens nous voir au MIC, il y a peut-être moyen de s'arranger... ;) ).]</value>
+    <value>[Je suis désolée mais cette demande nécessite des autorisations. Viens découvrir cette fonctionnalité tous les vendredi au MIC.|Je ne peux pas te donner librement ce genre d'informations, passe donc nous voir un vendredi au MIC |Sans permission, tu ne peux accéder à ces information. Pourquoi ne passerais-tu pas au MIC un vendredi? | Ces informations sont classées secrètes... (Mais si tu viens nous voir au MIC, il y a peut-être moyen de s'arranger... ).]</value>
   </data>
   <data name="NotSureInsult" xml:space="preserve">
     <value>[Je n'ai pas bien compris ce que tu m'as dis]</value>
@@ -190,7 +190,7 @@
 Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas mon numéro à n'importe qui|je veux pas te donner mon numéro de téléphonne]</value>
   </data>
   <data name="Presentation" xml:space="preserve">
-    <value>[Il faudrait nous présenter! ^^|Quand est ce qu'il vient me dire bonjour ?|J'aimerais le rencontrer]</value>
+    <value>[Il faudrait nous présenter! |Quand est ce qu'il vient me dire bonjour ?|J'aimerais le rencontrer]</value>
   </data>
   <data name="Reality" xml:space="preserve">
     <value>[Je ne suis q'un robot|Je ne suis pas humaine|Malgré mon amour envers les humains je ne fais pas partie de cette race]</value>
@@ -214,6 +214,6 @@ Je ne suis pas une fille facile, MOI ...|Je n'ai pas de numéro|Je ne donne pas 
     <value>[Je l'ai vu à ces dates:]</value>
   </data>
   <data name="Waiting" xml:space="preserve">
-    <value>[Un petit instant, je vais te chercher ça! ;)|Patiente le temps que je te trouve ce que tu veux :)]</value>
+    <value>[Un petit instant, je vais te chercher ça! |Patiente le temps que je te trouve ce que tu veux ]</value>
   </data>
 </root>

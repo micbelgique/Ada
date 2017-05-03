@@ -137,7 +137,7 @@ namespace AdaW10.ViewModels
 
                     LogHelper.Log("Message reçu ;)");
                     LogHelper.Log("Je suis à toi dans un instant");
-                    await TtsService.SayAsync("Message reçu, je suis à toi dans un instant");
+                    await TtsService.SayAsync("Bonjour je suis à toi dans un instant");
 
                     PersonDto person = null;
 
@@ -179,10 +179,15 @@ namespace AdaW10.ViewModels
                                 await client.PutPerson(updateDto);
                             }
                         }
+
+                        if (person.FirstName != null)
+                        {
+                            await TtsService.SayAsync($"Que puis-je faire pour toi {person.FirstName} ?");
+                        }
                     }
                     else
                     {
-                        await TtsService.SayAsync("Bonjour");
+                        await TtsService.SayAsync("Que puis-je faire pour toi ?");
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
