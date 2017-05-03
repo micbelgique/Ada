@@ -70,6 +70,9 @@ namespace AdaWebApp.Models.Entities
                     IdFacebookConversation = indicatePassage.IdFacebookConversation,
                     Firtsname = indicatePassage.Firtsname,
                     IsSend = indicatePassage.IsSend,
+                    Channel = indicatePassage.Channel,
+                    FromId = indicatePassage.FromId,
+                    RecipientID = indicatePassage.RecipientID,
                     To = indicatePassage.ToId
                 };
             }

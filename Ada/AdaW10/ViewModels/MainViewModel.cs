@@ -457,7 +457,6 @@ namespace AdaW10.ViewModels
 
                                 foreach (IndicatePassageDto indicatePassage in indicatePassages)
                                 {
-                                    // need to send message to the person on facebook
                                     try
                                     {
                                         var activity = new Activity
@@ -465,16 +464,15 @@ namespace AdaW10.ViewModels
                                             From = new ChannelAccount("Jean"),
                                             Type = ActivityTypes.Message,
                                             Text = "Passage person from UWP",
-                                            ChannelData = indicatePassage.Firtsname,
-                                            Name = indicatePassage.IdFacebookConversation
+                                            ChannelData = "Je viens de voir : " + indicatePassage.Firtsname,
+                                            Name = indicatePassage.IdFacebookConversation + "|" + indicatePassage.FromId + "|" + indicatePassage.RecipientID + "|" + indicatePassage.Channel
                                         };
 
                                         await _client.Conversations.PostActivityAsync(_conversation.ConversationId, activity);
-
                                     }
                                     catch (HttpRequestException)
                                     {
-                                        //Impossible to take picture
+                                        throw;
                                     }
 
                                     indicatePassage.IsSend = true;

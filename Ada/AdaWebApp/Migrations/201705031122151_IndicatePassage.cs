@@ -15,6 +15,9 @@ namespace AdaWebApp.Migrations
                         IdFacebookConversation = c.String(),
                         Firtsname = c.String(),
                         IsSend = c.Boolean(nullable: false),
+                        FromId = c.String(),
+                        RecipientID = c.String(),
+                        Channel = c.String(),
                         ToId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)

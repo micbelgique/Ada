@@ -13,7 +13,7 @@ namespace AdaWebApp.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201704260924035_IndicatePassage"; }
+            get { return "201705031122151_IndicatePassage"; }
         }
         
         string IMigrationMetadata.Source
