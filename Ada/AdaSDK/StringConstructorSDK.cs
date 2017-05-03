@@ -71,8 +71,11 @@ namespace AdaSDK.Services
                 }
             }
 
-            reply.Append(" Et il me semble qu'il y a du texte sur la photo, le voici : ");
-            reply.Append(OCR);
+            if (OCR != null)
+            {
+                reply.Append(" Et il me semble qu'il y a du texte sur la photo, le voici : ");
+                reply.Append(OCR);
+            }
 
             return reply.ToString();
         }
