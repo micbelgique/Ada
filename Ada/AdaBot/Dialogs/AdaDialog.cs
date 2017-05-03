@@ -95,7 +95,16 @@ namespace AdaBot.Dialogs
             newMessage.Conversation = MessagesController.conversation;
             newMessage.From = MessagesController.botAccount;
             newMessage.Text = "take picture";
-            newMessage.ChannelData = context.Activity.Conversation.Id + "|" + context.Activity.From.Id + "|" + context.Activity.Recipient.Id;
+            string channel;
+            if (context.Activity.ServiceUrl == "https://slack.botframework.com")
+            {
+                channel = "Slack";
+            }
+            else
+            {
+                channel = "Facebook";
+            }
+            newMessage.ChannelData = context.Activity.Conversation.Id + "|" + context.Activity.From.Id + "|" + context.Activity.Recipient.Id + "|" + channel;
             await connector.Conversations.SendToConversationAsync((Activity)newMessage);
         }
 

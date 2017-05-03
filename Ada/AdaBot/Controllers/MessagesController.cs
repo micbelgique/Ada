@@ -88,7 +88,14 @@ namespace AdaBot
                 {
                     CommunicationService communicationLine = new CommunicationService();
                     string[] logs = activity.Name.ToString().Split('|');
-                    await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    if (logs[3] == "Facebook")
+                    {
+                        await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
+                    else
+                    {
+                        await communicationLine.SendProactiveMessageSlack(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
                 }
 
                 if (activity.Text == "Passage person from UWP")
