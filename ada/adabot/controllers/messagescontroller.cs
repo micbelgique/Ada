@@ -12,12 +12,7 @@ using AdaSDK;
 using AdaSDK.Models;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
-using System.IO;
 using AdaBot.Services;
-using Microsoft.ProjectOxford.Vision.Contract;
-using System.Collections.Generic;
-using AdaBot.Models;
-using System.Text;
 
 
 namespace AdaBot
@@ -92,17 +87,31 @@ namespace AdaBot
                 if (activity.Text == "Picture from UWP")
                 {
                     answer = false;
-                    activity.Conversation.Id = activity.Name;
-                    ConnectorClient connector = new ConnectorClient(new Uri(activity.Name));
-                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                    CommunicationService communicationLine = new CommunicationService();
+                    string[] logs = activity.Name.ToString().Split('|');
+                    if (logs[3] == "Facebook")
+                    {
+                        await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
+                    else
+                    {
+                        await communicationLine.SendProactiveMessageSlack(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
                 }
 
                 if (activity.Text == "Passage person from UWP")
                 {
                     answer = false;
-                    activity.Conversation.Id = Convert.ToString(activity.ChannelData);
-                    ConnectorClient connector = new ConnectorClient(new Uri("https://facebook.botframework.com"));
-                    await connector.Conversations.SendToConversationAsync((Activity)activity.ChannelData);
+                    CommunicationService communicationLine = new CommunicationService();
+                    string[] logs = activity.Name.ToString().Split('|');
+                    if (logs[3] == "facebook" || logs[3] == "Facebook")
+                    {
+                        await communicationLine.SendProactiveMessageFacebook(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
+                    else
+                    {
+                        await communicationLine.SendProactiveMessageSlack(logs[1], logs[2], logs[0], activity.ChannelData.ToString());
+                    }
                 }
 
                 if (activity.Attachments?.Count() >= 1)
