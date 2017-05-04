@@ -469,7 +469,7 @@ namespace AdaW10.ViewModels
                                             From = new ChannelAccount("Jean"),
                                             Type = ActivityTypes.Message,
                                             Text = "Passage person from UWP",
-                                            ChannelData = "Je viens de voir : " + indicatePassage.Firtsname,
+                                            ChannelData = "Je viens de voir " + indicatePassage.Firtsname.First().ToString().ToUpper() + indicatePassage.Firtsname.Substring(1),
                                             Name = indicatePassage.IdFacebookConversation + "|" + indicatePassage.FromId + "|" + indicatePassage.RecipientID + "|" + indicatePassage.Channel
                                         };
 
