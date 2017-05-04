@@ -34,9 +34,6 @@ namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private static MainViewModel _instance;
-        static readonly object instanceLock = new object();
-
         private DirectLineClient _client;
         private Conversation _conversation;
         private CaptureElement _captureElement;
