@@ -48,7 +48,14 @@ namespace AdaBot.Services
 
             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
 
-            await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
+            string[] stringReturn = reply.ToString().Split('|');
+
+            for (int i=0; i<stringReturn.Length; i++)
+            {
+                await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(stringReturn[i].ToString()));
+            }
+
+            //await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(reply.ToString()));
         }
 
 

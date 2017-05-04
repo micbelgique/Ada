@@ -39,11 +39,11 @@ namespace AdaSDK.Services
                                         VisualFeature.Description //generate image caption
                                         };
             AnalysisResult analysisResult = null;
-            string OCR;
+            string OCR = "NULL";
             VisionService visionService = new VisionService();
             StringBuilder reply = new StringBuilder();
             GoogleTranslatorServiceSDK translator = new GoogleTranslatorServiceSDK();
-            
+
 
             analysisResult = await visionClient.AnalyzeImageAsync(imageFileStream, visualFeatures);
 
@@ -51,28 +51,47 @@ namespace AdaSDK.Services
 
             OCR = await visionService.MakeOCRRequest(imageFileStream, visionApiKey);
             string translate = await translator.TranslateText(analysisResult.Description.Captions[0].Text.ToString(), "en|fr");
-            reply.Append(translate + ". ");
+            reply.Append("Je vois " + translate.ToLower() + ". ");
 
             if (analysisResult.Description.Tags.Contains("person"))
             {
                 imageFileStream.Seek(0, SeekOrigin.Begin);
 
                 FullPersonDto[] persons = await this.recognizepersonsPictureAsync(imageFileStream);
-
+                bool inconnu = false;
                 if (persons != null)
                 {
-                    reply.Append("je vois : " + persons.Count() + " personne(s) sur la photo.");
-
+                    reply.Append("Je vois " + persons.Count() + " personne(s) sur la photo.|");
 
                     foreach (FullPersonDto result in persons)
                     {
-                        reply.Append(this.DescriptionPersonImage(result));
+                        if (result.FirstName != null)
+                        {
+                            reply.Append(this.DescriptionPersonImage(result));
+                        }
+                        else
+                        {
+                            inconnu = true;
+                        }
                     }
+                    if (inconnu)
+                        reply.Append("|Passons aux inconnus, je vois:|");
+                    foreach (FullPersonDto result in persons)
+                    {
+                        if (result.FirstName == null)
+                        {
+                            reply.Append(this.DescriptionPersonImage(result));
+                        }
+                    }
+
                 }
             }
 
-            reply.Append(" Et il me semble qu'il y a du texte sur la photo, le voici : ");
-            reply.Append(OCR);
+            if (OCR != "")
+            {
+                reply.Append("|Il me semble que je peux distinguer le texte suivant:");
+                reply.Append(OCR);
+            }
 
             return reply.ToString();
         }
@@ -83,11 +102,7 @@ namespace AdaSDK.Services
 
             if (person.FirstName != null)
             {
-                reply.Append(" Je connais cette personne c'est " + person.FirstName + ". ");
-            }
-            else
-            {
-                reply.Append(" Je ne connais malheureusement pas cette personne. ");
+                reply.Append("Parmi ces personnes, je connais " + person.FirstName);
             }
 
             reply.Append(DescriptionGender(person));
@@ -106,7 +121,6 @@ namespace AdaSDK.Services
                 reply.Append(DescriptionEmotionFemale(person));
             }
 
-
             reply.Append(".");
             return reply;
         }
@@ -117,7 +131,10 @@ namespace AdaSDK.Services
 
             if (Convert.ToString(person.Gender) == "male")
             {
-                reply.Append("C'est un homme");
+                if (person.FirstName == null)
+                    reply.Append("Un homme");
+                else
+                    reply.Append(" qui est un homme");
 
                 if (person.Beard >= 0.5 && person.Mustache >= 0.5)
                 {
@@ -136,7 +153,10 @@ namespace AdaSDK.Services
             }
             else
             {
-                reply.Append("C'est une femme d'environ " + (int)person.Age + " ans ");
+                if (person.FirstName == null)
+                    reply.Append("Un femme d'environ " + (int)person.Age + " ans ");
+                else
+                    reply.Append("C'est une femme d'environ " + (int)person.Age + " ans ");
             }
 
             return reply;

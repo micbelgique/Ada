@@ -135,9 +135,7 @@ namespace AdaW10.ViewModels
                         await VoiceInterface.StopListening();
                     }
 
-                    LogHelper.Log("Message reçu ;)");
-                    LogHelper.Log("Je suis à toi dans un instant");
-                    await TtsService.SayAsync("Message reçu, je suis à toi dans un instant");
+                    LogHelper.Log("Bonjour, je suis à toi dans un instant.");
 
                     PersonDto person = null;
 

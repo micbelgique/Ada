@@ -7,10 +7,7 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         public SpeechRecognitionConstraintProbability Probability { get; set; }
         public static ISpeechRecognitionConstraint ConstraintForHelloAda => new SpeechRecognitionListConstraint(new[]
         {
-            "J'ai besoin de toi Ada", "Ada j'ai besoin de toi", "Réveille-toi Ada", "Je suis là Ada", "Ada réveille-toi",
-            "Je veux te parler Ada","Ada je veux te parler", "Tu as une minute Ada",
-            "Tu es dispo Ada", "Ada tu as une minute", "Ada tu es dispo"
-            //, "Bonjour Ada", "Salut Ada", "Hey Ada", "Hello Ada", "Coucou Ada"
+            "Bonjour Ada", "Salut Ada", "Hey Ada", "Hello Ada", "Coucou Ada"
         },
         "constraint_hello_ada");
 
@@ -52,7 +49,8 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint ConstraintForAbortWords => new SpeechRecognitionListConstraint(new[]
         {
-            "au-revoir", "terminer", "sortir", "quitter", "retour", "bonne journée" , "adieu" , "annuler", "aurevoir"
+            "au-revoir", "terminer", "sortir", "quitter", "retour", "bonne journée" , "adieu" , "annuler", "aurevoir", "merci",
+            "merssi", "a plus", "à plus", "merci Ada"
         },
         "constraint_abord_words");
 
