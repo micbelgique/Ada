@@ -147,6 +147,8 @@ namespace AdaW10.ViewModels
                         person = (await MakeRecognition())?.FirstOrDefault();
                     }
 
+                    await TtsService.SayAsync("Patiente le temps que je regarde si je te connais ou pas.");
+
                     if (person != null)
                     {
                         PersonUpdateDto updateDto = new PersonUpdateDto
