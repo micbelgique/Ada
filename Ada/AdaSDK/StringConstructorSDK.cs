@@ -58,10 +58,11 @@ namespace AdaSDK.Services
                 imageFileStream.Seek(0, SeekOrigin.Begin);
 
                 FullPersonDto[] persons = await this.recognizepersonsPictureAsync(imageFileStream);
-                bool inconnu = false;
+                bool inconnu = true;
                 if (persons != null)
                 {
-                    reply.Append("Je vois " + persons.Count() + " personne(s) sur la photo.|");
+                    inconnu = false;
+                    reply.Append("Il me semble qu'il y a " + persons.Count() + " personne(s). Parmi ces personnes:");
 
                     foreach (FullPersonDto result in persons)
                     {
@@ -74,8 +75,6 @@ namespace AdaSDK.Services
                             inconnu = true;
                         }
                     }
-                    if (inconnu)
-                        reply.Append("|Passons aux inconnus, je vois:|");
                     foreach (FullPersonDto result in persons)
                     {
                         if (result.FirstName == null)
@@ -83,10 +82,8 @@ namespace AdaSDK.Services
                             reply.Append(this.DescriptionPersonImage(result));
                         }
                     }
-
                 }
             }
-
             if (OCR != "")
             {
                 reply.Append("|Il me semble que je peux distinguer le texte suivant:");
@@ -102,14 +99,11 @@ namespace AdaSDK.Services
 
             if (person.FirstName != null)
             {
-                reply.Append("Parmi ces personnes, je connais " + person.FirstName);
+                reply.Append("|Je connais: " + person.FirstName + " ");
             }
-
-            reply.Append(DescriptionGender(person));
-
-            if (Convert.ToInt32(person.Glasses) != 0)
+            else
             {
-                reply.Append(DescriptionGlasses(person));
+                reply.Append("|Je vois aussi " + DescriptionGender(person));
             }
 
             if (Convert.ToString(person.Gender) == "male")
@@ -119,6 +113,11 @@ namespace AdaSDK.Services
             else if (Convert.ToString(person.Gender) == "female")
             {
                 reply.Append(DescriptionEmotionFemale(person));
+            }
+
+            if (Convert.ToInt32(person.Glasses) != 0)
+            {
+                reply.Append(DescriptionGlasses(person));
             }
 
             reply.Append(".");
@@ -132,7 +131,7 @@ namespace AdaSDK.Services
             if (Convert.ToString(person.Gender) == "male")
             {
                 if (person.FirstName == null)
-                    reply.Append("Un homme");
+                    reply.Append("un homme");
                 else
                     reply.Append(" qui est un homme");
 
@@ -154,7 +153,7 @@ namespace AdaSDK.Services
             else
             {
                 if (person.FirstName == null)
-                    reply.Append("Un femme d'environ " + (int)person.Age + " ans ");
+                    reply.Append("une femme d'environ " + (int)person.Age + " ans ");
                 else
                     reply.Append("C'est une femme d'environ " + (int)person.Age + " ans ");
             }
@@ -168,15 +167,15 @@ namespace AdaSDK.Services
 
             if (Convert.ToInt32(person.Glasses) == 1)
             {
-                reply.Append("qui porte des lunettes de soleil ");
+                reply.Append(" qui porte des lunettes de soleil ");
             }
             else if (Convert.ToInt32(person.Glasses) == 2)
             {
-                reply.Append("qui porte des lunettes ");
+                reply.Append(" qui porte des lunettes ");
             }
             else
             {
-                reply.Append("qui porte des lunettes de piscine ");
+                reply.Append(" qui porte des lunettes de piscine ");
             }
 
             return reply;

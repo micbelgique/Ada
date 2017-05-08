@@ -66,6 +66,18 @@ namespace AdaBot.Dialogs
             context.Done<object>(null);
         }
 
+        [LuisIntent("Emoji")]
+        public async Task Emoji(IDialogContext context, LuisResult result)
+        {
+            string message = $"<3";
+            Activity replyToConversation;
+            replyToConversation = ((Activity)context.Activity).CreateReply(message);
+            replyToConversation.Recipient = context.Activity.From;
+            replyToConversation.Type = "message";
+            await context.PostAsync(replyToConversation);
+            context.Done<object>(null);
+        }
+
         [LuisIntent("Compliment")]
         public async Task Compliment(IDialogContext context, LuisResult result)
         {
