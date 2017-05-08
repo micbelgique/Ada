@@ -87,7 +87,7 @@ namespace AdaSDK.Services
                 }
             }
 
-            if (OCR != "")
+            if (OCR != "" && !OCR.Contains("Э") && !OCR.Contains("년") && !OCR.Contains("п"))
             {
                 reply.Append("|Il me semble que je peux distinguer le texte suivant:");
                 reply.Append(OCR);
