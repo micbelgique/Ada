@@ -34,9 +34,6 @@ namespace AdaW10.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private static MainViewModel _instance;
-        static readonly object instanceLock = new object();
-
         private DirectLineClient _client;
         private Conversation _conversation;
         private CaptureElement _captureElement;
@@ -136,6 +133,7 @@ namespace AdaW10.ViewModels
                     }
 
                     LogHelper.Log("Bonjour, je suis à toi dans un instant.");
+                    await TtsService.SayAsync("Bonjour, je suis à toi dans un instant.");
 
                     PersonDto person = null;
 
@@ -144,8 +142,6 @@ namespace AdaW10.ViewModels
                         await WebcamService.StopFaceDetectionAsync();
                         person = (await MakeRecognition())?.FirstOrDefault();
                     }
-
-                    await TtsService.SayAsync("Patiente le temps que je regarde si je te connais ou pas.");
 
                     if (person != null)
                     {

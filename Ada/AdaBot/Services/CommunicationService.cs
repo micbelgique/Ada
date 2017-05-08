@@ -21,15 +21,20 @@ namespace AdaBot.Services
             var connector = new ConnectorClient(new Uri(slackConnector), ConfigurationManager.AppSettings["MicrosoftAppId"],
                                                 ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
 
-            var msg = Activity.CreateMessageActivity();
-            msg.Type = ActivityTypes.Message;
-            msg.From = account;
-            msg.Recipient = recipient;
-            msg.ChannelId = "slack";
-            var conversation = conversationId; //ID de la conversation
-            msg.Conversation = new ConversationAccount(id: conversation);
-            msg.Text = text;
-            await connector.Conversations.SendToConversationAsync((Activity)msg);
+            string[] stringReturn = text.ToString().Split('|');
+
+            for (int i = 0; i < stringReturn.Length; i++)
+            {
+                var msg = Activity.CreateMessageActivity();
+                msg.Type = ActivityTypes.Message;
+                msg.From = account;
+                msg.Recipient = recipient;
+                msg.ChannelId = "slack";
+                var conversation = conversationId; //ID de la conversation
+                msg.Conversation = new ConversationAccount(id: conversation);
+                msg.Text = stringReturn[i].ToString();
+                await connector.Conversations.SendToConversationAsync((Activity)msg);
+            }
         }
 
         public async Task SendProactiveMessageFacebook(string userId, string botId, string conversationId, string text)
@@ -42,15 +47,20 @@ namespace AdaBot.Services
             var connector = new ConnectorClient(new Uri(facebookConnector), ConfigurationManager.AppSettings["MicrosoftAppId"],
                                                 ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
 
-            var msg = Activity.CreateMessageActivity();
-            msg.Type = ActivityTypes.Message;
-            msg.From = account;
-            msg.Recipient = recipient;
-            msg.ChannelId = "facebook";
-            var conversation = conversationId; //ID de la conversation
-            msg.Conversation = new ConversationAccount(id: conversation);
-            msg.Text = text;
-            await connector.Conversations.SendToConversationAsync((Activity)msg);
+            string[] stringReturn = text.ToString().Split('|');
+
+            for (int i = 0; i < stringReturn.Length; i++)
+            {
+                var msg = Activity.CreateMessageActivity();
+                msg.Type = ActivityTypes.Message;
+                msg.From = account;
+                msg.Recipient = recipient;
+                msg.ChannelId = "facebook";
+                var conversation = conversationId; //ID de la conversation
+                msg.Conversation = new ConversationAccount(id: conversation);
+                msg.Text = stringReturn[i].ToString();
+                await connector.Conversations.SendToConversationAsync((Activity)msg);
+            }
         }
     }
 }
