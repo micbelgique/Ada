@@ -58,10 +58,8 @@ namespace AdaSDK.Services
                 imageFileStream.Seek(0, SeekOrigin.Begin);
 
                 FullPersonDto[] persons = await this.recognizepersonsPictureAsync(imageFileStream);
-                bool inconnu = true;
                 if (persons != null)
                 {
-                    inconnu = false;
                     reply.Append("Il me semble qu'il y a " + persons.Count() + " personne(s). Parmi ces personnes:");
 
                     foreach (FullPersonDto result in persons)
@@ -69,10 +67,6 @@ namespace AdaSDK.Services
                         if (result.FirstName != null)
                         {
                             reply.Append(this.DescriptionPersonImage(result));
-                        }
-                        else
-                        {
-                            inconnu = true;
                         }
                     }
                     foreach (FullPersonDto result in persons)

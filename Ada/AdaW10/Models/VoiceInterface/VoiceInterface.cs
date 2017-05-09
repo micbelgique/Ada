@@ -234,6 +234,18 @@ namespace AdaW10.Models.VoiceInterface
             }
         }
 
+        internal async Task ChangeSentenceAsync()
+        {
+            await TtsService.SayAsync("Quelle phrase d'accueil dois-je enregistrer?");
+            using (var sttService = new SttService())
+            {
+                await sttService.CleanConstraintsAsync();
+                var result = await RecognitionWithFallBack(sttService);
+                string newSentence = result.Text;
+                SpeechDictionnary.ChangeSentenceHome(newSentence);
+            }
+        }
+
         private static async Task<SpeechRecognitionResult> RecognitionWithFallBack(SttService sttService)
         {
             SpeechRecognitionResult result;

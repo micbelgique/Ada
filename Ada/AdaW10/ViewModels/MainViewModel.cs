@@ -184,6 +184,15 @@ namespace AdaW10.ViewModels
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
+                else if (e.Result.Constraint.Tag == "constraint_Change_Sentences")
+                {
+                    if (VoiceInterface != null)
+                    {
+                        await VoiceInterface.StopListening();
+                    }
+                    await VoiceInterface.ChangeSentenceAsync();
+                    await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+                }
             });
 
             //// Prepares capture element to camera feed and load camera
