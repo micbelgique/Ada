@@ -271,6 +271,9 @@ namespace AdaW10.ViewModels
             }
             else if (activity.Name != "NotFinish")
             {
+                LogHelper.Log("Que puis-je faire pour toi?");
+                await TtsService.SayAsync("Que puis-je faire pour toi?");
+
                 await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
             }
         }
@@ -371,9 +374,6 @@ namespace AdaW10.ViewModels
             {
                 await WebcamService.StopFaceDetectionAsync();
             }
-
-            LogHelper.Log("Que puis-je faire pour toi?");
-            await TtsService.SayAsync("Que puis-je faire pour toi?");
 
             var str = await VoiceInterface.Listen();
             LogHelper.Log(str);
