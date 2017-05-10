@@ -11,6 +11,13 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         },
         "constraint_hello_ada");
 
+        public static ISpeechRecognitionConstraint ConstraintForChangeSentence => new SpeechRecognitionListConstraint(new[]
+        {
+            "Je veux que tu changes ta phrase d'accueil", "Change ta phrase d'accueil", "Changer phrase accueil",
+            "Changer phrase"
+        },
+        "constraint_Change_Sentences");
+
         public static ISpeechRecognitionConstraint ConstraintForEvents => new SpeechRecognitionListConstraint(new[]
         {
             "évènement", "événement", "evennement", "event", "névènement", "zévènement", "deszévénement", "des zévénements", 
@@ -68,7 +75,7 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
 
         public static ISpeechRecognitionConstraint ConstraintForYes => new SpeechRecognitionListConstraint(new[]
         {
-            "oui", "ouais", "yep", "yes", "wé", "correct"
+            "oui", "ouais", "yep", "yes", "wé", "correct","si"
         }, 
         "constraint_yes");
 
@@ -77,12 +84,6 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
             "non", "no", "pas du tout", "faux", "nope"
         }, 
         "constraint_no");
-
-        public static ISpeechRecognitionConstraint ConstraintForChangeSentence => new SpeechRecognitionListConstraint(new[]
-        {
-            "Je veux que tu changes ta phrase d'accueil", "Change ta phrase d'accueil", "Changer phrase accueil"
-        },
-        "constraint_Change_Sentences");
 
         public static ISpeechRecognitionConstraint GetConstraintForName()
         {

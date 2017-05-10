@@ -136,6 +136,7 @@ namespace AdaW10.ViewModels
                     }
 
                     LogHelper.Log("Bonjour, je suis à toi dans un instant.");
+                    await TtsService.SayAsync("Bonjour, je suis à toi dans un instant.");
 
                     PersonDto person = null;
 
@@ -190,8 +191,25 @@ namespace AdaW10.ViewModels
                     {
                         await VoiceInterface.StopListening();
                     }
+                    if (WebcamService.FaceDetectionEffect != null)
+                    {
+                        await WebcamService.StopFaceDetectionAsync();
+                    }
                     await VoiceInterface.ChangeSentenceAsync();
-                    await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
+
+                    await TtsService.SayAsync("Très bien, j'accueillerai les prochains visiteurs comme cela.");
+
+                    if (WebcamService.FaceDetectionEffect != null)
+                    {
+                        await WebcamService.StopFaceDetectionAsync();
+                    }
+
+                    if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
+                    {
+                        WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
+                    }
+
+                    await VoiceInterface.ListeningHelloAda();
                 }
             });
 
