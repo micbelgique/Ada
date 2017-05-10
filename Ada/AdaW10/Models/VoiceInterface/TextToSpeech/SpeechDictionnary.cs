@@ -121,7 +121,14 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
             "Bonjour tout le monde ! Alors, toujours à traîner ensemble ?"
             */
         };
+
+        private static string TemporarySentenceHome = "";
         #endregion
+
+        public static void ChangeSentenceHome(string newSentence)
+        {
+            TemporarySentenceHome = newSentence;
+        }
 
         public static string GetHelloSentence(PersonDto[] persons)
         {
@@ -133,18 +140,25 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
                 // If there are more persons than limit of persons
                 "Bonjour tout le monde !" : 
                 // If there are one or two persons
-                string.Join(". ", persons.Select(p => $"Bonjour {p.FirstName}")));
+                string.Join(". ", persons.Select(p => $"Bonjour {p.FirstName} ")));
 
-            // Generates random sentence
-            builder.Append(persons.Length == 1 ? 
-                // If there are one person
-                persons[0].Gender == GenderValues.Male ? 
-                    // If it's a male
-                    $". {RandomMaleSentences[randomizer.Next(0, RandomMaleSentences.Count)]}" : 
-                    // If it's a female 
-                    $". {RandomFemaleSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}" : 
-                // If there are more than one 
-                $". {RandomSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}");
+            if (TemporarySentenceHome == "")
+            {
+                // Generates random sentence
+                builder.Append(persons.Length == 1 ?
+                    // If there are one person
+                    persons[0].Gender == GenderValues.Male ?
+                        // If it's a male
+                        $". {RandomMaleSentences[randomizer.Next(0, RandomMaleSentences.Count)]}" :
+                        // If it's a female 
+                        $". {RandomFemaleSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}" :
+                    // If there are more than one 
+                    $". {RandomSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}");
+            }
+            else
+            {
+                builder.Append(TemporarySentenceHome);
+            }
 
             return builder.ToString(); 
         }
