@@ -92,7 +92,6 @@ namespace AdaW10.Models.VoiceInterface
             await PrepareListening();
 
             await _continuousRecognitionSession.AddConstraintAsync(ConstraintsDictionnary.ConstraintForHelloAda);
-            await _continuousRecognitionSession.AddConstraintAsync(ConstraintsDictionnary.ConstraintForChangeSentence);
             await _continuousRecognitionSession.StartContinuousRecognitionAsync();
         }
 
@@ -232,21 +231,6 @@ namespace AdaW10.Models.VoiceInterface
                 } while (repeat);
 
                 return name;
-            }
-        }
-
-        public async Task ChangeSentenceAsync()
-        {
-            await TtsService.SayAsync("Quelle phrase d'accueil dois-je enregistrer?");
-            using (var sttService = new SttService())
-            {
-                await sttService.AddConstraintAsync(ConstraintsDictionnary.GetConstraintForSpeak());
-               
-                //await sttService.CleanConstraintsAsync();
-                var result = await RecognitionWithFallBack(sttService);
-                string newSentence = result.Text;
-                SpeechDictionnary.ChangeSentenceHome(newSentence);
-                await sttService.CleanConstraintsAsync();
             }
         }
 
