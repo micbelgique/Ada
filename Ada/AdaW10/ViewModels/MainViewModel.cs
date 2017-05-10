@@ -187,32 +187,6 @@ namespace AdaW10.ViewModels
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
-                else if (e.Result.Constraint.Tag == "constraint_Change_Sentences")
-                {
-                    if (VoiceInterface != null)
-                    {
-                        await VoiceInterface.StopListening();
-                    }
-                    if (WebcamService.FaceDetectionEffect != null)
-                    {
-                        await WebcamService.StopFaceDetectionAsync();
-                    }
-                    await VoiceInterface.ChangeSentenceAsync();
-
-                    await TtsService.SayAsync("Très bien, j'accueillerai les prochains visiteurs comme cela.");
-
-                    if (WebcamService.FaceDetectionEffect != null)
-                    {
-                        await WebcamService.StopFaceDetectionAsync();
-                    }
-
-                    if (WebcamService.IsInitialized && await WebcamService.StartFaceDetectionAsync(300))
-                    {
-                        WebcamService.FaceDetectionEffect.FaceDetected += OnFaceDetected;
-                    }
-
-                    await VoiceInterface.ListeningHelloAda();
-                }
             });
 
             //// Prepares capture element to camera feed and load camera

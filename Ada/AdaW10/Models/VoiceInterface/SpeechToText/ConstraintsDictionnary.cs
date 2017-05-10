@@ -11,13 +11,6 @@ namespace AdaW10.Models.VoiceInterface.SpeechToText
         },
         "constraint_hello_ada");
 
-        public static ISpeechRecognitionConstraint ConstraintForChangeSentence => new SpeechRecognitionListConstraint(new[]
-        {
-            "Je veux que tu changes ta phrase d'accueil", "Change ta phrase d'accueil", "Changer phrase accueil",
-            "Changer phrase"
-        },
-        "constraint_Change_Sentences");
-
         public static ISpeechRecognitionConstraint ConstraintForEvents => new SpeechRecognitionListConstraint(new[]
         {
             "évènement", "événement", "evennement", "event", "névènement", "zévènement", "deszévénement", "des zévénements", 

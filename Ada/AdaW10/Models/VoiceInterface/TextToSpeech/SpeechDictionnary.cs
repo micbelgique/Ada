@@ -121,14 +121,8 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
             "Bonjour tout le monde ! Alors, toujours à traîner ensemble ?"
             */
         };
-
-        private static string TemporarySentenceHome = "";
         #endregion
-
-        public static void ChangeSentenceHome(string newSentence)
-        {
-            TemporarySentenceHome = newSentence;
-        }
+        
 
         public static string GetHelloSentence(PersonDto[] persons)
         {
@@ -141,9 +135,7 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
                 "Bonjour tout le monde !" : 
                 // If there are one or two persons
                 string.Join(". ", persons.Select(p => $"Bonjour {p.FirstName} ")));
-
-            if (TemporarySentenceHome == "")
-            {
+            
                 // Generates random sentence
                 builder.Append(persons.Length == 1 ?
                     // If there are one person
@@ -154,11 +146,6 @@ namespace AdaW10.Models.VoiceInterface.TextToSpeech
                         $". {RandomFemaleSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}" :
                     // If there are more than one 
                     $". {RandomSentences[randomizer.Next(0, RandomFemaleSentences.Count)]}");
-            }
-            else
-            {
-                builder.Append(TemporarySentenceHome);
-            }
 
             return builder.ToString(); 
         }
