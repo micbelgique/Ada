@@ -136,6 +136,7 @@ namespace AdaW10.ViewModels
                     }
 
                     LogHelper.Log("Bonjour, je suis à toi dans un instant.");
+                    await TtsService.SayAsync("Bonjour, je suis à toi dans un instant.");
 
                     PersonDto person = null;
 
@@ -189,6 +190,10 @@ namespace AdaW10.ViewModels
                     if (VoiceInterface != null)
                     {
                         await VoiceInterface.StopListening();
+                    }
+                    if (WebcamService.FaceDetectionEffect != null)
+                    {
+                        await WebcamService.StopFaceDetectionAsync();
                     }
                     await VoiceInterface.ChangeSentenceAsync();
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
