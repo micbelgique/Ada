@@ -239,6 +239,8 @@ namespace AdaW10.Models.VoiceInterface
             await TtsService.SayAsync("Quelle phrase d'accueil dois-je enregistrer?");
             using (var sttService = new SttService())
             {
+                await sttService.AddConstraintAsync(ConstraintsDictionnary.GetConstraintForSpeak());
+               
                 await sttService.CleanConstraintsAsync();
                 var result = await RecognitionWithFallBack(sttService);
                 string newSentence = result.Text;
