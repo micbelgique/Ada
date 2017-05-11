@@ -156,24 +156,51 @@ namespace AdaW10.Models.VoiceInterface
             }
         }
 
-        public async Task<string> AskIdentified()
+        public async Task<bool> AskIdentified()
         {
+            bool answer = false;
+            bool repeat = true;
             using (var sttService = new SttService())
             {
-                await TtsService.SayAsync("Veux tu t'identifier ?");
-
-                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForYes, false);
-                await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForNo);
-
-                var result = await sttService.RecognizeAsync();
-
-                if (result.Confidence != SpeechRecognitionConfidence.Rejected)
+                do
                 {
-                    var firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
-                    return firedConstraint.Commands.First();
-                }
+                    await TtsService.SayAsync("Veux tu t'identifier ?");
 
-                return "non";
+                    await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForYes, false);
+                    await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForNo, false);
+                    await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForAbortWords);
+
+                    var result = await sttService.RecognizeAsync();
+
+                    var firedConstraint = ConstraintsDictionnary.ConstraintForNo;
+
+                    if (result.Confidence != SpeechRecognitionConfidence.Rejected)
+                    {
+                        firedConstraint = (SpeechRecognitionListConstraint)result.Constraint;
+                    }
+
+                    switch (firedConstraint.Tag)
+                    {
+                        case "constraint_yes":
+                            repeat = false;
+                            answer = true;
+                            break;
+
+                        case "constraint_no":
+                            repeat = false;
+                            await TtsService.SayAsync("Que puis-je faire pour toi?");
+                            break;
+
+                        default:
+                            repeat = true;
+                            await TtsService.SayAsync("Pourrais-tu répondre par oui ou non ?");
+                            break;
+                    }
+
+                    await sttService.CleanConstraintsAsync();
+                } while (repeat);
+
+                return answer;
             }
 
         }
@@ -194,6 +221,7 @@ namespace AdaW10.Models.VoiceInterface
 
                     var result = await RecognitionWithFallBack(sttService);
                     name = result.Text;
+                    name = GetNameForRegistration(name);
 
                     // Clean up stt service to clean constraints of prévious recognitions
                     await sttService.CleanConstraintsAsync();
@@ -203,7 +231,7 @@ namespace AdaW10.Models.VoiceInterface
                     await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForNo, false);
                     await sttService.AddConstraintAsync(ConstraintsDictionnary.ConstraintForAbortWords);
 
-                    await TtsService.SayAsync(SpeechDictionnary.GetYesOrNoSentence(result.Text));
+                    await TtsService.SayAsync(SpeechDictionnary.GetYesOrNoSentence(name));
 
                     result = await RecognitionWithFallBack(sttService);
 
@@ -231,6 +259,13 @@ namespace AdaW10.Models.VoiceInterface
 
                 return name;
             }
+        }
+
+        private string GetNameForRegistration(string name)
+        {
+            string[] test = name.Split(' ');
+            string retour = test[2];
+            return retour;
         }
 
         private static async Task<SpeechRecognitionResult> RecognitionWithFallBack(SttService sttService)

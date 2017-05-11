@@ -156,9 +156,9 @@ namespace AdaW10.ViewModels
                         // Update person's name
                         if (person.FirstName == null)
                         {
-                            string answer = await VoiceInterface.AskIdentified();
+                            bool answer = await VoiceInterface.AskIdentified();
 
-                            if (answer != "non")
+                            if (answer)
                             {
                                 string name = await VoiceInterface.AskNameAsync();
 

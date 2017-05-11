@@ -106,7 +106,7 @@ namespace AdaBot.Answers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Ca va |Nickel! |Je pète la forme, comme toujours! ].
+        ///   Recherche une chaîne localisée semblable à [Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)|Ca va, ça va, Imhotep].
         /// </summary>
         internal static string Feelings {
             get {
