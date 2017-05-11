@@ -44,16 +44,20 @@ namespace AdaSDK.Services
                 response = await client.PostAsync(uri, content);
                 var resultContent = await response.Content.ReadAsStringAsync();
                 OCRModel result = JsonConvert.DeserializeObject<OCRModel>(resultContent);
+
                 StringBuilder stringResult = new StringBuilder();
 
-                for(int i = 0 ; i < result.Regions.Count ; i++)
+                if (result.Language == "en" || result.Language == "fr")
                 {
-                    for (int y = 0; y < result.Regions[i].Lines.Count; y++)
+                    for (int i = 0; i < result.Regions.Count; i++)
                     {
-                        for (int z = 0; z < result.Regions[i].Lines[y].Words.Count; z++)
+                        for (int y = 0; y < result.Regions[i].Lines.Count; y++)
                         {
-                            stringResult.Append(result.Regions[i].Lines[y].Words[z].Text);
-                            stringResult.Append(" ");
+                            for (int z = 0; z < result.Regions[i].Lines[y].Words.Count; z++)
+                            {
+                                stringResult.Append(result.Regions[i].Lines[y].Words[z].Text);
+                                stringResult.Append(" ");
+                            }
                         }
                     }
                 }
