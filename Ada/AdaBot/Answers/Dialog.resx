@@ -133,7 +133,7 @@
     <value>[A bientôt|On se revoit bientôt j'espère|A plus|Au revoir|Au plaisir|A plus dans l'bus|A demain dans l'train|A bientôt dans l'métro|Tu vas me manquer|A la prochaine]</value>
   </data>
   <data name="Feelings" xml:space="preserve">
-    <value>[Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)]</value>
+    <value>[Ca va :)|Nickel! :D|Je pète la forme, comme toujours! ;)|Ca va, ça va, Imhotep]</value>
   </data>
   <data name="Greeting" xml:space="preserve">
     <value>[Bonjour|Salut|Coucou|Hello]</value>
