@@ -13,7 +13,10 @@ using AdaSDK.Models;
 using Microsoft.ProjectOxford.Vision;
 using System.Diagnostics;
 using AdaBot.Services;
-
+using System.Collections.Generic;
+using AdaBot.Answers;
+using AdaBot.Bot.Utils;
+using System.Web;
 
 namespace AdaBot
 {
@@ -32,7 +35,7 @@ namespace AdaBot
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             bool answer = true;
-
+            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             string accessAllow;
@@ -80,7 +83,6 @@ namespace AdaBot
                     botAccount = activity.Recipient;
                     conversation = activity.Conversation;
 
-                    ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                     await connector.Conversations.ReplyToActivityAsync(activity.CreateReply("registered"));
                     return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
                 }
@@ -114,7 +116,93 @@ namespace AdaBot
                     }
                 }
 
-                if (activity.Attachments?.Count() >= 1)
+                if (activity.Text.Contains("ConfirmationIdentityFace "))
+                {
+                    answer = false;
+                    var splitResult = activity.Text.Split(':');
+
+                    VisitDto lastVisit = new VisitDto();
+                    Activity replyToConversation;
+                    TreatmentDialog treatment = new TreatmentDialog();
+
+                    List<VisitDto> visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
+                    lastVisit = visits.Last();
+                    ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
+                    string response = treatment.describe(lastVisit, picture);
+                    replyToConversation = activity.CreateReply(response);
+                    await connector.Conversations.ReplyToActivityAsync(replyToConversation);
+                }
+                else if (activity.Text.Contains("ChoosePersonId"))
+                {
+                    answer = false;
+                    var splitResult = activity.Text.Split(':');
+
+                    int nbVisit = 10;
+                    Activity replyToConversation;
+                    replyToConversation = activity.CreateReply($"{Dialog.Waiting.Spintax()}");
+                    replyToConversation.Recipient = activity.From;
+                    replyToConversation.Name = "NotFinish";
+                    replyToConversation.Type = "message";
+                    await Post(replyToConversation);
+
+                    int idPerson = Convert.ToInt32(splitResult[1]);
+
+                    nbVisit = Convert.ToInt32(splitResult[3]);
+
+                    List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
+
+                    replyToConversation = activity.CreateReply($"{Dialog.VisitsPerson.Spintax()}");
+                    replyToConversation.Recipient = activity.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.AttachmentLayout = "carousel";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visitsById)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                        var customDialog = new CreateDialog();
+                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(2));
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            Text = messageDate,
+                            Images = cardImages
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
+                    await connector.Conversations.ReplyToActivityAsync(replyToConversation);
+                }
+                else if (activity.Text.Contains("IndicatePassage"))
+                {
+                    answer = false;
+                    var splitResult = activity.Text.Split('|');
+
+                    Activity replyToConversation;
+                    IndicatePassageDto indicatePassage = new IndicatePassageDto();
+
+                    int personId = Convert.ToInt32(splitResult[1]);
+
+                    indicatePassage.IdFacebookConversation = activity.Conversation.Id;
+                    indicatePassage.To = personId;
+                    indicatePassage.Firtsname = splitResult[2];
+                    indicatePassage.FromId = activity.From.Id;
+                    indicatePassage.RecipientID = activity.Recipient.Id;
+                    indicatePassage.Channel = activity.ChannelId;
+                    await client.AddIndicatePassage(indicatePassage);
+
+                    replyToConversation = activity.CreateReply("Bien je le ferai.");
+                    replyToConversation.Recipient = activity.From;
+                    replyToConversation.Type = "message";
+
+                    await connector.Conversations.ReplyToActivityAsync(replyToConversation);
+                }
+
+                    if (activity.Attachments?.Count() >= 1)
                 {
                     if (activity.Attachments[0].ContentType == "image/png" || activity.Attachments[0].ContentType == "image/jpeg" || activity.Attachments[0].ContentType == "image/jpg")
                     {

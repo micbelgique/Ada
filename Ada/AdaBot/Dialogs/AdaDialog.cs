@@ -123,75 +123,63 @@ namespace AdaBot.Dialogs
             if (context.Activity.ServiceUrl == "https://facebook.botframework.com")
             {
                 var splitResult = result.Query.Split(':');
-                if (splitResult[0] == "ConfirmationIdentityFace ")
+
+                string name = context.Activity.From.Name;
+                string[] firstNameUser = name.Split(' ');
+                string firstname = firstNameUser[0];
+                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                if (visits.Count == 0)
                 {
-                    List<VisitDto> visits = await client.GetVisitPersonById(Convert.ToInt32(splitResult[1]), 1);
+                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                }
+                else if (visits.Count > 1)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("J'ai une petite hésitation, peux-tu me confirmer lequel de ces " + firstname + " es-tu? :)");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.AttachmentLayout = "carousel";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visits)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                        List<CardAction> cardButtons = new List<CardAction>();
+
+                        CardAction plButtonChoice = new CardAction()
+                        {
+                            Value = "ConfirmationIdentityFace :" + visit.PersonVisit.PersonId,
+                            Type = "postBack",
+                            Title = "Le voilà !"
+                        };
+                        cardButtons.Add(plButtonChoice);
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            Images = cardImages,
+                            Buttons = cardButtons
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
+                    await context.PostAsync(replyToConversation);
+                    context.Wait(MessageReceived);
+                }
+                else
+                {
+                    visits = await client.GetLastVisitPerson(firstname);
                     lastVisit = visits.Last();
                     ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
                     string response = treatment.describe(lastVisit, picture);
                     replyToConversation = ((Activity)context.Activity).CreateReply(response);
                     await context.PostAsync(replyToConversation);
                     context.Wait(MessageReceived);
-                }
-                else
-                {
-                    string name = context.Activity.From.Name;
-                    string[] firstNameUser = name.Split(' ');
-                    string firstname = firstNameUser[0];
-                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
-
-                    if (visits.Count == 0)
-                    {
-                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
-                        replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Type = "message";
-                    }
-                    else if (visits.Count > 1)
-                    {
-                        replyToConversation = ((Activity)context.Activity).CreateReply("J'ai une petite hésitation, peux-tu me confirmer lequel de ces " + firstname + " es-tu? :)");
-                        replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Type = "message";
-                        replyToConversation.AttachmentLayout = "carousel";
-                        replyToConversation.Attachments = new List<Attachment>();
-
-                        foreach (var visit in visits)
-                        {
-                            List<CardImage> cardImages = new List<CardImage>();
-                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-
-                            List<CardAction> cardButtons = new List<CardAction>();
-
-                            CardAction plButtonChoice = new CardAction()
-                            {
-                                Value = "ConfirmationIdentityFace :" + visit.PersonVisit.PersonId,
-                                Type = "postBack",
-                                Title = "Le voilà !"
-                            };
-                            cardButtons.Add(plButtonChoice);
-
-                            HeroCard plCard = new HeroCard()
-                            {
-                                Title = visit.PersonVisit.FirstName,
-                                Images = cardImages,
-                                Buttons = cardButtons
-                            };
-
-                            Attachment plAttachment = plCard.ToAttachment();
-                            replyToConversation.Attachments.Add(plAttachment);
-                        }
-                        await context.PostAsync(replyToConversation);
-                        context.Wait(MessageReceived);
-                    }
-                    else
-                    {
-                        visits = await client.GetLastVisitPerson(firstname);
-                        lastVisit = visits.Last();
-                        ProfilePictureDto picture = lastVisit.ProfilePicture.Last();
-                        string response = treatment.describe(lastVisit, picture);
-                        replyToConversation = ((Activity)context.Activity).CreateReply(response);
-                        await context.PostAsync(replyToConversation);
-                        context.Wait(MessageReceived);
-                    }
                 }
             }
             else
@@ -1000,21 +988,41 @@ namespace AdaBot.Dialogs
 
             int nbVisit = 10;
 
-            var splitResult = result.Query.Split(':');
+            string firstname = null;
 
-            if (splitResult[0] == "ChoosePersonId ")
+            int nbEntities = result.Entities.Count();
+            for (int i = 0; i < nbEntities; i++)
             {
-                int idPerson = Convert.ToInt32(splitResult[1]);
+                if (result.Entities[i].Type == "Firstname")
+                {
+                    firstname = result.Entities[i].Entity;
+                }
+                if (result.Entities[i].Type == "Number")
+                {
+                    nbVisit = Convert.ToInt32(result.Entities[i].Entity);
+                }
+            }
 
-                nbVisit = Convert.ToInt32(splitResult[3]);
+            List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
 
-                List<VisitDto> visitsById = await client.GetVisitPersonById(idPerson, nbVisit);
+            if (visits.Count == 0)
+            {
+                replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+            }
+            else if (visits.Count == 1)
+            {
+                int id = visits[0].PersonVisit.PersonId;
+
+                List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
 
                 replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.VisitsPerson.Spintax()}");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
                 replyToConversation.AttachmentLayout = "carousel";
                 replyToConversation.Attachments = new List<Attachment>();
+
 
                 foreach (var visit in visitsById)
                 {
@@ -1034,101 +1042,44 @@ namespace AdaBot.Dialogs
                     Attachment plAttachment = plCard.ToAttachment();
                     replyToConversation.Attachments.Add(plAttachment);
                 }
+
             }
             else
             {
-                string firstname = null;
+                replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                replyToConversation.Recipient = context.Activity.From;
+                replyToConversation.Type = "message";
+                replyToConversation.AttachmentLayout = "carousel";
+                replyToConversation.Attachments = new List<Attachment>();
 
-                int nbEntities = result.Entities.Count();
-                for (int i = 0; i < nbEntities; i++)
+                foreach (var visit in visits)
                 {
-                    if (result.Entities[i].Type == "Firstname")
+                    List<CardImage> cardImages = new List<CardImage>();
+                    cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
+
+                    List<CardAction> cardButtons = new List<CardAction>();
+
+                    CardAction plButtonChoice = new CardAction()
                     {
-                        firstname = result.Entities[i].Entity;
-                    }
-                    if (result.Entities[i].Type == "Number")
+
+                        Value = "ChoosePersonId :" + visit.PersonVisit.PersonId + " : nbVisit :" + nbVisit,
+                        Type = "postBack",
+                        Title = "Le voilà !"
+                    };
+                    cardButtons.Add(plButtonChoice);
+
+                    HeroCard plCard = new HeroCard()
                     {
-                        nbVisit = Convert.ToInt32(result.Entities[i].Entity);
-                    }
-                }
+                        Title = visit.PersonVisit.FirstName,
+                        Images = cardImages,
+                        Buttons = cardButtons
+                    };
 
-                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
-
-                if (visits.Count == 0)
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                }
-                else if (visits.Count == 1)
-                {
-                    int id = visits[0].PersonVisit.PersonId;
-
-                    List<VisitDto> visitsById = await client.GetVisitPersonById(id, nbVisit);
-
-                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.VisitsPerson.Spintax()}");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.AttachmentLayout = "carousel";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-
-                    foreach (var visit in visitsById)
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-
-                        var customDialog = new CreateDialog();
-                        var messageDate = customDialog.GetVisitsMessage(visit.PersonVisit.FirstName, visit.Date.AddHours(2));
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Text = messageDate,
-                            Images = cardImages
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                    }
-
-                }
-                else
-                {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
-                    replyToConversation.Recipient = context.Activity.From;
-                    replyToConversation.Type = "message";
-                    replyToConversation.AttachmentLayout = "carousel";
-                    replyToConversation.Attachments = new List<Attachment>();
-
-                    foreach (var visit in visits)
-                    {
-                        List<CardImage> cardImages = new List<CardImage>();
-                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}")); // a mettre dans le SDK
-
-                        List<CardAction> cardButtons = new List<CardAction>();
-
-                        CardAction plButtonChoice = new CardAction()
-                        {
-
-                            Value = "ChoosePersonId :" + visit.PersonVisit.PersonId + " : nbVisit :" + nbVisit,
-                            Type = "postBack",
-                            Title = "Le voilà !"
-                        };
-                        cardButtons.Add(plButtonChoice);
-
-                        HeroCard plCard = new HeroCard()
-                        {
-                            Title = visit.PersonVisit.FirstName,
-                            Images = cardImages,
-                            Buttons = cardButtons
-                        };
-
-                        Attachment plAttachment = plCard.ToAttachment();
-                        replyToConversation.Attachments.Add(plAttachment);
-                    }
+                    Attachment plAttachment = plCard.ToAttachment();
+                    replyToConversation.Attachments.Add(plAttachment);
                 }
             }
+
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
         }
@@ -1230,106 +1181,85 @@ namespace AdaBot.Dialogs
 
             string firstname = null;
 
-            var splitResult = result.Query.Split('|');
-
-            if (splitResult[0] == "IndicatePassage ")
+            int nbEntities = result.Entities.Count();
+            if (nbEntities == 0)
             {
-                int personId = Convert.ToInt32(splitResult[1]);
-
-                indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
-                indicatePassage.To = personId;
-                indicatePassage.Firtsname = splitResult[2];
-                indicatePassage.FromId = context.Activity.From.Id;
-                indicatePassage.RecipientID = context.Activity.Recipient.Id;
-                indicatePassage.Channel = context.Activity.ChannelId;
-                await client.AddIndicatePassage(indicatePassage);
-
-                replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire le prénom de la personne.");
                 replyToConversation.Recipient = context.Activity.From;
                 replyToConversation.Type = "message";
+                await context.PostAsync(replyToConversation);
+                context.Wait(MessageReceived);
             }
             else
             {
-
-                int nbEntities = result.Entities.Count();
-                if (nbEntities == 0)
+                for (int i = 0; i < nbEntities; i++)
                 {
-                    replyToConversation = ((Activity)context.Activity).CreateReply("Tu as oublié de me dire le prénom de la personne.");
+                    if (result.Entities[i].Type == "Firstname")
+                    {
+                        firstname = result.Entities[i].Entity;
+                    }
+                }
+
+                List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+
+                if (visits.Count == 0)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
                     replyToConversation.Recipient = context.Activity.From;
                     replyToConversation.Type = "message";
-                    await context.PostAsync(replyToConversation);
-                    context.Wait(MessageReceived);
+                }
+                else if (visits.Count > 1)
+                {
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
+                    replyToConversation.AttachmentLayout = "carousel";
+                    replyToConversation.Attachments = new List<Attachment>();
+
+                    foreach (var visit in visits)
+                    {
+                        List<CardImage> cardImages = new List<CardImage>();
+                        cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
+
+                        List<CardAction> cardButtons = new List<CardAction>();
+
+                        CardAction plButtonChoice = new CardAction()
+                        {
+                            Value = "IndicatePassage |" + visit.PersonVisit.PersonId + "|" + visit.PersonVisit.FirstName,
+                            Type = "postBack",
+                            Title = "Le voilà !"
+                        };
+                        cardButtons.Add(plButtonChoice);
+
+                        HeroCard plCard = new HeroCard()
+                        {
+                            Title = visit.PersonVisit.FirstName,
+                            Images = cardImages,
+                            Buttons = cardButtons
+                        };
+
+                        Attachment plAttachment = plCard.ToAttachment();
+                        replyToConversation.Attachments.Add(plAttachment);
+                    }
                 }
                 else
                 {
-                    for (int i = 0; i < nbEntities; i++)
-                    {
-                        if (result.Entities[i].Type == "Firstname")
-                        {
-                            firstname = result.Entities[i].Entity;
-                        }
-                    }
 
-                    List<VisitDto> visits = await client.GetLastVisitPerson(firstname);
+                    indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
+                    indicatePassage.To = visits[0].PersonVisit.PersonId;
+                    indicatePassage.Firtsname = visits[0].PersonVisit.FirstName;
+                    indicatePassage.FromId = context.Activity.From.Id;
+                    indicatePassage.RecipientID = context.Activity.Recipient.Id;
+                    indicatePassage.Channel = context.Activity.ChannelId;
 
-                    if (visits.Count == 0)
-                    {
-                        replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Unknow.Spintax()} " + firstname + $" :/ {Dialog.Presentation.Spintax()}");
-                        replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Type = "message";
-                    }
-                    else if (visits.Count > 1)
-                    {
-                        replyToConversation = ((Activity)context.Activity).CreateReply("Je connais " + visits.Count + " " + firstname + ". Les voici :)");
-                        replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Type = "message";
-                        replyToConversation.AttachmentLayout = "carousel";
-                        replyToConversation.Attachments = new List<Attachment>();
+                    await client.AddIndicatePassage(indicatePassage);
 
-                        foreach (var visit in visits)
-                        {
-                            List<CardImage> cardImages = new List<CardImage>();
-                            cardImages.Add(new CardImage(url: $"{ ConfigurationManager.AppSettings["WebAppUrl"] }{VirtualPathUtility.ToAbsolute(visit.ProfilePicture.Last().Uri)}"));
-
-                            List<CardAction> cardButtons = new List<CardAction>();
-
-                            CardAction plButtonChoice = new CardAction()
-                            {
-                                Value = "IndicatePassage |" + visit.PersonVisit.PersonId + "|" + visit.PersonVisit.FirstName,
-                                Type = "postBack",
-                                Title = "Le voilà !"
-                            };
-                            cardButtons.Add(plButtonChoice);
-
-                            HeroCard plCard = new HeroCard()
-                            {
-                                Title = visit.PersonVisit.FirstName,
-                                Images = cardImages,
-                                Buttons = cardButtons
-                            };
-
-                            Attachment plAttachment = plCard.ToAttachment();
-                            replyToConversation.Attachments.Add(plAttachment);
-                        }
-                    }
-                    else
-                    {
-
-                        indicatePassage.IdFacebookConversation = context.Activity.Conversation.Id;
-                        indicatePassage.To = visits[0].PersonVisit.PersonId;
-                        indicatePassage.Firtsname = visits[0].PersonVisit.FirstName;
-                        indicatePassage.FromId = context.Activity.From.Id;
-                        indicatePassage.RecipientID = context.Activity.Recipient.Id;
-                        indicatePassage.Channel = context.Activity.ChannelId;
-
-                        await client.AddIndicatePassage(indicatePassage);
-
-                        replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
-                        replyToConversation.Recipient = context.Activity.From;
-                        replyToConversation.Type = "message";
-                    }
+                    replyToConversation = ((Activity)context.Activity).CreateReply("Bien je le ferai.");
+                    replyToConversation.Recipient = context.Activity.From;
+                    replyToConversation.Type = "message";
                 }
             }
+
 
             await context.PostAsync(replyToConversation);
             context.Wait(MessageReceived);
