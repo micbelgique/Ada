@@ -441,11 +441,11 @@ namespace AdaW10.ViewModels
                                 {
                                     if (message.From != null)
                                     {
-                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message de la part de " + message.From);
+                                        await TtsService.SayAsync("j'ai un nouveau message pour toi " + person.FirstName + " de la part de " + message.From);
                                     }
                                     else
                                     {
-                                        await TtsService.SayAsync("Bonjour" + person.FirstName + "Tu as un nouveau message ");
+                                        await TtsService.SayAsync("j'ai un nouveau message pour toi " + person.FirstName);
                                     }
                                     await TtsService.SayAsync(message.Contenu);
                                     message.IsRead = true;
