@@ -113,7 +113,7 @@ namespace AdaW10.ViewModels
         {
             await Task.Run(() => { while (!_isDirectLineInitialized) { } });
 
-            connection.OnMessage += Connection_OnMessage;
+            connection.OnMessage += Connection_OnMessage; // add connection to webSocket
 
             // Registers to messenger for on screen log messages
             Messenger.Default.Register<LogMessage>(this, async e => await DispatcherHelper.RunAsync(() => LogMessage += e.Message));
@@ -245,6 +245,7 @@ namespace AdaW10.ViewModels
                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                  async () =>
                  {
+                     connection.OnMessage -= Connection_OnMessage; //remove connection to the webSocket
                      await WebcamService.CleanUpAsync();
                      await GoToCarouselPageExecute(attachments);
                  }
