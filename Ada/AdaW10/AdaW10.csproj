@@ -165,6 +165,8 @@
     <Content Include="Assets\SplashScreen.scale-400.png" />
     <Content Include="Assets\Square310x310Logo.scale-100.png" />
     <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Images\Ada.png" />
+    <Content Include="Images\Ada_Title.png" />
     <Content Include="Images\mic-banner.png" />
     <Content Include="Images\mic-banner_ada.png" />
     <Content Include="Images\music.mp4" />

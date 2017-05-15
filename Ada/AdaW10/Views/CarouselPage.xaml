@@ -18,15 +18,17 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 
-    
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="140*" />
+            <ColumnDefinition Width="212*"/>
+            <ColumnDefinition Width="13*"/>
         </Grid.ColumnDefinitions>
 
-        <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Image Source="/Images/Ada.png" Grid.Column="0"/>
+
+        <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Height="4" Margin="0,318" />
 
         <ListView Grid.Column="1"  Margin="10,33,10,47"  ItemsSource="{Binding CarouselList}"  >
             <ListView.ItemTemplate>
