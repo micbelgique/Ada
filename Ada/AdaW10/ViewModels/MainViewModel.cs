@@ -255,8 +255,7 @@ namespace AdaW10.ViewModels
 
             if (activity.Name == "End")
             {
-                connection.OnMessage -= Connection_OnMessage;
-
+                
                 if (WebcamService.FaceDetectionEffect != null)
                 {
                     await WebcamService.StopFaceDetectionAsync();
@@ -390,8 +389,6 @@ namespace AdaW10.ViewModels
             if (activity.Text == "")
             {
                 await TtsService.SayAsync("au revoir");
-
-                connection.OnMessage -= Connection_OnMessage;
 
                 if (WebcamService.FaceDetectionEffect != null)
                 {

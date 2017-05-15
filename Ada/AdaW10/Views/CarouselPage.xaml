@@ -26,7 +26,7 @@
             <ColumnDefinition Width="13*"/>
         </Grid.ColumnDefinitions>
 
-        <Image Source="/Images/Ada.png" Grid.Column="0"/>
+        <Image Source="/Images/Ada.png" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
         <ProgressBar Grid.Column="1" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Height="4" Margin="0,318" />
 
