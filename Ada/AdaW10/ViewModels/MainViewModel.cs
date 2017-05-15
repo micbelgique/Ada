@@ -297,7 +297,9 @@ namespace AdaW10.ViewModels
                     await RunTaskAsync(async () =>
                     {
                         var persons = await MakeRecognition();
+                        await VoiceInterface.StopListening();
                         await VoiceInterface.SayHelloAsync(persons);
+                        await VoiceInterface.ListeningHelloAda();
                     });
                 });
             }
