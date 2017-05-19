@@ -369,13 +369,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsToday")]
         public async Task GetVisitsToday(IDialogContext context, LuisResult result)
         {
-            //Message d'attente
             Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
-            replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "NotFinish";
-            replyToConversation.Type = "message";
-            await context.PostAsync(replyToConversation);
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             List<VisitDto> visits = await client.GetVisitsToday();
@@ -589,13 +583,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetStatsVisits")]
         public async Task GetStatsVisits(IDialogContext context, LuisResult result)
         {
-            //Message d'attente
             Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
-            replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "NotFinish";
-            replyToConversation.Type = "message";
-            await context.PostAsync(replyToConversation);
 
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
             CreateDialog customDialog = new CreateDialog();
@@ -977,13 +965,7 @@ namespace AdaBot.Dialogs
         [LuisIntent("GetVisitsPersonByFirstname")]
         public async Task GetVisitsPersonByFirstname(IDialogContext context, LuisResult result)
         {
-            //Message d'attente
             Activity replyToConversation;
-            replyToConversation = ((Activity)context.Activity).CreateReply($"{Dialog.Waiting.Spintax()}");
-            replyToConversation.Recipient = context.Activity.From;
-            replyToConversation.Name = "NotFinish";
-            replyToConversation.Type = "message";
-            await context.PostAsync(replyToConversation);
             AdaClient client = new AdaClient() { WebAppUrl = $"{ ConfigurationManager.AppSettings["WebAppUrl"] }" };
 
             int nbVisit = 10;

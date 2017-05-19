@@ -156,10 +156,12 @@ namespace AdaW10.ViewModels
                         // Update person's name
                         if (person.FirstName == null)
                         {
+                            await VoiceInterface.StopListening();
                             bool answer = await VoiceInterface.AskIdentified();
 
                             if (answer)
                             {
+                                await VoiceInterface.StopListening();
                                 string name = await VoiceInterface.AskNameAsync();
 
                                 if (name == null)
@@ -179,11 +181,13 @@ namespace AdaW10.ViewModels
                         if (person.FirstName != null)
                         {
                             await TtsService.SayAsync($"Que puis-je faire pour toi {person.FirstName} ?");
+                            await VoiceInterface.StopListening();
                         }
                     }
                     else
                     {
                         await TtsService.SayAsync("Que puis-je faire pour toi ?");
+                        await VoiceInterface.StopListening();
                     }
                     await DispatcherHelper.RunAsync(async () => { await SolicitExecute(); });
                 }
@@ -231,7 +235,10 @@ namespace AdaW10.ViewModels
                 }
             }
         }
-
+        /*
+         * Task.Delay allows us to wait for detecting the flag name of the activity.
+         * This flag allows Ada to know when her task is finished ans when she can listen again for another.
+        */
         private async void HandleActivity(Activity activity)
         {
             var text = WebUtility.HtmlDecode(activity.Text);
@@ -240,7 +247,7 @@ namespace AdaW10.ViewModels
             if (attachments?.Count > 0)
             {
                 var token = new CancellationTokenSource();
-
+                await Task.Delay(1000);
                 await VoiceInterface.StopListening();
                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                  async () =>
@@ -251,12 +258,13 @@ namespace AdaW10.ViewModels
                  }
                );
             }
+
             LogHelper.Log(text);
             await TtsService.SayAsync(text);
-
+                        
             if (activity.Name == "End")
             {
-                
+                await Task.Delay(1000);
                 if (WebcamService.FaceDetectionEffect != null)
                 {
                     await WebcamService.StopFaceDetectionAsync();
@@ -271,6 +279,7 @@ namespace AdaW10.ViewModels
             }
             else if (activity.Name != "NotFinish")
             {
+                await Task.Delay(1000);
                 LogHelper.Log("Que puis-je faire pour toi?");
                 await TtsService.SayAsync("Que puis-je faire pour toi?");
 

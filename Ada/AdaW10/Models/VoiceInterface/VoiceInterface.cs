@@ -264,7 +264,7 @@ namespace AdaW10.Models.VoiceInterface
         private string GetNameForRegistration(string name)
         {
             string[] test = name.Split(' ');
-            string retour = test[2];
+            string retour = test[0];
             return retour;
         }
 
