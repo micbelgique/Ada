@@ -118,7 +118,7 @@ You need to register your bot on the bot framework website : https://dev.botfram
 
 # Step 4
 
--After that you need to add a file a file AppSettings.config.
+-After that you need to add a file AppSettings.config.
  
  ```
  <?xml version="1.0"?>
